@@ -9,12 +9,12 @@ editor_options:
 
 ## Setup
 
-```{r Load packages, message=FALSE, warning=FALSE}
+```{r setup, include=FALSE}
 # global options
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 
 # set working directory
-setwd("../GWAS")
+setwd("../../Complex_genetics/GWAS")
 
 # load packages
 library("tidyverse") ## includes ggplot2, dplyr, readr, stringr
@@ -29,7 +29,7 @@ library("circlize") ## make circos plots
 ## Summarize sig associations at the ps and gene levels (full and subsets)
 
 ```{r summaries}
-load(file = "./Data/SNPs_sig_long.Rdata") # loads SNPs_sig_long
+load(file = "./Data_output/SNPs_sig_long.Rdata") # loads SNPs_sig_long
 
 ## no genes = coding regions, exclude non-coding. Include all variants
 
@@ -69,86 +69,11 @@ SNPs_sig_long %>%
   summarize(no_genes = n_distinct(gene_ID)) ## DZA: 548; A17: 383
 ```
 
-## summarize at the SNP-level for all traits
+## Summarize at the SNP-level for all traits
 
-```{r SNP-lvl, warning=FALSE}
-load(file = "./Data/SNPs_sig_long.Rdata") # loads SNPs_sig_long
-
-# Summarize at the ps-level
-  SNPs_ann_ps <- SNPs_sig_long %>%
-    filter(trait == "shoot") %>%
-    droplevels(.) %>%
-    group_by(region, rs, gene_name, RefSeq_ID, ncbi_func, 
-             start_pos, end_pos, effect) %>% ## summarized to rs-level
-    summarize(
-      no_effects = n(),
-      ave_score = mean(scores),
-      maf = mean(af),
-      assocs = paste(unique(assoc), collapse = ", "),
-      lines = paste(unique(line), collapse = ", ")) %>%
-    as.data.frame(.)
+```{r SNP-lvl}
+load(file = "./Data_output/SNPs_sig_long.Rdata") # loads SNPs_sig_long
   
-  SNPs_ann_ps$host <- ifelse(SNPs_ann_ps$lines == "A17, DZA" | SNPs_ann_ps$lines == "DZA, A17", "Both",
-                             ifelse(SNPs_ann_ps$lines == "A17", "A17 only", "DZA only"))
-  
-  SNPs_ann_ps <- SNPs_ann_ps %>%
-    select(-lines)
-  
-  SNPs_ann_ps$dir <- ifelse(SNPs_ann_ps$no_effects > 1 &
-                              grepl("shoot[-]", SNPs_ann_ps$assocs, 
-                                    fixed = FALSE) &
-                                      grepl("shoot[+]", SNPs_ann_ps$assocs, 
-                                            fixed = FALSE), "dis",
-                            ifelse(SNPs_ann_ps$no_effects == 1, "single","con"))
-  
-  SNPs_ann_ps$GxE <- ifelse(SNPs_ann_ps$dir == "dis" &
-                                  SNPs_ann_ps$host == "DZA only","antagonistic_DZA",
-                                ifelse(SNPs_ann_ps$dir == "dis" &
-                                  SNPs_ann_ps$host == "A17 only","antagonistic_A17",
-                                ifelse(SNPs_ann_ps$dir == "con" &
-                                  SNPs_ann_ps$host == "DZA only","concordant_DZA", 
-                                ifelse(SNPs_ann_ps$dir == "con" &
-                                  SNPs_ann_ps$host == "A17 only","concordant_A17",
-                                  ## more than 2 assoc
-                                  ### DZA antagonistic
-                                ifelse(SNPs_ann_ps$no_effects > 2 &
-                                  SNPs_ann_ps$dir == "dis" & 
-                                           grepl("DZA-1", SNPs_ann_ps$assocs, 
-                                            fixed = FALSE) &
-                                    grepl("DZA-3", SNPs_ann_ps$assocs, 
-                                            fixed = FALSE),
-                                   "antagonistic_DZA",
-                                  ### A17 antagonistic
-                                ifelse(SNPs_ann_ps$no_effects > 2 &
-                                  SNPs_ann_ps$dir == "dis" & 
-                                           grepl("A17-2", SNPs_ann_ps$assocs, 
-                                            fixed = FALSE) &
-                                    grepl("A17-4", SNPs_ann_ps$assocs, 
-                                            fixed = FALSE),
-                                   "antagonistic_A17",
-                                  ### DZA concordant
-                                ifelse(SNPs_ann_ps$no_effects > 2 &
-                                  SNPs_ann_ps$dir == "con" & 
-                                           grepl("DZA-1", SNPs_ann_ps$assocs, 
-                                            fixed = FALSE) &
-                                    grepl("DZA-3", SNPs_ann_ps$assocs, 
-                                            fixed = FALSE),
-                                   "concordant_DZA",
-                                  ### A17 antagonistic
-                                ifelse(SNPs_ann_ps$no_effects > 2 &
-                                  SNPs_ann_ps$dir == "con" & 
-                                           grepl("A17-2", SNPs_ann_ps$assocs, 
-                                            fixed = FALSE) &
-                                    grepl("A17-4", SNPs_ann_ps$assocs, 
-                                            fixed = FALSE),
-                                   "concordant_A17",SNPs_ann_ps$dir))))))))
-                               
-  
-  write.csv(SNPs_ann_ps, file = "./Data/Var-lvl_summaries/tradeoffs.csv", 
-            row.names = FALSE)
-  
-  
-
 # create variant summary files for each trait individually
 
 ## function to summarize data at the variant-level:
@@ -162,17 +87,17 @@ source("../Source_code/var_sum_func.R")
 var_sum_out <- sapply(trait.list, var_sum_func, df = SNPs_sig_long, 
                       simplify = FALSE, USE.NAMES = TRUE)
 
-save(var_sum_out, file = "./Data/Var-lvl_summaries/var_sums.Rdata")
+save(var_sum_out, file = "./Data_output/Var-lvl_summaries/var_sums.Rdata")
 
 ```
 
 ## Summarize at the gene-lvl and categorize
 
 ```{r gene_cat}
-load(file = "./Data/SNPs_sig_long.Rdata") # loads SNPs_sig_long
+load(file = "./Data_output/SNPs_sig_long.Rdata") # loads SNPs_sig_long
 
 ## recode levels of trait
-SNPs_sig_long$trait <- recode(as.character(SNPs_sig_long$trait), 
+SNPs_sig_long$trait <- recode_factor(SNPs_sig_long$trait, 
                               chloro1 = "chloro",
                               height1 = "height",
                               leaf1 = "leaf")
@@ -209,8 +134,8 @@ SNPs_ann_gene$host <- ifelse(SNPs_ann_gene$lines == "A17, DZA" |
 SNPs_ann_gene <- SNPs_ann_gene %>%
   select(-lines)
 
-save(SNPs_ann_gene, file = "./Data/Gene-lvl_summaries/SNPs_ann_gene_all.Rdata")
-write.csv(SNPs_ann_gene, "./Data/Gene-lvl_summaries/SNPs_ann_gene_all.csv", 
+save(SNPs_ann_gene, file = "./Data_output/Gene-lvl_summaries/SNPs_ann_gene_all.Rdata")
+write.csv(SNPs_ann_gene, "./Data_output/Gene-lvl_summaries/SNPs_ann_gene_all.csv", 
           row.names = FALSE)
 
 # function: iterate through each trait individually
@@ -224,7 +149,7 @@ source("../Source_code/gene_sum_func.R")
 gene_sum_out <- sapply(trait.list, gene_sum_func, df = SNPs_sig_long,
                        simplify = FALSE, USE.NAMES = TRUE)
 
-save(gene_sum_out, file = "./Data/Gene-lvl_summaries/Venn_diagram_nums.Rdata")
+save(gene_sum_out, file = "./Data_output/Gene-lvl_summaries/Venn_diagram_nums.Rdata")
 
 ## summary for shoot plasticity genes (numbers reported in main text)
 gene_sum_out[["shoot.plast"]] %>%
@@ -235,7 +160,7 @@ gene_sum_out[["shoot.plast"]] %>%
 ## Venn diagrams
 
 ```{r Venns}
-load(file = "./Data/Gene-lvl_summaries/Venn_diagram_nums.Rdata") # loads gene_sum_out
+load(file = "./Data_output/Gene-lvl_summaries/Venn_diagram_nums.Rdata") # loads gene_sum_out
 
 Venn_diagram_nums <- gene_sum_out[1:4] %>%
   reduce(full_join, by = c("cat","host_exps")) %>%
@@ -251,7 +176,7 @@ Venn_diagrams <- rbind(Venn_diagram_nums, c("All","All",colSums(Venn_diagram_num
 cols.to.num <- 3:6
 Venn_diagrams[cols.to.num] <- sapply(Venn_diagrams[cols.to.num],as.numeric)
 
-write.csv(Venn_diagrams, file = "./Figures_Tables/Venn_numbers.csv", row.names = FALSE)
+write.csv(Venn_diagrams, file = "./Figures_tables/Venn_numbers.csv", row.names = FALSE)
 
 kable(Venn_diagrams)
 
@@ -276,61 +201,16 @@ Venn_diagrams <- rbind(Venn_diagram_nums, c("All",colSums(Venn_diagram_nums[,2:5
 cols.to.num <- 2:5
 Venn_diagrams[cols.to.num] <- sapply(Venn_diagrams[cols.to.num],as.numeric)
 
-write.csv(Venn_diagrams, file = "./Figures_Tables/Venn_numbers_plast.csv", row.names = FALSE)
+write.csv(Venn_diagrams, file = "./Figures_tables/Venn_numbers_plast.csv", row.names = FALSE)
 
 kable(Venn_diagrams)
-```
-
-## Manhattan plots
-
-```{r manhattan}
-# Use manhattan function to create plots for each trait
-
-## traits to iterate through:
-trait.list <- c("chloro1","height1","leaf1","shoot",
-                "chloro.plast","height.plast","leaf.plast","shoot.plast")
-
-## source function
-source('../Source_code/manhattan_func.R')
-
-manhattan_out <- sapply(trait.list, manhattan_func, 
-                        simplify = FALSE, USE.NAMES = TRUE)
-
-mans <- plot_grid( manhattan_out[["chloro1"]] + ggtitle("Chlorophyll A"), 
-                    manhattan_out[["height1"]] + ggtitle("Plant height"), 
-                    manhattan_out[["leaf1"]] + ggtitle("Leaves"), 
-                    manhattan_out[["shoot"]] + ggtitle("Shoot biomass"),
-                   manhattan_out[["chloro.plast"]], 
-                   manhattan_out[["height.plast"]], 
-                   manhattan_out[["leaf.plast"]],
-                   manhattan_out[["shoot.plast"]],
-                    ncol = 4, nrow = 2, align="hv", labels=c("A","","","",
-                                                             "B","","",""))
-
-# add on the shared x axis title
-fig_x_axis <- add_sub(mans, "Genomic position (Mbp)", size=24)
-
-# add on the shared y axis title
-fig_y_axis <- ggdraw() + draw_label("Average absolute \n effect size", size = 24, angle=90)
-
-# put them together
-fig <- plot_grid(fig_y_axis, fig_x_axis, ncol=2, rel_widths=c(0.05, 1)) 
-# rel_heights or widths values control text margins
-
-save_plot("./Figures_Tables/manhattans_all.png", fig,
-          ncol = 4, # we're saving a grid plot of 2 columns
-          nrow = 2, # and 2 rows
-          # each individual subplot should have an aspect ratio of 1.3
-          base_aspect_ratio = 1.3)
-
-include_graphics("./Figures_Tables/manhattans_all.png")
 ```
 
 ## Overlap in genes for shoot biomass (and other traits) and plasticity
 
 ```{r overlap_traits_plast}
 # get overlap between plast and shoot
-load(file = "./Data/SNPs_sig_long.Rdata") # loads SNPs_sig_long
+load(file = "./Data_output/SNPs_sig_long.Rdata") # loads SNPs_sig_long
 
 ## remove all 1's after traits
 SNPs_sig_long$trait.c <- str_remove(SNPs_sig_long$trait, "1")
@@ -346,7 +226,7 @@ source('../Source_code/overlap_func.R')
 overlap_out <- sapply(trait.list, overlap_func, df = SNPs_sig_long,
                       simplify = FALSE, USE.NAMES = TRUE)
 
-# chrom
+# combine
 overlap <- overlap_out %>% 
   reduce(full_join, by = c("overlap")) %>%
   as.data.frame(.)
