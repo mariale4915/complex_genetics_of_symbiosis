@@ -1,37 +1,13 @@
----
-title: "Phenotypic_analyses"
-author: "Rebecca Batstone"
-date: "`r format(Sys.Date())`"
-output: github_document
-editor_options: 
-  chunk_output_type: console
----
+Phenotypic\_analyses
+================
+Rebecca Batstone
+2021-10-19
 
 ## Setup
 
-```{r setup, include=FALSE}
-# global options
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
-
-# set working directory
-setwd("../../Complex_genetics/Phenotypic_analyses")
-
-# load packages
-library("tidyverse") ## includes ggplot2, dplyr, readr, stringr
-library("knitr") ## produce the knitted doc
-library("cowplot") ## produce paneled plots
-library("data.table") ## for dcast function, multiple measurements
-library("emmeans") ## calculate "least squares" means from fitted model
-library("lme4") ## mixed effects models
-library("car") ## Anova function
-
-# set contrasts
-options(contrasts = rep ("contr.sum", 2)) 
-```
-
 ## Load the data
 
-```{r load_data}
+``` r
 # load datasets
 DZA_exp1 <- read_csv("./Raw_data/March_DZA_final.csv")
 A17_exp2 <- read_csv("./Raw_data/May_A17_final.csv")
@@ -130,7 +106,11 @@ ggplot(ds_all %>% filter(strain_ID %in% strains_inc & exp %in% c(3,4)),
          strip.text = element_text(face = "bold"),
          legend.position="bottom",
          legend.box = "horizontal")
+```
 
+![](phenotypic_analyses_files/figure-gfm/load_data-1.png)<!-- -->
+
+``` r
 ## incompatible strains: 285, 476 (A17-only), 486, 557, 522, 702A, 717A, 733B
 
 # include compatibility in full dataset (also, none are rhizobium)
@@ -159,7 +139,7 @@ save(ds_ensifer, file = "./Data_output/ensifer_dataset.Rdata")
 
 ## Compare treated versus control, exclude controls
 
-```{r controls}
+``` r
 load(file = "./Data_output/ensifer_dataset.Rdata") ## loads ds_ensifer
 
 # summarize
@@ -206,7 +186,11 @@ ds_control$type <- recode_factor(ds_control$type, !!!level_key)
         panel.grid.minor = element_blank()
         )
   )
+```
 
+![](phenotypic_analyses_files/figure-gfm/controls-1.png)<!-- -->
+
+``` r
 ## compare nodules
 (p_nod <- ggplot(data = ds_control, aes(x=exp, y=mean_nod, fill = line_exp)) + 
   geom_bar(stat = "identity", position = position_dodge()) + 
@@ -230,7 +214,11 @@ ds_control$type <- recode_factor(ds_control$type, !!!level_key)
         panel.grid.minor = element_blank()
         )
   )
+```
 
+![](phenotypic_analyses_files/figure-gfm/controls-2.png)<!-- -->
+
+``` r
 # ## combine into paneled plot:
 # fig_base <- plot_grid(p_shoot, p_nod,
 #                       rel_heights = c(1,1),
@@ -263,7 +251,7 @@ ds_metadata <- ds %>%
 
 ## Calculate raw means
 
-```{r raw_means}
+``` r
 load(file = "./Data_output/ds_treat.Rdata") ## loads ds
 
 # summarize for each strain and experiment
@@ -287,7 +275,7 @@ save(ds_means.w, file = "./Data_output/raw_means_wide.Rdata")
 
 Run mixed models on each experiment:
 
-```{r emmeans}
+``` r
 ## load proper dataset
 load(file = "./Data_output/ds_treat.Rdata") # loads ds
 
@@ -306,7 +294,34 @@ emmeans_out <- mapply(FUN = emmeans_function,
                       exps = exps_list, 
                       USE.NAMES = TRUE, 
                       MoreArgs = list(df = ds))
+```
 
+    ## [1] "chloro1_DZA_1"
+    ## [1] "chloro1_A17_2"
+    ## [1] "chloro1_DZA_3"
+    ## [1] "chloro1_A17_4"
+    ## [1] "height1_DZA_1"
+    ## [1] "height1_A17_2"
+    ## [1] "height1_DZA_3"
+    ## [1] "height1_A17_4"
+    ## [1] "leaf1_DZA_1"
+    ## [1] "leaf1_A17_2"
+    ## [1] "leaf1_DZA_3"
+    ## [1] "leaf1_A17_4"
+    ## [1] "shoot_DZA_1"
+    ## [1] "shoot_A17_2"
+    ## [1] "shoot_DZA_3"
+    ## [1] "shoot_A17_4"
+    ## [1] "nod_DZA_1"
+    ## [1] "nod_A17_2"
+    ## [1] "nod_DZA_3"
+    ## [1] "nod_A17_4"
+    ## [1] "nod.weight_DZA_1"
+    ## [1] "nod.weight_A17_2"
+    ## [1] "nod.weight_DZA_3"
+    ## [1] "nod.weight_A17_4"
+
+``` r
 ## collapse dfs into one
 emmeans.w <- emmeans_out %>% 
   reduce(full_join, by = "strain_ID") %>%
@@ -374,12 +389,17 @@ comb_means <- separate(data = comb_means,
   geom_point() +
   geom_smooth(method = "lm") +
   facet_wrap(exp~trait, scales = "free", ncol = 6))
+```
+
+![](phenotypic_analyses_files/figure-gfm/emmeans-1.png)<!-- -->
+
+``` r
 ## looks good
 ```
 
 ## Calculate strain plasticity (for all traits)
 
-```{r plasticity}
+``` r
 load(file = "./Data_output/emmeans_wide.Rdata") ## loads emmeans.w
 
 ## calculate plasticity (log response ratio exp2:exp1)
@@ -439,7 +459,7 @@ save_plot("./Figures_tables/strain_plasticity_all.png", fig,
 
 ## Models: split by line, assess G x E
 
-```{r GxE}
+``` r
 ## create a function
 load(file = "./Data_output/ds_treat.Rdata") # loads ds
 
@@ -458,7 +478,18 @@ GxE_out <- mapply(FUN = GxE_func,
                   lines = line_list, 
                   USE.NAMES = TRUE, 
                   MoreArgs = list(df = ds))
+```
 
+    ## [1] "chloro1_DZA"
+    ## [1] "chloro1_A17"
+    ## [1] "height1_DZA"
+    ## [1] "height1_A17"
+    ## [1] "leaf1_DZA"
+    ## [1] "leaf1_A17"
+    ## [1] "shoot_DZA"
+    ## [1] "shoot_A17"
+
+``` r
 ## combine ANOVA outputs
 ANOVAs_out.DZA <- rbind(GxE_out[[1]], GxE_out[[5]], GxE_out[[9]], GxE_out[[13]])
 ANOVAs_out.A17 <- rbind(GxE_out[[3]], GxE_out[[7]], GxE_out[[11]], GxE_out[[15]])  
@@ -518,9 +549,32 @@ write.csv(GxE_mods.w, "./Figures_tables/Table1.csv", row.names = FALSE)
 kable(GxE_mods.w)
 ```
 
+| trait         | term                | A17               | DZA               |
+|:--------------|:--------------------|:------------------|:------------------|
+| Chlorophyll   | Intercept           | 619.4(1)\*\*\*    | 1447.65(1)\*\*\*  |
+| Chlorophyll   | Strain              | 252.6(190)\*\*    | 361.67(190)\*\*\* |
+| Chlorophyll   | Experiment          | 0.15(1)           | 0(1)              |
+| Chlorophyll   | Strain X Experiment | 191.38(182)       | 205.16(183)       |
+| Chlorophyll   | Rack                | 30.86(1)\*\*\*    | 23.91(1)\*\*\*    |
+| Plant height  | Intercept           | 373.58(1)\*\*\*   | 355.55(1)\*\*\*   |
+| Plant height  | Strain              | 340.68(190)\*\*\* | 268.05(190)\*\*\* |
+| Plant height  | Experiment          | 20.24(1)\*\*\*    | 2.5(1)            |
+| Plant height  | Strain X Experiment | 308.63(185)\*\*\* | 177.71(183)       |
+| Plant height  | Rack                | 38.35(1)\*\*\*    | 54.12(1)\*\*\*    |
+| Leaves        | Intercept           | 207.69(1)\*\*\*   | 164.09(1)\*\*\*   |
+| Leaves        | Strain              | 355.37(190)\*\*\* | 207.58(190)       |
+| Leaves        | Experiment          | 7.85(1)\*\*       | 0.45(1)           |
+| Leaves        | Strain X Experiment | 243.88(185)\*\*   | 218.54(183)\*     |
+| Leaves        | Rack                | 27.51(1)\*\*\*    | 41.67(1)\*\*\*    |
+| Shoot biomass | Intercept           | 97.65(1)\*\*\*    | 179.32(1)\*\*\*   |
+| Shoot biomass | Strain              | 544.81(190)\*\*\* | 499.67(190)\*\*\* |
+| Shoot biomass | Experiment          | 10.08(1)\*\*      | 6.93(1)\*\*       |
+| Shoot biomass | Strain X Experiment | 330.06(185)\*\*\* | 262.2(183)\*\*\*  |
+| Shoot biomass | Rack                | 11.32(1)\*\*\*    | 155.67(1)\*\*\*   |
+
 ## Reaction norms
 
-```{r rxn_norms}
+``` r
 load(file = "./Data_output/emmeans_long.Rdata") ## loads emmeans
 
 ## add info
@@ -548,7 +602,14 @@ source("../Source_code/rxn_func.R")
 
 ## run
 rxn_out <- sapply(trait.list, rxn_func, df = emmeans.rn)
+```
 
+    ## [1] "Chlorophyll"
+    ## [1] "Plant height (cm)"
+    ## [1] "Leaves (no.)"
+    ## [1] "Shoot biomass (g)"
+
+``` r
 # put all plots into one
 rxn_comb <- plot_grid(rxn_out[["Chlorophyll"]],
                       rxn_out[["Plant height (cm)"]],
@@ -572,7 +633,7 @@ save_plot("./Figures_tables/rxn_all.png", fig,
 
 ## Heritability
 
-```{r herit}
+``` r
 # create a function
 load(file = "./Data_output/ds_treat.Rdata") # loads ds
 
@@ -594,7 +655,26 @@ herit_out <- mapply(FUN = herit_func,
                     exps = exp_list, 
                     USE.NAMES = TRUE, 
                     MoreArgs = list(df = ds))
+```
 
+    ## [1] "chloro1_DZA_1"
+    ## [1] "chloro1_A17_2"
+    ## [1] "chloro1_DZA_3"
+    ## [1] "chloro1_A17_4"
+    ## [1] "height1_DZA_1"
+    ## [1] "height1_A17_2"
+    ## [1] "height1_DZA_3"
+    ## [1] "height1_A17_4"
+    ## [1] "leaf1_DZA_1"
+    ## [1] "leaf1_A17_2"
+    ## [1] "leaf1_DZA_3"
+    ## [1] "leaf1_A17_4"
+    ## [1] "shoot_DZA_1"
+    ## [1] "shoot_A17_2"
+    ## [1] "shoot_DZA_3"
+    ## [1] "shoot_A17_4"
+
+``` r
 # genetic variance
 strain_out <- rbind(herit_out[[2]], herit_out[[4]], herit_out[[6]], herit_out[[8]], ## chloro
                     herit_out[[10]], herit_out[[12]], herit_out[[14]], herit_out[[16]], ## height
@@ -656,11 +736,11 @@ herit.f <- herit %>%
 save(herit.f, file = "./Data_output/heritability.Rdata") ## needed for cockerham's method
 ```
 
-## Regression coefficients 
+## Regression coefficients
 
 The same trait across the two experiments (G x E)
 
-```{r corr_plot}
+``` r
 load(file = "./Data_output/emmeans.w_Ensifer.Rdata") ## loads emmeans.w_Ensifer
 
 # reg coefficients function
@@ -682,7 +762,18 @@ reg_out <- mapply(FUN = lin_reg_func,
                   exp2 = trait_exp2, 
                   USE.NAMES = TRUE, 
                   MoreArgs = list(df = emmeans.w_Ensifer))
+```
 
+    ## [1] "chloro1_DZA_1vschloro1_DZA_3"
+    ## [1] "height1_DZA_1vsheight1_DZA_3"
+    ## [1] "leaf1_DZA_1vsleaf1_DZA_3"
+    ## [1] "shoot_DZA_1vsshoot_DZA_3"
+    ## [1] "chloro1_A17_2vschloro1_A17_4"
+    ## [1] "height1_A17_2vsheight1_A17_4"
+    ## [1] "leaf1_A17_2vsleaf1_A17_4"
+    ## [1] "shoot_A17_2vsshoot_A17_4"
+
+``` r
 ## Extract Reg coeffs
 reg_coeffs_out1 <- as.data.frame(rbind(reg_out[[2]][2,],reg_out[[4]][2,],
                                        reg_out[[6]][2,],reg_out[[8]][2,],
@@ -714,9 +805,9 @@ reg_coeffs_out$line <- c(rep("DZA",4),rep("A17",4))
 save(reg_coeffs_out, file = "./Data_output/reg_coeff.Rdata") ## needed for cockerham's method
 ```
 
-## Cockerham's method
+## Cockerham’s method
 
-```{r cockerham}
+``` r
 load(file = "./Data_output/heritability.Rdata") # loads herit.f
 
 ## format heritability
@@ -781,13 +872,26 @@ cockerham <- cockerham %>%
   select(-trait_line)
 
 kable(cockerham)
+```
 
+| trait         | line | H1          | H2          | reg\_sig    | perCross.r |
+|:--------------|:-----|:------------|:------------|:------------|-----------:|
+| Shoot biomass | A17  | 0.303\*\*\* | 0.262\*\*\* | 0.221\*\*   |      99.83 |
+| Chlorophyll   | A17  | 0           | 0.093\*\*   | 0.201\*\*   |       0.00 |
+| Plant height  | A17  | 0.181\*\*\* | 0.173\*\*\* | 0.1         |      73.37 |
+| Leaves        | A17  | 0.173\*\*\* | 0.127\*\*\* | 0.173\*     |      94.13 |
+| Shoot biomass | DZA  | 0.248\*\*\* | 0.253\*\*\* | 0.265\*\*\* |      87.19 |
+| Chlorophyll   | DZA  | 0.118\*\*   | 0.141\*\*\* | 0.297\*\*\* |      99.06 |
+| Plant height  | DZA  | 0.131\*\*   | 0.065\*     | 0.175\*     |      99.97 |
+| Leaves        | DZA  | 0.05        | 0.084\*\*   | -0.071      |      63.96 |
+
+``` r
 write.csv(cockerham, "./Figures_tables/Table2.csv", row.names = FALSE)
 ```
 
-## Genetic correlation plots 
+## Genetic correlation plots
 
-```{r corrs}
+``` r
 load(file = "./Data_output/emmeans.w_Ensifer.Rdata") ## loads emmeans.w_Ensifer
 
 ## source the function
@@ -840,7 +944,42 @@ gc_out <- mapply(FUN = gen_corr_func,
                  cols = cols.list, 
                  USE.NAMES = FALSE, 
                  MoreArgs = list(df = emmeans.w_Ensifer))
+```
 
+    ## [1] "chloro1_DZA_1_vs_chloro1_DZA_3"
+    ## [1] "chloro1_DZA_1_vs_height1_DZA_1"
+    ## [1] "chloro1_DZA_1_vs_leaf1_DZA_1"
+    ## [1] "chloro1_DZA_1_vs_shoot_DZA_1"
+    ## [1] "height1_DZA_1_vs_height1_DZA_3"
+    ## [1] "height1_DZA_1_vs_leaf1_DZA_1"
+    ## [1] "height1_DZA_1_vs_shoot_DZA_1"
+    ## [1] "leaf1_DZA_1_vs_leaf1_DZA_3"
+    ## [1] "leaf1_DZA_1_vs_shoot_DZA_1"
+    ## [1] "shoot_DZA_1_vs_shoot_DZA_3"
+    ## [1] "chloro1_DZA_3_vs_height1_DZA_3"
+    ## [1] "chloro1_DZA_3_vs_leaf1_DZA_3"
+    ## [1] "chloro1_DZA_3_vs_shoot_DZA_3"
+    ## [1] "height1_DZA_3_vs_leaf1_DZA_3"
+    ## [1] "height1_DZA_3_vs_shoot_DZA_3"
+    ## [1] "leaf1_DZA_3_vs_shoot_DZA_3"
+    ## [1] "chloro1_A17_2_vs_chloro1_A17_4"
+    ## [1] "chloro1_A17_2_vs_height1_A17_2"
+    ## [1] "chloro1_A17_2_vs_leaf1_A17_2"
+    ## [1] "chloro1_A17_2_vs_shoot_A17_2"
+    ## [1] "height1_A17_2_vs_height1_A17_4"
+    ## [1] "height1_A17_2_vs_leaf1_A17_2"
+    ## [1] "height1_A17_2_vs_shoot_A17_2"
+    ## [1] "leaf1_A17_2_vs_leaf1_A17_4"
+    ## [1] "leaf1_A17_2_vs_shoot_A17_2"
+    ## [1] "shoot_A17_2_vs_shoot_A17_4"
+    ## [1] "chloro1_A17_4_vs_height1_A17_4"
+    ## [1] "chloro1_A17_4_vs_leaf1_A17_4"
+    ## [1] "chloro1_A17_4_vs_shoot_A17_4"
+    ## [1] "height1_A17_4_vs_leaf1_A17_4"
+    ## [1] "height1_A17_4_vs_shoot_A17_4"
+    ## [1] "leaf1_A17_4_vs_shoot_A17_4"
+
+``` r
 ## create histograms of plasticity
 (hist_plast_DZA <- ggplot(emmeans.w_Ensifer, aes(x=shoot.plast_DZA_13)) + 
   geom_histogram(bins = 40, position = position_dodge(), fill = "#79AB39") +
@@ -862,7 +1001,11 @@ gc_out <- mapply(FUN = gen_corr_func,
           panel.grid.minor = element_blank()
         )
   )
+```
 
+![](phenotypic_analyses_files/figure-gfm/corrs-1.png)<!-- -->
+
+``` r
 (hist_plast_A17 <- ggplot(emmeans.w_Ensifer, aes(x=shoot.plast_A17_24)) + 
   geom_histogram(bins = 40, position = position_dodge(), fill = "#C646A9") +
   xlab(NULL)  +
@@ -883,7 +1026,11 @@ gc_out <- mapply(FUN = gen_corr_func,
           panel.grid.minor = element_blank()
         )
   )
+```
 
+![](phenotypic_analyses_files/figure-gfm/corrs-2.png)<!-- -->
+
+``` r
 ## create the paneled figures
 
 fig_base_DZA <- plot_grid(gc_out[[2]] + ggtitle("Chlorophyll") + ylab("Chlorophyll"), 
@@ -930,5 +1077,4 @@ save_plot("./Figures_tables/gen_corrs_A17.png", fig_base_A17,
           # each individual subplot should have an aspect ratio of 1.3
           base_aspect_ratio = 1.3
           )
-
 ```
