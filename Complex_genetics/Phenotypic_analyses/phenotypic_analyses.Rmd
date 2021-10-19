@@ -160,14 +160,17 @@ save(ds_ensifer, file = "./Data_output/ensifer_dataset.Rdata")
 ## Compare treated versus control, exclude controls
 
 ```{r controls}
-load(file = "./Data/ensifer_dataset.Rdata") ## loads ds_ensifer
+load(file = "./Data_output/ensifer_dataset.Rdata") ## loads ds_ensifer
 
+# summarize
 ds_control <- ds_ensifer %>%
   select(line_exp, exp, type, shoot, nod) %>%
   group_by(line_exp, exp, type) %>%
-  summarise(mean_shoot = mean(shoot, na.rm=T), SE_shoot = sd(shoot, na.rm=T)/sqrt(length(shoot)),
-            mean_nod = mean(nod, na.rm=T), SE_nod = sd(nod, na.rm=T)/sqrt(length(nod)))
-## replace NaN with 0:
+  summarise(mean_shoot = mean(shoot, na.rm=T), 
+            SE_shoot = sd(shoot, na.rm=T)/sqrt(length(shoot)),
+            mean_nod = mean(nod, na.rm=T), 
+            SE_nod = sd(nod, na.rm=T)/sqrt(length(nod)))
+## replace NaN with 0, bc it really means 0 and not missing data:
 ds_control$mean_shoot[is.nan(ds_control$mean_shoot)] <- 0
 ds_control$mean_nod[is.nan(ds_control$mean_nod)] <- 0
 
@@ -236,7 +239,7 @@ ds_control$type <- recode_factor(ds_control$type, !!!level_key)
 #           align = "v",
 #           labels = NULL)
 
-save_plot("./Figures_Tables/controls.png", p_nod,
+save_plot("./Figures_tables/controls.png", p_nod,
           ncol = 1, # we're saving a grid plot of 2 columns
           nrow = 1, # and 3 rows
           # each individual subplot should have an aspect ratio of 1.3
@@ -248,8 +251,8 @@ ds <- ds_ensifer %>%
   filter(type == "treated") %>%
   droplevels(.)
 
-write.csv(ds, "./Data/dataset_treat.csv", row.names = FALSE)
-save(ds, file = "./Data/ds_treat.Rdata")
+write.csv(ds, "./Data_output/dataset_treat.csv", row.names = FALSE)
+save(ds, file = "./Data_output/ds_treat.Rdata")
 
 ## summarize metadata
 ds_metadata <- ds %>%
@@ -261,7 +264,7 @@ ds_metadata <- ds %>%
 ## Calculate raw means
 
 ```{r raw_means}
-load(file = "./Data/ds_treat.Rdata") ## loads ds
+load(file = "./Data_output/ds_treat.Rdata") ## loads ds
 
 # summarize for each strain and experiment
 ds_raw_means <- ds %>%
@@ -269,7 +272,7 @@ ds_raw_means <- ds %>%
   summarise_if(is.numeric, mean, na.rm=TRUE) %>%
   as.data.frame(.)
 
-save(ds_raw_means, file = "./Data/raw_means_long.Rdata")
+save(ds_raw_means, file = "./Data_output/raw_means_long.Rdata")
 
 # long to wide for line
 setDT(ds_raw_means)   # coerce to data.table
@@ -277,7 +280,7 @@ ds_means.w <- dcast(ds_raw_means, strain_ID ~ line_exp,
                    value.var = c("chloro1","height1","leaf1",
                                  "nod","nod.weight","shoot"))
 
-save(ds_means.w, file = "./Data/raw_means_wide.Rdata")
+save(ds_means.w, file = "./Data_output/raw_means_wide.Rdata")
 ```
 
 ## Calculate emmeans (correcting for rack)
@@ -286,18 +289,23 @@ Run mixed models on each experiment:
 
 ```{r emmeans}
 ## load proper dataset
-load(file = "./Data/ds_treat.Rdata") # loads ds
+load(file = "./Data_output/ds_treat.Rdata") # loads ds
 
 ## create list of traits/exps to loop through:
 traits_list <- c(rep("chloro1",4), rep("height1",4), rep("leaf1",4), 
             rep("shoot",4), rep("nod",4), rep("nod.weight", 4))
 exps_list <- rep(c("DZA_1", "A17_2", "DZA_3", "A17_4"),6)
+combs_list <- paste0(traits_list, "_", exps_list)
 
 ## source the function:
 source("../Source_code/emmeans_func.R")
 
-emmeans_out <- mapply(FUN = emmeans_function, traits = traits_list, 
-                      exps = exps_list, USE.NAMES = TRUE, MoreArgs = list(df = ds))
+emmeans_out <- mapply(FUN = emmeans_function, 
+                      combs = combs_list, 
+                      traits = traits_list, 
+                      exps = exps_list, 
+                      USE.NAMES = TRUE, 
+                      MoreArgs = list(df = ds))
 
 ## collapse dfs into one
 emmeans.w <- emmeans_out %>% 
@@ -319,7 +327,7 @@ names(emmeans.w) <- c("strain_ID",
                       "nod.weight_DZA_1", "nod.weight_A17_2",
                       "nod.weight_DZA_3", "nod.weight_A17_4")
 
-save(emmeans.w, file = "./Data/emmeans_wide.Rdata")
+save(emmeans.w, file = "./Data_output/emmeans_wide.Rdata")
 
 ## wide to long
 emmeans <- reshape(emmeans.w, direction='long', 
@@ -341,11 +349,11 @@ emmeans <- reshape(emmeans.w, direction='long',
         v.names=c('chloro1', 'height1','leaf1','nod','nod.weight','shoot'),
         idvar='strain_ID')
 
-save(emmeans, file = "./Data/emmeans_long.Rdata")
+save(emmeans, file = "./Data_output/emmeans_long.Rdata")
 
 ## regress emmeans and raw_means to make sure they were correctly calculated
-load("./Data/raw_means_long.Rdata") ## loads ds_raw_means
-load(file = "./Data/emmeans_long.Rdata") ## loads emmeans
+load("./Data_output/raw_means_long.Rdata") ## loads ds_raw_means
+load(file = "./Data_output/emmeans_long.Rdata") ## loads emmeans
 
 emmeans.l <- emmeans %>% 
   gather(traits, em_means, chloro1:shoot) %>%
@@ -366,12 +374,13 @@ comb_means <- separate(data = comb_means,
   geom_point() +
   geom_smooth(method = "lm") +
   facet_wrap(exp~trait, scales = "free", ncol = 6))
+## looks good
 ```
 
 ## Calculate strain plasticity (for all traits)
 
 ```{r plasticity}
-load(file = "./Data/emmeans_wide.Rdata") ## loads emmeans.w
+load(file = "./Data_output/emmeans_wide.Rdata") ## loads emmeans.w
 
 ## calculate plasticity (log response ratio exp2:exp1)
 emmeans.w_Ensifer <- emmeans.w %>%
@@ -384,46 +393,25 @@ emmeans.w_Ensifer <- emmeans.w %>%
          shoot.plast_DZA_13 = log(shoot_DZA_3/shoot_DZA_1),
          shoot.plast_A17_24 = log(shoot_A17_4/shoot_A17_2))
  
-save(emmeans.w_Ensifer, file = "./Data/emmeans.w_Ensifer.Rdata") ## will get used to make phenotype file
+save(emmeans.w_Ensifer, file = "./Data_output/emmeans.w_Ensifer.Rdata") ## will get used to make phenotype file
 
 ## use plast function to plot values
 source('../Source_code/plast_func.R')
 
 trait.list <- c("chloro", "height", "leaf", "shoot")
 
-plast_out <- lapply(trait.list, plast_func, df = emmeans.w_Ensifer)
-
-## shoot biomass figure only
-fig_base <- plot_grid(plast_out[[4]][[2]], plast_out[[4]][[3]],  
-          ncol = 1,
-          nrow = 2,
-          align = "v",
-          labels = NULL)
-
-# add on the shared x axis title
-fig.xaxis <- add_sub(fig_base, "Strain", size = 24, hjust = 0.5)
-
-# add on the shared y axis title
-fig_y_axis <- ggdraw() + draw_label("Plasticity (log response ratio)", size = 24, angle=90)
-
-# put them together
-fig <- plot_grid(fig_y_axis, fig.xaxis, ncol=2, rel_widths=c(0.05, 1)) 
-# rel_heights or widths values control text margins
-
-save_plot("./Figures_Tables/strain_plasticity_shoot.png", fig,
-          ncol = 1, # we're saving a grid plot of 2 columns
-          nrow = 2, # and 3 rows
-          # each individual subplot should have an aspect ratio of 1.3
-          base_aspect_ratio = 3
-          )
+plast_out <- sapply(trait.list, plast_func, df = emmeans.w_Ensifer,
+                    USE.NAMES = TRUE, simplify = FALSE)
 
 ## all traits figure
-fig_base <- plot_grid(plast_out[[4]][[2]] + ggtitle("Shoot biomass"), 
-                       plast_out[[1]][[2]] + ggtitle("Chlorophyll"),
-                       plast_out[[4]][[3]], plast_out[[1]][[3]],
-                       plast_out[[2]][[2]] + ggtitle("Leaves"),
-                       plast_out[[3]][[2]] + ggtitle("Plant height"),
-                      plast_out[[2]][[3]], plast_out[[3]][[3]], 
+fig_base <- plot_grid(plast_out[["shoot"]][[2]] + ylab("Shoot biomass") + ggtitle("DZA"),
+                      plast_out[["shoot"]][[3]] + ggtitle("A17"), 
+                       plast_out[["chloro"]][[2]] + ylab("Chlorophyll"),
+                      plast_out[["chloro"]][[3]],
+                       plast_out[["height"]][[2]] + ylab("Plant height"),
+                       plast_out[["height"]][[3]],
+                      plast_out[["leaf"]][[2]] + ylab("Leaves"),
+                      plast_out[["leaf"]][[3]], 
                      
           ncol = 2,
           nrow = 4,
@@ -441,7 +429,7 @@ fig_y_axis <- ggdraw() + draw_label("Plasticity (log response ratio)",
 fig <- plot_grid(fig_y_axis, fig.xaxis, ncol=2, rel_widths=c(0.05, 1)) 
 # rel_heights or widths values control text margins
 
-save_plot("./Figures_Tables/strain_plasticity_all.png", fig,
+save_plot("./Figures_tables/strain_plasticity_all.png", fig,
           ncol = 1.5, # we're saving a grid plot of 2 columns
           nrow = 4, # and 3 rows
           # each individual subplot should have an aspect ratio of 1.3
