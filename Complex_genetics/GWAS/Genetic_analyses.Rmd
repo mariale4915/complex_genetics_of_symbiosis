@@ -242,7 +242,7 @@ kable(overlap)
 ## Make stacked barplots (number of genes for each trait and line)
 
 ```{r barplots}
-load(file = "./Data/SNPs_sig_long.Rdata") # loads SNPs_sig_long
+load(file = "./Data_output/SNPs_sig_long.Rdata") # loads SNPs_sig_long
 
 # get counts of sig SNPs for each region, trait, exp
 SNPs_sub <- SNPs_sig_long %>%
@@ -256,7 +256,7 @@ SNPs_sub$line_region <- factor(SNPs_sub$line_region,
                                levels = c("A17_Chromosome","A17_pSymA","A17_pSymB",
                                           "DZA_Chromosome","DZA_pSymA","DZA_pSymB"))
 
-write.csv(SNPs_sub, file = "./Data/GxE_numbers.csv", row.names = FALSE)
+write.csv(SNPs_sub, file = "./Data_output/Gene-lvl_summaries/GxE_numbers.csv", row.names = FALSE)
 
 SNPs_sub2 <- SNPs_sig_long %>%
   filter(ncbi_func != "non-coding") %>%
@@ -264,7 +264,7 @@ SNPs_sub2 <- SNPs_sig_long %>%
   summarize(gene_count = n_distinct(gene_ID),
             ps_count = n_distinct(rs))
 
-write.csv(SNPs_sub2, file = "./Data/GxG_numbers.csv", row.names = FALSE)
+write.csv(SNPs_sub2, file = "./Data_output/Gene-lvl_summaries/GxG_numbers.csv", row.names = FALSE)
 
 # make plotting function
 trait.list <- c(rep("chloro1", 2), rep("height1",2), rep("leaf1",2),rep("shoot",2), 
@@ -275,8 +275,12 @@ trait_line.list <- paste0(trait.list, "-",line.list)
 ## source function
 source("../Source_code/bar_func.R")
 
-bars_out <- mapply(combs = trait_line.list, traits = trait.list, lines = line.list, 
-                     FUN = bar_func, USE.NAMES = TRUE, MoreArgs = list(df = SNPs_sub))
+bars_out <- mapply(combs = trait_line.list, 
+                   traits = trait.list, 
+                   lines = line.list, 
+                     FUN = bar_func, 
+                   USE.NAMES = TRUE, 
+                   MoreArgs = list(df = SNPs_sub))
 
 # make a paneled Figure (all traits)
 row1 <- plot_grid( bars_out[[1]] + ggtitle("Chlorophyll") + theme(axis.text.y = element_text(size=14)), 
@@ -348,13 +352,13 @@ fig_y_axis <- ggdraw() + draw_label("Genes (no.)", size = 24, angle=90)
 fig <- plot_grid(fig_y_axis, fig_x_axis, ncol=2, rel_widths=c(0.05, 1)) 
 # rel_heights or widths values control text margins
 
-save_plot("./Figures_Tables/stacked_bars_all.png", fig,
+save_plot("./Figures_tables/stacked_bars_all.png", fig,
           ncol = 4, # we're saving a grid plot of 2 columns
           nrow = 4, # and 2 rows
           # each individual subplot should have an aspect ratio of 1.3
           base_aspect_ratio = 1.3)
 
-include_graphics("./Figures_Tables/stacked_bars_all.png")
+include_graphics("./Figures_tables/stacked_bars_all.png")
 ```
 
 ## Variant-lvl analyses
@@ -362,7 +366,7 @@ include_graphics("./Figures_Tables/stacked_bars_all.png")
 ### Select traits, rename cols
 
 ```{r select}
-load(file = "./Data/SNPs.Rdata") # loads SNPs
+load(file = "./Data_output/SNPs.Rdata") # loads SNPs
 
 ## subset dataframe, rename cols
 
@@ -424,13 +428,13 @@ SNPs_sel <- SNPs %>%
          region, ps, af, impact, RefSeq_ID, ncbi_func, start_pos, end_pos
          )
 
-save(SNPs_sel, file = "./Data/SNPs_sel.Rdata")
+save(SNPs_sel, file = "./Data_output/SNPs_sel.Rdata")
 ```
 
 ### Correlations of effect sizes across experiments (same trait)
 
 ```{r corr_calcs_exp}
-load(file = "./Data/SNPs_sel.Rdata") # loads SNPs_sel
+load(file = "./Data_output/SNPs_sel.Rdata") # loads SNPs_sel
 
 # specify vars to loop over
 reg.x.list <- c("chloro.1","height.1", "leaf.1","shoot.1",
@@ -467,14 +471,14 @@ fig_base <- plot_grid(plot_out[[4]] + ggtitle("Shoot biomass") +
 # # put them together
 # fig <- plot_grid(fig.yaxis, fig.xaxis, ncol=2, rel_widths=c(0.06, 1)) 
 
-save_plot("./Figures_Tables/var_effect_corrs_shoot.pdf", fig_base,
+save_plot("./Figures_tables/var_effect_corrs_shoot.pdf", fig_base,
           ncol = 1, # we're saving a grid plot of 2 columns
           nrow = 2, # and 3 rows
           # each individual subplot should have an aspect ratio of 1.3
           base_aspect_ratio = 1.3
           )
 
-include_graphics("./Figures_Tables/var_effect_corrs_shoot.pdf")
+include_graphics("./Figures_tables/var_effect_corrs_shoot.pdf")
 
 ## corrplots (rest)
 
@@ -515,7 +519,7 @@ fig <- plot_grid(fig_DZA, fig_A17,
                   align = "v",
                   labels = NULL)
 
-save_plot("./Figures_Tables/var_effect_corrs_all.pdf", fig,
+save_plot("./Figures_tables/var_effect_corrs_all.pdf", fig,
           ncol = 3, # we're saving a grid plot of 2 columns
           nrow = 2, # and 3 rows
           # each individual subplot should have an aspect ratio of 1.3
@@ -523,63 +527,6 @@ save_plot("./Figures_Tables/var_effect_corrs_all.pdf", fig,
           )
 
 include_graphics("./Figures_Tables/var_effect_corrs.png")
-```
-
-### Correlations of effect sizes between hosts 
-
-```{r corr_calcs_host}
-load(file = "./Data/SNPs_sel.Rdata") # loads SNPs_sel
-
-# specify vars to loop over (traits)
-trait.list <- c("chloro","height","leaf","shoot") ## "chloro", no pleio SNPs
-
-# using function for regressing variant level effects
-source("../Source_code/var_effect_corr_func_GxG.R")
-  
-plot_out <- sapply(trait.list, var_effect_corr_func_GxG, df = SNPs_sel,
-                   USE.NAMES = TRUE, simplify = FALSE)
-
-## same trait across hosts
-fig_base <- plot_grid( plot_out[["chloro"]] + ggtitle("Chlorophyll"), 
-                          plot_out[["height"]] + ggtitle("Plant height"), 
-                          plot_out[["leaf"]] + ggtitle("Leaves"),
-          ncol = 3,
-          nrow = 1,
-          align = "h",
-          labels = NULL)
-
-fig.xaxis <- add_sub(fig_base, "Effect size for DZA, experiment 3", size = 18, hjust = 0.5)
-# add on the shared y axis title
-fig.yaxis <- ggdraw() + draw_label("Effect size for A17 \n experiment 4", size = 18, angle=90)
-# put them together
-fig <- plot_grid(fig.yaxis, fig.xaxis, ncol=2, rel_widths=c(0.05, 1)) 
-
-save_plot("./Figures_Tables/var_effect_corrs_GxG.png", fig,
-          ncol = 3, # we're saving a grid plot of 2 columns
-          nrow = 1, # and 3 rows
-          # each individual subplot should have an aspect ratio of 1.3
-          base_aspect_ratio = 1.3
-          )
-
-include_graphics("./Figures_Tables/var_effect_corrs_GxG.png")
-
-## same trait across hosts
-fig_base <- plot_grid(plot_out[["shoot"]] + ggtitle("Shoot biomass") +
-                        xlab("Effect size for DZA \n experiment 3") +
-                        ylab("Effect size for A17 \n experiment 4"),
-          ncol = 1,
-          nrow = 1,
-          align = "hv",
-          labels = NULL)
-
-save_plot("./Figures_Tables/var_effect_corrs_GxG_shoot.png", fig_base,
-          ncol = 1, # we're saving a grid plot of 2 columns
-          nrow = 1, # and 3 rows
-          # each individual subplot should have an aspect ratio of 1.3
-          base_aspect_ratio = 1.3
-          )
-
-include_graphics("./Figures_Tables/var_effect_corrs_GxG_shoot.png")
 ```
 
 ## GxE global analyses
@@ -592,30 +539,15 @@ Each trait was measured in four experiments total, that's why there are 24 "trai
 
 This code combines the association tests for each trait across the genome (i.e., chr, pSymA, pSymB all in one file)
 
-```{r GxE_global, warning = FALSE}
-## test 
-file_list <- list.files(path="./Data/gemma_outputs/", pattern = paste0("01", ".assoc"), full.names = T)
-  
-extract_fun <- function(files){
-  traits <- read.table(files, header=T, sep="\t") # read in the file
-    return(traits)
-}  
-
-traits <- lapply(file_list, extract_fun)
-
-comb <- bind_rows(traits)
-
-write.csv(comb, file = paste0("./Data/gemma_outputs/trait_", "01-test" , ".csv"), row.names = FALSE)
-
-print(paste0("completed trait", "01"))
-  
+```{r GxE_global_combine}
 ## function
   
 ### make trait number list
 trait.list <- str_pad(1:24, 2, pad = "0")
 comb_func <- sapply(trait.list, function(x){
 
-file_list <- list.files(path="./Data/gemma_outputs/", pattern = paste0(x, ".assoc"), full.names = T)
+file_list <- list.files(path="./Data_output/betasigs_29Mar2021/", 
+                        pattern = paste0(x, ".assoc"), full.names = T)
 
 extract_fun <- function(files){
   traits <- read.table(files, header=T, sep="\t") # read in the file
@@ -626,35 +558,38 @@ traits <- lapply(file_list, extract_fun)
 
 comb <- bind_rows(traits)
 
-write.csv(comb, file = paste0("./Data/gemma_outputs/trait_", x , ".csv"), row.names = FALSE)
+write.csv(comb, file = paste0("./Data_output/Global_gxe/trait_", x , ".csv"), row.names = FALSE)
 
 print(paste0("completed trait", x))
 })
+
+# ## alternative 
+# # merge across regions for each trait
+# bind_func <- function(x){
+#   trait_chr <- read.delim(paste0("./chr_subset191_LD_ulmm_trait_",
+#   x, ".assoc.txt"))
+#   trait_psyma <- read.delim(paste0("./psyma_subset191_LD_ulmm_trait_",
+#   x, ".assoc.txt"))
+#   trait_psymb <- read.delim(paste0("./psymb_subset191_LD_ulmm_trait_",
+#   x, ".assoc.txt"))
+# 
+# trait <- rbind(trait_chr, trait_psyma, trait_psymb)
+# 
+# write.csv(trait, file = paste0("./trait_",
+#   x, ".csv"), row.names = FALSE)
+#   
+# }
+# 
+# index <- sprintf("%02d",1:24)
+# 
+# sapply(index, bind_func)
 ```
 
 ### Global test of GxE
 
-```{r global_GxE, eval = FALSE}
+Completed on the server:
 
-# merge across regions for each trait
-bind_func <- function(x){
-  trait_chr <- read.delim(paste0("./Data/gemma_outputs/chr_subset191_LD_ulmm_trait_",
-  x, ".assoc.txt"))
-  trait_psyma <- read.delim(paste0("./Data/gemma_outputs/psyma_subset191_LD_ulmm_trait_",
-  x, ".assoc.txt"))
-  trait_psymb <- read.delim(paste0("./Data/gemma_outputs/psymb_subset191_LD_ulmm_trait_",
-  x, ".assoc.txt"))
-
-trait <- rbind(trait_chr, trait_psyma, trait_psymb)
-
-write.csv(trait, file = paste0("./trait_",
-  x, ".csv"), row.names = FALSE)
-  
-}
-
-index <- sprintf("%02d",1:24)
-
-sapply(index, bind_func)
+```{r GxE_global_test, eval = FALSE}
 
 ### ran on server ###
 
@@ -722,11 +657,16 @@ save(slopes_out_all, file = "./slopes_out_all.Rdata")
 #
 
 ### end server run
+```
 
-traits <- read.table("./Data/gemma_outputs/README.txt", header = FALSE)
+### Global test of GxE (plotting)
+
+```{r GxE_global_plot}
+
+traits <- read.table("./Data_output/Global_gxe/README.txt", header = FALSE)
 
 # load slopes_out_all
-load(file = "./Data/gemma_outputs/slopes_out_all.Rdata")
+load(file = "./Data_output/Global_gxe/slopes_out_all.Rdata")
 
 ## merge data
 seq_x1 <- seq(1,12000,1000)
@@ -752,10 +692,10 @@ slopes_out <- mapply(x1 = seq_x1,
 
 plot_func <- function(traits1, traits2, cols, list){
 
-  data_1 <- read_csv(paste0("./Data/gemma_outputs/trait_", 
+  data_1 <- read_csv(paste0("./Data_output/Global_gxe/trait_", 
                             substr(traits$V2[traits1], 6, 7), ".csv"),
                             col_names = TRUE)
-  data_2 <- read_csv(paste0("./Data/gemma_outputs/trait_", 
+  data_2 <- read_csv(paste0("./Data_output/Global_gxe/trait_", 
                             substr(traits$V2[traits2], 6, 7), ".csv"),
                             col_names = TRUE)
   
@@ -778,7 +718,7 @@ plot_func <- function(traits1, traits2, cols, list){
     theme(plot.title = element_text(hjust = 0.5))
   
   ## save the resulting plot
-  ggsave(file = paste0("./Data/gemma_outputs/beta_dist_plots/beta_dist_", cols, ".png"))
+  ggsave(file = paste0("./Data_output/Global_gxe/beta_dist_plots/beta_dist_", cols, ".png"))
   
   # real slope
   lm <- lm(beta.exp2 ~ beta.exp1, data = data)
@@ -796,7 +736,7 @@ plot_func <- function(traits1, traits2, cols, list){
     xlab(paste0(cols))
 
   ## save the resulting plot
-  ggsave(file = paste0("./Data/gemma_outputs/real_perms/", cols, ".png"))
+  ggsave(file = paste0("./Data_output/Global_gxe/real_perms/", cols, ".png"))
 
   p_value <- findInterval(real_slope, sort(df[[cols]]))/1000
 
@@ -819,7 +759,7 @@ plots_all <- plot_grid(plotlist = plots_out,
                        align = "hv",
                        labels = NULL)
 
-save_plot("./Data/gemma_outputs/all_dist.png", plots_all,
+save_plot("./Data_output/Global_gxe/all_dist.png", plots_all,
           ncol = 4, # we're saving a grid plot of 2 columns
           nrow = 2, # and 3 rows
           # each individual subplot should have an aspect ratio of 1.3
