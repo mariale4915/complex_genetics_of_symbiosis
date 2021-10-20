@@ -465,12 +465,6 @@ fig_base <- plot_grid(plot_out[[4]] + ggtitle("Shoot biomass") +
           align = "hv",
           labels = c("A)","B)"))
 
-# fig.xaxis <- add_sub(fig_base, "Experiment (1 = DZA, 2 = A17)", size = 20, hjust = 0.5)
-# # add on the shared y axis title
-# fig.yaxis <- ggdraw() + draw_label("Experiment (3 = DZA, 4 = A17)", size = 20, angle=90)
-# # put them together
-# fig <- plot_grid(fig.yaxis, fig.xaxis, ncol=2, rel_widths=c(0.06, 1)) 
-
 save_plot("./Figures_tables/var_effect_corrs_shoot.pdf", fig_base,
           ncol = 1, # we're saving a grid plot of 2 columns
           nrow = 2, # and 3 rows
@@ -526,7 +520,7 @@ save_plot("./Figures_tables/var_effect_corrs_all.pdf", fig,
           base_aspect_ratio = 1.3
           )
 
-include_graphics("./Figures_Tables/var_effect_corrs.png")
+include_graphics("./Figures_tables/var_effect_corrs_all.pdf")
 ```
 
 ## GxE global analyses
@@ -775,111 +769,6 @@ https://jokergoo.github.io/circlize_book/book/
 Gu, Z. (2014) circlize implements and enhances circular visualization in R. Bioinformatics. DOI: 10.1093/bioinformatics/btu393
 
 ```{r cirular}
-### test code from tutorial 
-set.seed(999)
-n = 1000
-df = data.frame(sectors = sample(letters[1:8], n, replace = TRUE),
-    x = rnorm(n), y = runif(n))
-
-### initialize the circular layout
-circos.par("track.height" = 0.1)
-circos.initialize(df$sectors, x = df$x)
-### add the first track
-circos.track(df$sectors, y = df$y,
-    panel.fun = function(x, y) {
-        circos.text(CELL_META$xcenter, 
-            CELL_META$cell.ylim[2] + mm_y(5), 
-            CELL_META$sector.index)
-        circos.axis(labels.cex = 0.6)
-})
-### add colors and points
-col = rep(c("#FF0000", "#00FF00"), 4)
-circos.trackPoints(df$sectors, df$x, df$y, col = col, pch = 16, cex = 0.5)
-circos.text(-1, 0.5, "text", sector.index = "a", track.index = 1)
-bgcol = rep(c("#EFEFEF", "#CCCCCC"), 4)
-### add the second track (histogram)
-circos.trackHist(df$sectors, df$x, bin.size = 0.2, bg.col = bgcol, col = NA)
-### add the third track (line plot)
-circos.track(df$sectors, x = df$x, y = df$y,
-    panel.fun = function(x, y) {
-        ind = sample(length(x), 10)
-        x2 = x[ind]
-        y2 = y[ind]
-        od = order(x2)
-        circos.lines(x2[od], y2[od])
-})
-### update the second track
-circos.update(sector.index = "d", track.index = 2, 
-    bg.col = "#FF8080", bg.border = "black")
-circos.points(x = -2:2, y = rep(0.5, 5), col = "white")
-circos.text(CELL_META$xcenter, CELL_META$ycenter, "updated", col = "white")
-### add the fourth track (heatmap)
-circos.track(ylim = c(0, 1), panel.fun = function(x, y) {
-    xlim = CELL_META$xlim
-    ylim = CELL_META$ylim
-    breaks = seq(xlim[1], xlim[2], by = 0.1)
-    n_breaks = length(breaks)
-    circos.rect(breaks[-n_breaks], rep(ylim[1], n_breaks - 1),
-                breaks[-1], rep(ylim[2], n_breaks - 1),
-                col = rand_color(n_breaks), border = NA)
-})
-### reset the graphic parameters and internal variables
-circos.clear()
-
-## adding legends
-col_fun = colorRamp2(c(-2, 0, 2), c("green", "yellow", "red"))
-circlize_plot = function() {
-    set.seed(12345)
-    sectors = letters[1:10]
-    circos.initialize(sectors, xlim = c(0, 1))
-    circos.track(ylim = c(0, 1), panel.fun = function(x, y) {
-        circos.points(runif(20), runif(20), cex = 0.5, pch = 16, col = 2)
-        circos.points(runif(20), runif(20), cex = 0.5, pch = 16, col = 3)
-    })
-    circos.track(ylim = c(0, 1), panel.fun = function(x, y) {
-        circos.lines(sort(runif(20)), runif(20), col = 4)
-        circos.lines(sort(runif(20)), runif(20), col = 5)
-    })
-
-    for(i in 1:10) {
-        circos.link(sample(sectors, 1), sort(runif(10))[1:2], 
-                    sample(sectors, 1), sort(runif(10))[1:2],
-                    col = add_transparency(col_fun(rnorm(1))))
-    }
-    circos.clear()
-}
-
-circlize_plot()
-
-## draw sector
-par(mar = c(1, 1, 1, 1))
-plot(c(-1, 1), c(-1, 1), type = "n", axes = FALSE, ann = FALSE, asp = 1)
-draw.sector(20, 0)
-draw.sector(30, 60, rou1 = 0.8, rou2 = 0.5, clock.wise = FALSE, col = "#FF000080")
-draw.sector(350, 1000, col = "#00FF0080", border = NA)
-draw.sector(0, 180, rou1 = 0.25, center = c(-0.5, 0.5), border = 2, lwd = 2, lty = 2)
-draw.sector(0, 360, rou1 = 0.7, rou2 = 0.6, col = "#0000FF80")
-
-### highlight specific sections
-sectors = letters[1:8]
-circos.initialize(sectors, xlim = c(0, 1))
-for(i in 1:3) {
-    circos.track(ylim = c(0, 1))
-}
-circos.info(plot = TRUE)
-
-draw.sector(get.cell.meta.data("cell.start.degree", sector.index = "a"),
-            get.cell.meta.data("cell.end.degree", sector.index = "a"),
-            rou1 = get.cell.meta.data("cell.top.radius", track.index = 1),
-            col = "#FF000040")
-
-pos = circlize(c(0.4, 1), c(0, 1), sector.index = "h", track.index = 2) ## start, end, then full range 
-draw.sector(pos[1, "theta"], pos[2, "theta"], pos[1, "rou"], pos[2, "rou"], 
-    clock.wise = TRUE, col = "#00FFFF40")
-circos.clear()
-
-### my code
- 
 ### function
 source('../Source_code/circos_func.R')
 
@@ -889,79 +778,53 @@ trait.list <- c("chloro","height","leaf","shoot")
 ### call
 circos_out <- sapply(trait.list, circos_func, 
                       simplify = FALSE, USE.NAMES = TRUE)
-
-### combine chloro, height, and leaf into one plot
-circos_chloro <- ggdraw() + 
-  draw_image("./Figures_Tables/circos_plots/circos_chloro.pdf", 
-             scale = 1)
-
-circos_height <- ggdraw() + 
-  draw_image("./Figures_Tables/circos_plots/circos_height.pdf", 
-             scale = 1)
-
-circos_leaf <- ggdraw() + 
-  draw_image("./Figures_Tables/circos_plots/circos_leaf.pdf", 
-             scale = 1)
-
-circos.c <- plot_grid(circos_chloro, circos_height, circos_leaf,
-                      labels = "AUTO",
-                      ncol = 1,
-                      nrow = 3,
-                      align = "v")
-
-save_plot("./Figures_tables/circos_plots/circos_supp.pdf", circos.c,
-          ncol = 1, # we're saving a grid plot of 4 columns
-          nrow = 3, # and 2 rows
-          # each individual subplot should have an aspect ratio of 1.3
-          base_aspect_ratio = 1.3
-          )
 ```
 
-## merging uniprot accessions and RefSeq_IDs, and DAVID outputs
+## Merging uniprot accessions and RefSeq_IDs, and DAVID outputs
 
 ```{r uniprot_DAVID}
 ## uniprot
-genes_shoot <- read_csv("./Data/Gene-lvl_summaries/genes_shoot.csv")
+genes_shoot <- read_csv("./Data_output/Gene-lvl_summaries/genes_shoot.csv")
 genes_uniprot <- 
- read_excel("./Data/DAVID_files/all_sig_genes_uniprot.xlsx")
+ read_excel("./Data_output/DAVID_files/all_sig_genes_uniprot.xlsx")
 
 genes_shoot_uniprot <- left_join(genes_shoot,
                                  genes_uniprot, by = "RefSeq_ID")
 
-write.csv(genes_shoot_uniprot, file = "./Data/DAVID_files/all_sig_genes_uniprot_comb.csv", 
+write.csv(genes_shoot_uniprot, file = "./Data_output/DAVID_files/all_sig_genes_uniprot_comb.csv", 
           row.names = FALSE)
 
 ## merge all DAVID outputs
 genes_GxE_DZA1 <- 
- read_excel("./Data/DAVID_files/GxE_DZA-1_func_ann.xlsx")
+ read_excel("./Data_output/DAVID_files/GxE_DZA-1_func_ann.xlsx")
 genes_GxE_DZA1$type <- "GxE_DZA1"
 ###
 genes_GxE_DZA3 <- 
- read_excel("./Data/DAVID_files/GxE_DZA-3_func_ann.xlsx")
+ read_excel("./Data_output/DAVID_files/GxE_DZA-3_func_ann.xlsx")
 genes_GxE_DZA3$type <- "GxE_DZA3"
 ###
 genes_GxE_A172 <- 
- read_excel("./Data/DAVID_files/GxE_A17-2_func_ann.xlsx")
+ read_excel("./Data_output/DAVID_files/GxE_A17-2_func_ann.xlsx")
 genes_GxE_A172$type <- "GxE_A172"
 ###
 genes_GxE_A174 <- 
- read_excel("./Data/DAVID_files/GxE_A17-4_func_ann.xlsx")
+ read_excel("./Data_output/DAVID_files/GxE_A17-4_func_ann.xlsx")
 genes_GxE_A174$type <- "GxE_A174"
 ###
 genes_GxG_DZA <- 
- read_excel("./Data/DAVID_files/GxG_DZA_func_ann.xlsx")
+ read_excel("./Data_output/DAVID_files/GxG_DZA_func_ann.xlsx")
 genes_GxG_DZA$type <- "GxG_DZA"
 ###
 genes_GxG_A17 <- 
- read_excel("./Data/DAVID_files/GxG_A17_func_ann.xlsx")
+ read_excel("./Data_output/DAVID_files/GxG_A17_func_ann.xlsx")
 genes_GxG_A17$type <- "GxG_A17"
 ###
 genes_uni <- 
- read_excel("./Data/DAVID_files/universal_func_ann.xlsx")
+ read_excel("./Data_output/DAVID_files/universal_func_ann.xlsx")
 genes_uni$type <- "universal"
 ###
 genes_plast <- 
- read_excel("./Data/DAVID_files/plast_shoot_func_ann.xlsx")
+ read_excel("./Data_output/DAVID_files/plast_shoot_func_ann.xlsx")
 genes_plast$type <- "plasticity"
 
 ## combine
@@ -969,27 +832,25 @@ genes_DAVID <- rbind(genes_GxE_DZA1, genes_GxE_DZA3, genes_GxE_A172, genes_GxE_A
                      genes_GxG_DZA, genes_GxG_A17,
                      genes_uni, genes_plast)
 
-write.csv(genes_DAVID, file = "./Data/DAVID_files/DAVID_outputs_combined.csv", row.names = FALSE)
+write.csv(genes_DAVID, file = "./Data_output/DAVID_files/DAVID_outputs_combined.csv", row.names = FALSE)
 ```
 
 ## Compare analyses based on WG with separate genomic regions
 
 ```{r compare_methods}
 
-## Merge results (GEMMA only)
-
 ## chromosome first
-load("./Data/methods_comp/betasigs_15May2020/chr_betasigs.Rdata") ## realres.psFIsig
+load("./Data_output/methods_comp/betasigs_15May2020/chr_betasigs.Rdata") ## realres.psFIsig
 chr_sigs <- realres.psFIsig
 chr_sigs$region <- "Chromosome"
 
 ## psyma
-load("./Data/methods_comp/betasigs_15May2020/psyma_betasigs.Rdata") ## realres.psFIsig
+load("./Data_output/methods_comp/betasigs_15May2020/psyma_betasigs.Rdata") ## realres.psFIsig
 psyma_sigs <- realres.psFIsig
 psyma_sigs$region <- "pSymA"
 
 ## psymb
-load("./Data/methods_comp/betasigs_15May2020/psymb_betasigs.Rdata") ## realres.psFIsig
+load("./Data_output/methods_comp/betasigs_15May2020/psymb_betasigs.Rdata") ## realres.psFIsig
 psymb_sigs <- realres.psFIsig
 psymb_sigs$region <- "pSymB"
 
@@ -1001,7 +862,7 @@ SNPs_comb.s <- SNPs_comb %>%
   select(rs, region, starts_with("shoot"), starts_with("nod"), -starts_with("nod.weight"))
 
 ## load betasigs from WG
-load("./Data/methods_comp/betasigs_12June2020/WG_betasigs.Rdata") ## realres.psFIsig
+load("./Data_output/methods_comp/betasigs_12June2020/WG_betasigs.Rdata") ## realres.psFIsig
 WG_sigs <- realres.psFIsig
 
 WG_sigs$rs <- str_replace(WG_sigs$rs, "NZ_CP021797.1", "chr")
@@ -1012,7 +873,7 @@ sigs_all <- full_join(SNPs_comb.s, WG_sigs, by ="rs", all = TRUE, suffix = c("_M
 ## 7961 SNPs
 
 ## load betasigs from WG
-load("./Data/methods_comp/betasigs_17June2020/WG2_betasigs.Rdata") ## realres.psFIsig
+load("./Data_output/methods_comp/betasigs_17June2020/WG2_betasigs.Rdata") ## realres.psFIsig
 WG2_sigs <- realres.psFIsig
 
 ## rename genomic region in rs
@@ -1035,63 +896,31 @@ sigs$ps <- sapply(strsplit(as.character(sigs$rs), split="-"), "[", 4)
 sigs$ps <- as.numeric(sigs$ps)
 ## 7961 SNPs
 
-## add in snpEff info:
-VCF_ann <- read.delim("./Data/methods_comp/vcf_ann_11May2020/subset195_LD.ann.TABLE")
-## extract gene, impact, function from snpEff annotation
-VCF_ann$ANN <- as.character(VCF_ann$ANN)
-VCF_ann <- separate(data = VCF_ann, col = ANN, into = c("allele", "effect","impact","gene_name","feature_type"), sep = "\\|")
-## create rs
-VCF_ann$region <- ifelse(VCF_ann$CHROM == "NZ_CP021797.1", "chr", 
-                         ifelse(VCF_ann$CHROM == "NZ_CP021798.1", 
-                                "psyma","psymb"))
-VCF_ann$add1 <- "freebayes"
-VCF_ann$add2 <- "snp"
-VCF_ann$rs <- str_c(VCF_ann$add1, VCF_ann$add2, VCF_ann$region, VCF_ann$POS,VCF_ann$ALT,sep = "-", collapse = NULL)
-## combine
-SNPs_vcf_ann <- left_join(sigs, VCF_ann[,c("rs","effect","impact","gene_name","feature_type","ALT","REF")], by = "rs")
-## 7961 SNPs
-
-## get MAF, minor allele, et c., from GEMMA
-chr_GEMMA_info <- 
-  read.delim("./Data/methods_comp/betasigs_15May2020/chr_subset195_LD_ulmm_trait_10.assoc.txt")
-psyma_GEMMA_info <- 
-  read.delim("./Data/methods_comp/betasigs_15May2020/psyma_subset195_LD_ulmm_trait_10.assoc.txt")
-psymb_GEMMA_info <- 
-  read.delim("./Data/methods_comp/betasigs_15May2020/psymb_subset195_LD_ulmm_trait_10.assoc.txt")
-GEMMA_info <- rbind(chr_GEMMA_info, psyma_GEMMA_info, psymb_GEMMA_info)
-
-SNPs_all <- full_join(SNPs_vcf_ann, GEMMA_info[,c("rs","allele1", "allele0", "af")], by = "rs")
-## 7961 SNPs
-
-## include minor allele state: whether it's ALT or REF
-SNPs_all$ma_state <- ifelse(SNPs_all$ALT == SNPs_all$allele1, "ALT", "REF")
-SNPs_all$ma_state <- as.factor(SNPs_all$ma_state)
-
 ### add in gene products
-load(file = "./Data/methods_comp/vcf_ann_11May2020/gene_functions.Rdata") # loads funcs
+load(file = "./Data_output/methods_comp/vcf_ann_11May2020/gene_functions.Rdata") # loads funcs
 
 ## match info
-SNPs_all$ncbi_func <- funcs$ncbi_func[match(SNPs_all$rs, funcs$rs)]
-SNPs_all$RefSeq_ID <- funcs$RefSeq_ID[match(SNPs_all$rs, funcs$rs)]
-SNPs_all$protein_ID <- funcs$protein_ID[match(SNPs_all$rs, funcs$rs)]
-SNPs_all$gene_ID <- funcs$gene_ID[match(SNPs_all$rs, funcs$rs)]
+sigs$ncbi_func <- funcs$ncbi_func[match(sigs$rs, funcs$rs)]
+sigs$RefSeq_ID <- funcs$RefSeq_ID[match(sigs$rs, funcs$rs)]
+sigs$protein_ID <- funcs$protein_ID[match(sigs$rs, funcs$rs)]
+sigs$gene_ID <- funcs$gene_ID[match(sigs$rs, funcs$rs)]
 
 ## replace na in NCBI fun with non-coding
-SNPs_all$ncbi_func[is.na(SNPs_all$ncbi_func)] <- "non-coding"
+sigs$ncbi_func[is.na(sigs$ncbi_func)] <- "non-coding"
 
 ## code region as factor
-SNPs_all$region <- factor(SNPs_all$region, levels = c("Chromosome","pSymA","pSymB"))
+sigs$region <- factor(sigs$region, levels = c("Chromosome","pSymA","pSymB"))
 
 ######### create long version of SNPs_all ###########
-rownames(SNPs_all) <- SNPs_all[,1] ## name rows by position
+rownames(sigs) <- sigs[,1] ## name rows by position
 
 # use gather to convert wide to long
-SNPs_long.1 <- SNPs_all %>% 
+SNPs_long.1 <- sigs %>% 
   gather(betas, scores, c(3:6, 11:14, 19:26, 35:42)) %>% ## gather betas
   mutate(rs_betas = paste(rs, betas, sep="_")) %>%
   select(-contains(".FIsig"))
 
-SNPs_long.2 <- SNPs_all %>% 
+SNPs_long.2 <- sigs %>% 
   gather(betas, sig, c(7:10, 15:18, 27:34, 43:50)) %>% ## gather sigs
   mutate(rs_betas = paste(rs, betas, sep="_")) %>%
   select(rs_betas, sig)
@@ -1142,26 +971,6 @@ SNPs_sub <- SNPs_sig_long %>%
 SNPs_sub$line_region <- factor(SNPs_sub$line_region, 
                                levels = c("A17_Chromosome","A17_pSymA","A17_pSymB",
                                           "DZA_Chromosome","DZA_pSymA","DZA_pSymB"))
-
-# write.csv(SNPs_sub, file = "./pleiotropy/GxE_numbers.csv", row.names = FALSE)
-
-SNPs_sub2 <- SNPs_sig_long %>%
-  filter(ncbi_func != "non-coding") %>%
-  group_by(trait, line, region, method) %>%
-  summarize(gene_count = n_distinct(RefSeq_ID),
-            ps_count = n_distinct(ps))
-
-# write.csv(SNPs_sub2, file = "./pleiotropy/GxG_numbers.csv", row.names = FALSE)
-
- (bp <- ggplot(data = SNPs_sub %>% filter(line == "DZA"), 
-               aes(x=exp, y=gene_count, fill=region)) +
-   facet_wrap(trait~method, ncol=3) +
-  geom_bar(width = 1, stat = "identity"))
-
-(bp <- ggplot(data = SNPs_sub %>% filter(line == "A17"), 
-               aes(x=exp, y=gene_count, fill=region)) +
-   facet_wrap(trait~method, ncol=3) +
-  geom_bar(width = 1, stat = "identity"))
 
 # make plotting function
 
@@ -1222,7 +1031,7 @@ fig_y_axis <- ggdraw() + draw_label("Genes (no.)", size = 24, angle=90)
 fig <- plot_grid(fig_y_axis, fig_x_axis, ncol=2, rel_widths=c(0.05, 1)) 
 # rel_heights or widths values control text margins
 
-save_plot("./Data/methods_comp/stacked_bars_methods.png", fig,
+save_plot("./Data_output/methods_comp/stacked_bars_methods.png", fig,
           ncol = 3, # we're saving a grid plot of 2 columns
           nrow = 2, # and 2 rows
           # each individual subplot should have an aspect ratio of 1.3
