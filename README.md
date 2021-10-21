@@ -34,7 +34,15 @@ This [folder](https://github.com/rtbatstone/complex_genetics_of_symbiosis/tree/m
 
 -   Phenotypic\_analyses [subfolder](https://github.com/rtbatstone/complex_genetics_of_symbiosis/tree/main/Genetics_conflict_cooperation/Phenotypic_analyses) contains the code to input the raw data and conduct phenotypic analyses
     -   phenotypic\_analyses.md [markdown](https://github.com/rtbatstone/complex_genetics_of_symbiosis/blob/main/Genetics_conflict_cooperation/Phenotypic_analyses/phenotypic_analyses.md) includes input files and code to make: Supp. Fig. S1
+<<<<<<< HEAD
 -   GWAS [subfolder](https://github.com/rtbatstone/complex_genetics_of_symbiosis/tree/main/Genetics_conflict_cooperation/GWAS) contains the code to run the GWAS and conduct genomic analyses
+=======
+<<<<<<< HEAD
+-   GWAS [subfolder](https://github.com/rtbatstone/complex_genetics_of_symbiosis/tree/main/Genetics_conflict_cooperation/GWAS) contains the code to run the GWAS and conduct genomic analyses
+=======
+-   GWAS [subfolder](https://github.com/rtbatstone/complex_genetics_of_symbiosis/tree/main/Complex_genetics/GWAS) contains the code to run the GWAS and conduct genomic analyses
+>>>>>>> f1fb9a5c5a97076b75f92c89ba7301cc6eecec1d
+>>>>>>> 341045489d5ffaa06c7934ee80952223928bd230
     -   Run\_GEMMA.md [markdown](https://github.com/rtbatstone/complex_genetics_of_symbiosis/blob/main/Genetics_conflict_cooperation/GWAS/Run_GEMMA.md) includes code to run GEMMA (on computer cluster)
     -   Genomic\_analyses.md [markdown](https://github.com/rtbatstone/complex_genetics_of_symbiosis/blob/main/Genetics_conflict_cooperation/GWAS/Genomic_analyses.md) includes input files and code to make: Figs. 1-3; Supp. Figs. S2-3; Tables S1-2; Datasets S1-S3
 -   Source\_code [subfolder](https://github.com/rtbatstone/complex_genetics_of_symbiosis/tree/main/Genetics_conflict_cooperation/Source_code) contains the source code called throughout
