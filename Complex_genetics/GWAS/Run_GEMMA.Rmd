@@ -703,6 +703,113 @@ save(realres.psFIsig, file = "./psymb_betasigs.Rdata")
 ## took ~ 1hr, 5 mins
 ```
 
+## Add gene annotations and predicted effects
+
+### Use bedtools to get annotations (var set inputted into GEMMA)
+
+Note: there is a diff btw GCA (genbank) and GCF (Refseq). All calls were made on GCA.
+
+Completed on server:
+
+```{bash bedtools, eval = FALSE}
+# from /projects/sib/labs/kheath/Ensifer_pleiotropy directory:
+# get annotation GFF file
+wget ftp://ftp.ncbi.nlm.nih.gov/genomes/genbank/bacteria/Sinorhizobium_meliloti/latest_assembly_versions/GCA_002197065.1_ASM219706v1/GCA_002197065.1_ASM219706v1_genomic.gff.gz
+gunzip GCA_002197065.1_ASM219706v1_genomic.gff.gz
+
+# needed to rename regions in vcf and gff files to match:
+sed 's/\bCP021798.1\b/psyma/g; s/\bCP021799.1\b/psymb/g' GCA_002197065.1_ASM219706v1_genomic.gff > annot_gff3
+sed 's/\bchr\b/CP021797.1/g' subset191_LD.recode.vcf > GWAS_vcf
+
+# Gene names for each variant (from gwas directory)
+## first, check number of fields in intersect:
+$BEDTOOLS intersect -loj -a GWAS_vcf -b annot_gff3 -wb > intersect.out
+head -1 intersect.out | awk '{ print NF}'
+## 209
+## then, work backwards to get info and field:
+cut -f 1-3,201-205,209 intersect.out > genes.txt
+## extracted region, ps, ID, field, and info
+  
+# scp'ed to ./Data_output/vcf_annotations_29Mar2021
+```
+
+### Annotate genes in SNP file
+
+```{r ann_ncbi}
+# add in gene products
+func <- read.delim("./Data_output/vcf_annotations_29Mar2021/genes.txt", header=FALSE) ## note, tsv only imported half the file
+## rename column POS to ps to merge
+colnames(func) <- c("CHROM","ps","rs","field","start_pos","end_pos","info")
+
+# filter to CDS and extract info fields
+func.f <- func %>%
+  filter(field == "CDS") %>%
+  droplevels(.) %>%
+  mutate(RefSeq_ID = sub(".*RefSeq: *(.*?) *;.*", "\\1", info),
+         protein_ID = sub(".*protein_id= *(.*?) *;.*", "\\1", info),
+         gene_ID = sub(".*locus_tag= *(.*?) *;.*", "\\1", info),
+         gene_name = sub(".*gene= *(.*?) *;.*", "\\1", info),
+         ncbi_func = sub(".*product= *(.*?) *;.*", "\\1", info))
+
+## replace long string with NA
+func.f$RefSeq_ID <- ifelse(!grepl("RefSeq:", func.f$info, fixed = FALSE),NA, 
+                        func.f$RefSeq_ID)
+func.f$protein_ID <- ifelse(!grepl("protein_id=", func.f$info, fixed = FALSE),NA,
+                         func.f$protein_ID)
+func.f$gene_ID <- ifelse(!grepl("locus_tag=", func.f$info, fixed = FALSE),NA, 
+                      func.f$gene_ID)
+func.f$gene_name <- ifelse(!grepl("gene=", func.f$info, fixed = FALSE),NA, 
+                        func.f$gene_name)
+func.f$ncbi_func <- ifelse(!grepl("product=", func.f$info, fixed = FALSE),NA, 
+                        func.f$ncbi_func)
+func.f$rs <- str_replace(func.f$rs, "CP021797.1", "chr")
+func.f$CHROM <- str_replace(func.f$CHROM, "CP021797.1", "Chromosome")
+
+## get rid of unwanted cols
+funcs <- func.f %>%
+  select(-info)
+
+save(funcs, file = "./Data_output/gene_functions.Rdata")
+```
+
+### Add in predicted SNP effects (snpEff)
+
+First, need to build database in SnpEff.
+
+Completed on server:
+
+```{bash build_snpEff, eval = FALSE}
+wget http://sourceforge.net/projects/snpeff/files/snpEff_latest_core.zip
+# unzip
+cd snpEff
+
+# check to see what genomes are already in the database:
+java -jar snpEff.jar databases | grep -i Sinorhizobium_meliloti
+# found 1021, but not usda1106 Had to build my own...
+
+# build database using GFF (GTF preferred, but not available for usda1106)
+mkdir path/to/snpEff/data/Sinorhizobium_meliloti_usda1106
+cd path/to/snpEff/data/Sinorhizobium_meliloti_usda1106
+wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/197/065/GCF_002197065.1_ASM219706v1/GCF_002197065.1_ASM219706v1_genomic.gff.gz
+mv GCF_002197065.1_ASM219706v1_genomic.gff.gz genes.gff.gz 
+# note: renaming to genes.gff.gz is essential
+
+# Get the genome
+cd /path/to/snpEff/data/Sinorhizobium_meliloti_usda1106
+wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/197/065/GCF_002197065.1_ASM219706v1/GCF_002197065.1_ASM219706v1_genomic.fna.gz
+mv GCF_002197065.1_ASM219706v1_genomic.fna.gz sequences.fa.gz
+# needs to match name of directory in data/, fa and not fna!
+
+# Add the new genome to the config file
+cd path/to/snpEff/
+nano snpEffect.config 
+# Sinorhizobium genome, version usda1106
+Sinorhizobium_meliloti_usda1106.genome : Sinorhizobium_meliloti_usda1106
+
+#create database
+java -jar snpEff.jar build -gtf22 -v Sinorhizobium_meliloti_usda1106
+```
+
 ### Use SnpEff to get annotations
 
 Note: genomic regions in annotation and genome files from database do not match vcf, so have to change the input vcf before proceeding
@@ -711,20 +818,18 @@ Completed on server:
 
 ```{bash vcf_annotate_snpEff, eval = FALSE}
 # /projects/sib/labs/kheath/Ensifer_pleiotropy:
-sed -i.bak 's/\bchr\b/NZ_CP021797.1/g; s/\bpsyma\b/NZ_CP021798.1/g; s/\bpsymb\b/NZ_CP021799.1/g' subset191_LD.recode.vcf
+sed 's/\bchr\b/CP021797.1/g; s/\bpsyma\b/CP021798.1/g; s/\bpsymb\b/CP021799.1/g' subset191_LD.recode.vcf > GWAS_vcf_snpEff
 
 # up/downstream 1000:
-java -Xmx4g -jar $SNPEFF -v Sinorhizobium_meliloti_usda1106 -s 'subset191_LD.ann1000.html' -ud 1000 subset191_LD.recode.vcf > subset191_LD.ann1000.vcf
+java -Xmx4g -jar $SNPEFF -v Sinorhizobium_meliloti_usda1106 -s 'subset191_LD.ann1000.html' -ud 1000 GWAS_vcf_snpEff > subset191_LD.ann1000.vcf
 
 # immediate area:
-java -Xmx4g -jar $SNPEFF -v Sinorhizobium_meliloti_usda1106 -s 'subset191_LD.ann.html' -ud 0 subset191_LD.recode.vcf > subset191_LD.ann.vcf
-
-## scp'ed summary files over: 
+java -Xmx4g -jar $SNPEFF -v Sinorhizobium_meliloti_usda1106 -s 'subset191_LD.ann.html' -ud 0 GWAS_vcf_snpEff > subset191_LD.ann.vcf
 
 # summarize vcf to table
-$GATK VariantsToTable -V subset191_LD.ann.vcf -F CHROM -F POS -F REF -F ALT -F QUAL -F AF -F ANN -F DP -GF GT -O subset191_LD.ann.table ## note AF and DP not calculated
+$GATK VariantsToTable -V subset191_LD.ann.vcf -F CHROM -F POS -F REF -F ALT -F QUAL -F ANN -GF GT -O subset191_LD.ann.table ## note fields AF and DP not calculated
 
-## scp'ed to VCF summary folder
+# scp'ed summary files over: 
 ```
 
 ## Merge results (updated vcf w/ 191 strains)
