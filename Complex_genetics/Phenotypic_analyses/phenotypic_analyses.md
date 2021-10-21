@@ -1,11 +1,13 @@
 Phenotypic\_analyses
 ================
 Rebecca Batstone
-2021-10-19
+2021-10-21
 
-## Setup
+Setup
+-----
 
-## Load the data
+Load the data
+-------------
 
 ``` r
 # load datasets
@@ -108,7 +110,7 @@ ggplot(ds_all %>% filter(strain_ID %in% strains_inc & exp %in% c(3,4)),
          legend.box = "horizontal")
 ```
 
-![](phenotypic_analyses_files/figure-gfm/load_data-1.png)<!-- -->
+![](phenotypic_analyses_files/figure-markdown_github/load_data-1.png)
 
 ``` r
 ## incompatible strains: 285, 476 (A17-only), 486, 557, 522, 702A, 717A, 733B
@@ -137,7 +139,8 @@ ds_ensifer <- ds_all %>%
 save(ds_ensifer, file = "./Data_output/ensifer_dataset.Rdata")
 ```
 
-## Compare treated versus control, exclude controls
+Compare treated versus control, exclude controls (Supp. Fig. S10)
+-----------------------------------------------------------------
 
 ``` r
 load(file = "./Data_output/ensifer_dataset.Rdata") ## loads ds_ensifer
@@ -188,10 +191,10 @@ ds_control$type <- recode_factor(ds_control$type, !!!level_key)
   )
 ```
 
-![](phenotypic_analyses_files/figure-gfm/controls-1.png)<!-- -->
+![](phenotypic_analyses_files/figure-markdown_github/controls-1.png)
 
 ``` r
-## compare nodules
+## compare nodules (Supp. Fig. S10)
 (p_nod <- ggplot(data = ds_control, aes(x=exp, y=mean_nod, fill = line_exp)) + 
   geom_bar(stat = "identity", position = position_dodge()) + 
   geom_errorbar(aes(ymin = mean_nod-SE_nod, ymax = mean_nod+SE_nod),
@@ -216,17 +219,9 @@ ds_control$type <- recode_factor(ds_control$type, !!!level_key)
   )
 ```
 
-![](phenotypic_analyses_files/figure-gfm/controls-2.png)<!-- -->
+![](phenotypic_analyses_files/figure-markdown_github/controls-2.png)
 
 ``` r
-# ## combine into paneled plot:
-# fig_base <- plot_grid(p_shoot, p_nod,
-#                       rel_heights = c(1,1),
-#           ncol = 1,
-#           nrow = 2,
-#           align = "v",
-#           labels = NULL)
-
 save_plot("./Figures_tables/controls.png", p_nod,
           ncol = 1, # we're saving a grid plot of 2 columns
           nrow = 1, # and 3 rows
@@ -249,7 +244,8 @@ ds_metadata <- ds %>%
   spread(line_exp, count)
 ```
 
-## Calculate raw means
+Calculate raw means
+-------------------
 
 ``` r
 load(file = "./Data_output/ds_treat.Rdata") ## loads ds
@@ -271,7 +267,8 @@ ds_means.w <- dcast(ds_raw_means, strain_ID ~ line_exp,
 save(ds_means.w, file = "./Data_output/raw_means_wide.Rdata")
 ```
 
-## Calculate emmeans (correcting for rack)
+Calculate emmeans (correcting for rack)
+---------------------------------------
 
 Run mixed models on each experiment:
 
@@ -391,13 +388,14 @@ comb_means <- separate(data = comb_means,
   facet_wrap(exp~trait, scales = "free", ncol = 6))
 ```
 
-![](phenotypic_analyses_files/figure-gfm/emmeans-1.png)<!-- -->
+![](phenotypic_analyses_files/figure-markdown_github/emmeans-1.png)
 
 ``` r
 ## looks good
 ```
 
-## Calculate strain plasticity (for all traits)
+Calculate strain plasticity (for all traits) - Supp. Fig. S5
+------------------------------------------------------------
 
 ``` r
 load(file = "./Data_output/emmeans_wide.Rdata") ## loads emmeans.w
@@ -455,9 +453,14 @@ save_plot("./Figures_tables/strain_plasticity_all.png", fig,
           # each individual subplot should have an aspect ratio of 1.3
           base_aspect_ratio = 3
           )
+
+include_graphics("./Figures_tables/strain_plasticity_all.png") ## Supp. Fig. S5
 ```
 
-## Models: split by line, assess G x E
+<img src="./Figures_tables/strain_plasticity_all.png" width="5008" />
+
+Models: split by line, assess G x E (Table 1)
+---------------------------------------------
 
 ``` r
 ## create a function
@@ -544,7 +547,7 @@ GxE_mods.w$trait <- recode_factor(GxE_mods.w$trait,
                         height1 = "Plant height", 
                         leaf1 = "Leaves")
 
-write.csv(GxE_mods.w, "./Figures_tables/Table1.csv", row.names = FALSE)
+write.csv(GxE_mods.w, "./Figures_tables/Table1.csv", row.names = FALSE) ## Table 1
 
 kable(GxE_mods.w)
 ```
@@ -555,24 +558,25 @@ kable(GxE_mods.w)
 | Chlorophyll   | Strain              | 252.6(190)\*\*    | 361.67(190)\*\*\* |
 | Chlorophyll   | Experiment          | 0.15(1)           | 0(1)              |
 | Chlorophyll   | Strain X Experiment | 191.38(182)       | 205.16(183)       |
-| Chlorophyll   | Rack                | 30.86(1)\*\*\*    | 23.91(1)\*\*\*    |
+| Chlorophyll   | Rack                | 30.86(376)\*\*\*  | 23.91(377)\*\*\*  |
 | Plant height  | Intercept           | 373.58(1)\*\*\*   | 355.55(1)\*\*\*   |
 | Plant height  | Strain              | 340.68(190)\*\*\* | 268.05(190)\*\*\* |
 | Plant height  | Experiment          | 20.24(1)\*\*\*    | 2.5(1)            |
 | Plant height  | Strain X Experiment | 308.63(185)\*\*\* | 177.71(183)       |
-| Plant height  | Rack                | 38.35(1)\*\*\*    | 54.12(1)\*\*\*    |
+| Plant height  | Rack                | 38.35(379)\*\*\*  | 54.12(377)\*\*\*  |
 | Leaves        | Intercept           | 207.69(1)\*\*\*   | 164.09(1)\*\*\*   |
 | Leaves        | Strain              | 355.37(190)\*\*\* | 207.58(190)       |
 | Leaves        | Experiment          | 7.85(1)\*\*       | 0.45(1)           |
 | Leaves        | Strain X Experiment | 243.88(185)\*\*   | 218.54(183)\*     |
-| Leaves        | Rack                | 27.51(1)\*\*\*    | 41.67(1)\*\*\*    |
+| Leaves        | Rack                | 27.51(379)\*\*\*  | 41.67(377)\*\*\*  |
 | Shoot biomass | Intercept           | 97.65(1)\*\*\*    | 179.32(1)\*\*\*   |
 | Shoot biomass | Strain              | 544.81(190)\*\*\* | 499.67(190)\*\*\* |
 | Shoot biomass | Experiment          | 10.08(1)\*\*      | 6.93(1)\*\*       |
 | Shoot biomass | Strain X Experiment | 330.06(185)\*\*\* | 262.2(183)\*\*\*  |
-| Shoot biomass | Rack                | 11.32(1)\*\*\*    | 155.67(1)\*\*\*   |
+| Shoot biomass | Rack                | 11.32(379)\*\*\*  | 155.67(377)\*\*\* |
 
-## Reaction norms
+Reaction norms (Supp. Fig. S4)
+------------------------------
 
 ``` r
 load(file = "./Data_output/emmeans_long.Rdata") ## loads emmeans
@@ -629,9 +633,14 @@ save_plot("./Figures_tables/rxn_all.png", fig,
           # each individual subplot should have an aspect ratio of 1.3
           base_aspect_ratio = 1.3
           )
+
+include_graphics("./Figures_tables/rxn_all.png") ## Supp. Fig. S4
 ```
 
-## Heritability
+<img src="./Figures_tables/rxn_all.png" width="2893" />
+
+Heritability
+------------
 
 ``` r
 # create a function
@@ -736,7 +745,8 @@ herit.f <- herit %>%
 save(herit.f, file = "./Data_output/heritability.Rdata") ## needed for cockerham's method
 ```
 
-## Regression coefficients
+Regression coefficients
+-----------------------
 
 The same trait across the two experiments (G x E)
 
@@ -805,7 +815,8 @@ reg_coeffs_out$line <- c(rep("DZA",4),rep("A17",4))
 save(reg_coeffs_out, file = "./Data_output/reg_coeff.Rdata") ## needed for cockerham's method
 ```
 
-## Cockerham’s method
+Cockerham's method (Table 2)
+----------------------------
 
 ``` r
 load(file = "./Data_output/heritability.Rdata") # loads herit.f
@@ -874,22 +885,23 @@ cockerham <- cockerham %>%
 kable(cockerham)
 ```
 
-| trait         | line | H1          | H2          | reg\_sig    | perCross.r |
+| trait         | line | H1          | H2          | reg\_sig    |  perCross.r|
 |:--------------|:-----|:------------|:------------|:------------|-----------:|
-| Shoot biomass | A17  | 0.303\*\*\* | 0.262\*\*\* | 0.221\*\*   |      99.83 |
-| Chlorophyll   | A17  | 0           | 0.093\*\*   | 0.201\*\*   |       0.00 |
-| Plant height  | A17  | 0.181\*\*\* | 0.173\*\*\* | 0.1         |      73.37 |
-| Leaves        | A17  | 0.173\*\*\* | 0.127\*\*\* | 0.173\*     |      94.13 |
-| Shoot biomass | DZA  | 0.248\*\*\* | 0.253\*\*\* | 0.265\*\*\* |      87.19 |
-| Chlorophyll   | DZA  | 0.118\*\*   | 0.141\*\*\* | 0.297\*\*\* |      99.06 |
-| Plant height  | DZA  | 0.131\*\*   | 0.065\*     | 0.175\*     |      99.97 |
-| Leaves        | DZA  | 0.05        | 0.084\*\*   | -0.071      |      63.96 |
+| Shoot biomass | A17  | 0.302\*\*\* | 0.262\*\*\* | 0.221\*\*   |       99.83|
+| Chlorophyll   | A17  | 0           | 0.093\*\*   | 0.201\*\*   |        0.00|
+| Plant height  | A17  | 0.181\*\*\* | 0.173\*\*\* | 0.1         |       73.37|
+| Leaves        | A17  | 0.173\*\*\* | 0.127\*\*\* | 0.173\*     |       94.13|
+| Shoot biomass | DZA  | 0.248\*\*\* | 0.253\*\*\* | 0.265\*\*\* |       87.19|
+| Chlorophyll   | DZA  | 0.118\*\*   | 0.141\*\*\* | 0.297\*\*\* |       99.06|
+| Plant height  | DZA  | 0.131\*\*   | 0.065\*     | 0.175\*     |       99.97|
+| Leaves        | DZA  | 0.05        | 0.084\*\*   | -0.071      |       63.97|
 
 ``` r
-write.csv(cockerham, "./Figures_tables/Table2.csv", row.names = FALSE)
+write.csv(cockerham, "./Figures_tables/Table2.csv", row.names = FALSE) ## Table 2
 ```
 
-## Genetic correlation plots
+Genetic correlation plots (Supp. Figs. S2 & S3)
+-----------------------------------------------
 
 ``` r
 load(file = "./Data_output/emmeans.w_Ensifer.Rdata") ## loads emmeans.w_Ensifer
@@ -1003,7 +1015,7 @@ gc_out <- mapply(FUN = gen_corr_func,
   )
 ```
 
-![](phenotypic_analyses_files/figure-gfm/corrs-1.png)<!-- -->
+![](phenotypic_analyses_files/figure-markdown_github/corrs-1.png)
 
 ``` r
 (hist_plast_A17 <- ggplot(emmeans.w_Ensifer, aes(x=shoot.plast_A17_24)) + 
@@ -1028,7 +1040,7 @@ gc_out <- mapply(FUN = gen_corr_func,
   )
 ```
 
-![](phenotypic_analyses_files/figure-gfm/corrs-2.png)<!-- -->
+![](phenotypic_analyses_files/figure-markdown_github/corrs-2.png)
 
 ``` r
 ## create the paneled figures
@@ -1056,6 +1068,12 @@ save_plot("./Figures_tables/gen_corrs_DZA.png", fig_base_DZA,
           base_aspect_ratio = 1.3
           )
 
+include_graphics("./Figures_tables/gen_corrs_DZA.png") ## Supp. Fig. S2
+```
+
+<img src="./Figures_tables/gen_corrs_DZA.png" width="5787" />
+
+``` r
 fig_base_A17 <- plot_grid(gc_out[[34]] + ggtitle("Chlorophyll") + ylab("Chlorophyll"), 
                       gc_out[[36]] + ggtitle("Plant height"), 
                       gc_out[[38]] + ggtitle("Leaves"), 
@@ -1077,4 +1095,8 @@ save_plot("./Figures_tables/gen_corrs_A17.png", fig_base_A17,
           # each individual subplot should have an aspect ratio of 1.3
           base_aspect_ratio = 1.3
           )
+
+include_graphics("./Figures_tables/gen_corrs_A17.png") ## Supp. Fig. S3
 ```
+
+<img src="./Figures_tables/gen_corrs_A17.png" width="5787" />

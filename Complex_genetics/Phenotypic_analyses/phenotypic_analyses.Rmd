@@ -157,7 +157,7 @@ ds_ensifer <- ds_all %>%
 save(ds_ensifer, file = "./Data_output/ensifer_dataset.Rdata")
 ```
 
-## Compare treated versus control, exclude controls
+## Compare treated versus control, exclude controls (Supp. Fig. S10)
 
 ```{r controls}
 load(file = "./Data_output/ensifer_dataset.Rdata") ## loads ds_ensifer
@@ -207,7 +207,7 @@ ds_control$type <- recode_factor(ds_control$type, !!!level_key)
         )
   )
 
-## compare nodules
+## compare nodules (Supp. Fig. S10)
 (p_nod <- ggplot(data = ds_control, aes(x=exp, y=mean_nod, fill = line_exp)) + 
   geom_bar(stat = "identity", position = position_dodge()) + 
   geom_errorbar(aes(ymin = mean_nod-SE_nod, ymax = mean_nod+SE_nod),
@@ -230,14 +230,6 @@ ds_control$type <- recode_factor(ds_control$type, !!!level_key)
         panel.grid.minor = element_blank()
         )
   )
-
-# ## combine into paneled plot:
-# fig_base <- plot_grid(p_shoot, p_nod,
-#                       rel_heights = c(1,1),
-#           ncol = 1,
-#           nrow = 2,
-#           align = "v",
-#           labels = NULL)
 
 save_plot("./Figures_tables/controls.png", p_nod,
           ncol = 1, # we're saving a grid plot of 2 columns
@@ -377,7 +369,7 @@ comb_means <- separate(data = comb_means,
 ## looks good
 ```
 
-## Calculate strain plasticity (for all traits)
+## Calculate strain plasticity (for all traits) - Supp. Fig. S5
 
 ```{r plasticity}
 load(file = "./Data_output/emmeans_wide.Rdata") ## loads emmeans.w
@@ -435,9 +427,11 @@ save_plot("./Figures_tables/strain_plasticity_all.png", fig,
           # each individual subplot should have an aspect ratio of 1.3
           base_aspect_ratio = 3
           )
+
+include_graphics("./Figures_tables/strain_plasticity_all.png") ## Supp. Fig. S5
 ```
 
-## Models: split by line, assess G x E
+## Models: split by line, assess G x E (Table 1)
 
 ```{r GxE}
 ## create a function
@@ -513,12 +507,12 @@ GxE_mods.w$trait <- recode_factor(GxE_mods.w$trait,
                         height1 = "Plant height", 
                         leaf1 = "Leaves")
 
-write.csv(GxE_mods.w, "./Figures_tables/Table1.csv", row.names = FALSE)
+write.csv(GxE_mods.w, "./Figures_tables/Table1.csv", row.names = FALSE) ## Table 1
 
 kable(GxE_mods.w)
 ```
 
-## Reaction norms
+## Reaction norms (Supp. Fig. S4)
 
 ```{r rxn_norms}
 load(file = "./Data_output/emmeans_long.Rdata") ## loads emmeans
@@ -568,6 +562,8 @@ save_plot("./Figures_tables/rxn_all.png", fig,
           # each individual subplot should have an aspect ratio of 1.3
           base_aspect_ratio = 1.3
           )
+
+include_graphics("./Figures_tables/rxn_all.png") ## Supp. Fig. S4
 ```
 
 ## Heritability
@@ -714,7 +710,7 @@ reg_coeffs_out$line <- c(rep("DZA",4),rep("A17",4))
 save(reg_coeffs_out, file = "./Data_output/reg_coeff.Rdata") ## needed for cockerham's method
 ```
 
-## Cockerham's method
+## Cockerham's method (Table 2)
 
 ```{r cockerham}
 load(file = "./Data_output/heritability.Rdata") # loads herit.f
@@ -782,10 +778,10 @@ cockerham <- cockerham %>%
 
 kable(cockerham)
 
-write.csv(cockerham, "./Figures_tables/Table2.csv", row.names = FALSE)
+write.csv(cockerham, "./Figures_tables/Table2.csv", row.names = FALSE) ## Table 2
 ```
 
-## Genetic correlation plots 
+## Genetic correlation plots (Supp. Figs. S2 & S3)
 
 ```{r corrs}
 load(file = "./Data_output/emmeans.w_Ensifer.Rdata") ## loads emmeans.w_Ensifer
@@ -909,6 +905,8 @@ save_plot("./Figures_tables/gen_corrs_DZA.png", fig_base_DZA,
           base_aspect_ratio = 1.3
           )
 
+include_graphics("./Figures_tables/gen_corrs_DZA.png") ## Supp. Fig. S2
+
 fig_base_A17 <- plot_grid(gc_out[[34]] + ggtitle("Chlorophyll") + ylab("Chlorophyll"), 
                       gc_out[[36]] + ggtitle("Plant height"), 
                       gc_out[[38]] + ggtitle("Leaves"), 
@@ -930,5 +928,7 @@ save_plot("./Figures_tables/gen_corrs_A17.png", fig_base_A17,
           # each individual subplot should have an aspect ratio of 1.3
           base_aspect_ratio = 1.3
           )
+
+include_graphics("./Figures_tables/gen_corrs_A17.png") ## Supp. Fig. S3
 
 ```
