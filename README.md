@@ -3,18 +3,12 @@ Analyses for the project "Complex genetics of symbiosis"
 Rebecca Batstone
 2021-10-21
 
-This repository archives the data and analyses for two papers:
-
-1.  "The complex genetics of symbiotic extended phenotypes across environments in a model mutualism" - bioRxiv doi: <https://doi.org/10.1101/2021.08.03.454976>
-
-2.  "The genetic basis of cooperation and conflict in natural populations of a model symbiont" - bioRxiv doi: <https://doi.org/10.1101/2021.07.19.452989>
-
 Contents
 --------
 
-This repository contains the raw data and analyses for:
+This repository contains the raw data and analyses for the following two manuscripts:
 
-### 1) Complex Genetics (Batstone & Lindgren et al. 2021)
+### 1) "The complex genetics of symbiotic extended phenotypes across environments in a model mutualism" (Batstone & Lindgren et al. 2021) - bioRxiv doi: <https://doi.org/10.1101/2021.08.03.454976>
 
 This [folder](https://github.com/rtbatstone/complex_genetics_of_symbiosis/tree/main/Complex_genetics) contains the raw data from the four GWAS experiments, the linear model results presented in the main text of the paper, and the code that generated Figures in the main text and Supplemental Figures.
 
@@ -28,7 +22,7 @@ This [folder](https://github.com/rtbatstone/complex_genetics_of_symbiosis/tree/m
 
 -   Supp\_files [subfolder](https://github.com/rtbatstone/complex_genetics_of_symbiosis/tree/main/Complex_genetics/Supp_files) contains copies of the supplementary Datasets (S1-S7), also on bioRxiv
 
-### 2) Genetics of Conflict and Cooperation (Batstone, Burghardt, Heath 2021)
+### 2) "The genetic basis of cooperation and conflict in natural populations of a model symbiont" (Batstone, Burghardt, Heath 2021) - bioRxiv doi: <https://doi.org/10.1101/2021.07.19.452989>
 
 This [folder](https://github.com/rtbatstone/complex_genetics_of_symbiosis/tree/main/Genetics_conflict_cooperation) contains the phenotypic and genomic analyses conducted on two of the four GWAS experiments listed in 1), and the code that generated Figures in the main text and Supplemental Figures.
 
