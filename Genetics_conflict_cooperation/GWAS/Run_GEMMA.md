@@ -1,7 +1,7 @@
 Running GEMMA, real and permutated data
 ================
 Rebecca Batstone
-2021-10-20
+2021-10-21
 
 Setup
 -----
@@ -13,7 +13,7 @@ Create the phenotype files (.fam) for GEMMA
 #################### for 89 strains #################### 
 
 ## load relevant df
-ms <- read.delim("../Phenotypic_analyses/Data_output/multistrain_data.txt")
+ms <- read.delim("../Phenotypic_analyses/Data_input/multistrain_data.txt")
 
 ## add MAG to strain_ID
 ms$add <- "MAG"
@@ -259,7 +259,7 @@ psymb_realres <- traits[c(9:12)] %>%
   reduce(full_join, by = "rs") %>%
   select("rs", starts_with("beta"))
  
- names(psymb_realres) <- c("rs","DZA_L_Fit_med", "DZA_Lold_Fit_med", "A17_L_Fit_med", "A17_Lold_Fit_med")
+names(psymb_realres) <- c("rs","DZA_L_Fit_med", "DZA_Lold_Fit_med", "A17_L_Fit_med", "A17_Lold_Fit_med")
  
 save(psymb_realres, file="./psymb_real_betas.Rdata") 
 ```
@@ -272,6 +272,8 @@ All steps completed on remote server, rather than local machine.
 ### Randomize phenotypes
 
 Use same phenotypes file as before, but shuffle values within each phenotype col for each phenotype, and produce 1000 shuffled sets.
+
+Completed on remote server, rather than local machine:
 
 ``` r
 # randomize .fam file
@@ -306,6 +308,8 @@ nohup Rscript pheno_rand.R > pheno_rand.out &
 
 Need names of all file inputs to match.
 
+Completed on remote server, rather than local machine:
+
 ``` bash
 
 #################### for 89 strains ####################
@@ -327,6 +331,8 @@ done
 ```
 
 ### Run GEMMA on permutated datasets
+
+Completed on remote server, rather than local machine:
 
 ``` bash
 
@@ -369,6 +375,8 @@ paste pve_ulmm_random.txt se_ulmm_random.txt > pve_se_ulmm_random.txt
 
 ### Merge outputs from perm test
 
+Completed on remote server, rather than local machine:
+
 ``` bash
 # nano merge_betas.sh
 while read region; do
@@ -399,6 +407,8 @@ Determine significance
 ----------------------
 
 findinterval method for checking whether betas fall outside the distribution. All steps completed on remote server, rather than local machine.
+
+Completed on remote server, rather than local machine:
 
 ``` r
 #################### for 89 strains ####################
@@ -507,6 +517,8 @@ dfFIsig <- data.frame(realsigFull)
 colnames(dfFIsig) <- paste(colnames(realres.rs[betacols.realres]),".FIsig",sep="")
 realres.psFIsig <- cbind(realres.rs,dfFIsig)
 save(realres.psFIsig, file = "./psymb_betasigs.Rdata")
+
+## scp'ed .Rdata files to ./Data_input/betasigs_14Apr2021/
 ```
 
 Merge results (191 and 89 strains)
@@ -517,7 +529,7 @@ Merge results (191 and 89 strains)
 load(file = "../../Complex_genetics/GWAS/Data_output/betasigs_29Mar2021/chr_betasigs.Rdata") ## realres.psFIsig
 chr_sigs <- realres.psFIsig
 
-load("./Data_output/betasigs_14Apr2021/chr_betasigs_89strains.Rdata") ## realres.psFIsig
+load("./Data_input/betasigs_14Apr2021/chr_betasigs_89strains.Rdata") ## realres.psFIsig
 chr_sigs_fit <- realres.psFIsig
 
 chr_sigs_all <- full_join(chr_sigs, chr_sigs_fit, by ="rs", all = TRUE)
@@ -527,7 +539,7 @@ chr_sigs_all$region <- "Chromosome"
 load("../../Complex_genetics/GWAS/Data_output/betasigs_29Mar2021/psyma_betasigs.Rdata") ## realres.psFIsig
 psyma_sigs <- realres.psFIsig
 
-load("./Data_output/betasigs_14Apr2021/psyma_betasigs_89strains.Rdata") ## realres.psFIsig
+load("./Data_input/betasigs_14Apr2021/psyma_betasigs_89strains.Rdata") ## realres.psFIsig
 psyma_sigs_fit <- realres.psFIsig
 
 psyma_sigs_all <- full_join(psyma_sigs, psyma_sigs_fit, by ="rs", all = TRUE)
@@ -537,7 +549,7 @@ psyma_sigs_all$region <- "pSymA"
 load("../../Complex_genetics/GWAS/Data_output/betasigs_29Mar2021/psymb_betasigs.Rdata") ## realres.psFIsig
 psymb_sigs <- realres.psFIsig
 
-load("./Data_output/betasigs_14Apr2021/psymb_betasigs_89strains.Rdata") ## realres.psFIsig
+load("./Data_input/betasigs_14Apr2021/psymb_betasigs_89strains.Rdata") ## realres.psFIsig
 psymb_sigs_fit <- realres.psFIsig
 
 psymb_sigs_all <- full_join(psymb_sigs, psymb_sigs_fit, by ="rs", all = TRUE)
@@ -571,11 +583,11 @@ SNPs_vcf_ann <- left_join(SNPs_comb,
 
 ## get MAF, minor allele, et c., from GEMMA outputs
 chr_GEMMA_info1 <- 
-  read.delim("./Data_output/betasigs_14Apr2021/chr_subset89_LD_ulmm_trait_1.assoc.txt")
+  read.delim("./Data_input/betasigs_14Apr2021/chr_subset89_LD_ulmm_trait_1.assoc.txt")
 psyma_GEMMA_info1 <- 
-  read.delim("./Data_output/betasigs_14Apr2021/psyma_subset89_LD_ulmm_trait_1.assoc.txt")
+  read.delim("./Data_input/betasigs_14Apr2021/psyma_subset89_LD_ulmm_trait_1.assoc.txt")
 psymb_GEMMA_info1 <- 
-  read.delim("./Data_output/betasigs_14Apr2021/psymb_subset89_LD_ulmm_trait_1.assoc.txt")
+  read.delim("./Data_input/betasigs_14Apr2021/psymb_subset89_LD_ulmm_trait_1.assoc.txt")
 GEMMA_info1 <- rbind(chr_GEMMA_info1, psyma_GEMMA_info1, psymb_GEMMA_info1)
 ### merge with 191 strains
 chr_GEMMA_info2 <- 
@@ -650,8 +662,7 @@ SNPs$gene_interval[!nzchar(SNPs$gene_interval)] <- "CDO30_27950-CDO30_27955"
 
 ## add in how many variants within LD group
 one_variant <- 
-  read.delim("../../Complex_genetics/GWAS/Data_output/one_variant.tsv", 
-                          header=FALSE)
+  read.delim("../../Complex_genetics/GWAS/Data_output/one_variant.tsv", header=FALSE)
 colnames(one_variant) <- c("region","start_ps","end_ps","rs","group_no","vars_in_group")
 ### count number of commas to get total variant count within group
 one_variant$no_vars_group <- str_count(one_variant$vars_in_group, ',') + 1
