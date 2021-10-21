@@ -1,13 +1,15 @@
 Running GEMMA, real and permutated data
 ================
 Rebecca Batstone
-2021-10-19
+2021-10-21
 
-## Setup
+Setup
+-----
 
-## LD grouping (a la Epstein et al., 2018)
+LD grouping (a la Epstein et al., 2018)
+---------------------------------------
 
-slurm and shell script located on server
+slurm and shell script located on server:
 
 ``` bash
 ## copy of shell script
@@ -88,10 +90,64 @@ $EPSTEIN/ld_grouping_choose_one.py --output "one_variant.tsv" "output.tsv" \
 rm tmp.*
 ```
 
-## create strain list (199 - 8 = 191)
+### Linkage group visualization
 
-Here are the 8 non-Ensifer strains: 285, 476, 486, 522, 557, 702A, 717A,
-733B
+``` r
+## threshold vals to loop over
+LD_thresh <- c(95, 80, 70)
+
+## source the function
+source("../Source_code/linkage_func.R")
+
+LD_res <- sapply(LD_thresh, linkage_func,
+                 USE.NAMES = TRUE, simplify = FALSE)
+```
+
+    ## [1] "95"
+
+    ## [1] "80"
+
+    ## [1] "70"
+
+``` r
+include_graphics("./Linkage_analyses/LG95.png")
+```
+
+<img src="./Linkage_analyses/LG95.png" width="3600" />
+
+``` r
+# get dfs
+## 95
+LG_0.95 <- as.data.frame(LD_res[[1]])
+LG_0.95$thresh <- "95"
+LG_0.95_sel <- LG_0.95 %>%
+  filter(seed == 1) %>%
+  group_by(chrom) %>%
+  summarize(count = n())
+## 80
+LG_0.80 <- as.data.frame(LD_res[[2]])
+LG_0.80$thresh <- "80"
+LG_0.80_sel <- LG_0.80 %>%
+  filter(seed == 1) %>%
+  group_by(chrom) %>%
+  summarize(count = n())
+## 70
+LG_0.70 <- as.data.frame(LD_res[[3]])
+LG_0.70$thresh <- "70"
+LG_0.70_sel <- LG_0.70 %>%
+  filter(seed == 1) %>%
+  group_by(chrom) %>%
+  summarize(count = n())
+
+## combine LG
+LG_all <- rbind(LG_0.95, LG_0.80, LG_0.70)
+save(LG_all, file = "./Linkage_analyses/LG_all.Rdata")
+```
+
+Create phenotype file (.fam) for GEMMA (199 - 8 = 191)
+------------------------------------------------------
+
+Here are the 8 non-Ensifer strains: 285, 476, 486, 522, 557, 702A, 717A, 733B
 
 ``` r
 load(file = "../Phenotypic_analyses/Data_output/emmeans.w_Ensifer.Rdata") ## loads emmeans.w_Ensifer
@@ -142,7 +198,7 @@ emmeans.w191.scaled_long <- gather(emmeans.w191.scaled, key = "traits", value = 
   theme_bw())
 ```
 
-![](Run_GEMMA_files/figure-gfm/list_195-1.png)<!-- -->
+![](Run_GEMMA_files/figure-markdown_github/list_195-1.png)
 
 ``` r
 ## create .fam file:
@@ -172,28 +228,29 @@ write.table(pheno191, file="./Data_output/phenos191.fam",
             row.names = FALSE, col.names = FALSE, sep = "\t", quote = FALSE)
 ```
 
-Phenotypes included in .fam file: 1. chloro1\_DZA\_1  
-2. chloro1\_A17\_2 3. chloro1\_DZA\_3 4. chloro1\_A17\_4 5.
-height\_DZA\_1 6. height\_A17\_2 7. height\_DZA\_3 8. height\_A17\_4 9.
-leaf\_DZA\_1  
-10. leaf\_A17\_2  
-11. leaf\_DZA\_3  
-12. leaf\_A17\_4  
-13. shoot\_DZA\_1 14. shoot\_A17\_2 15. shoot\_DZA\_3 16. shoot\_A17\_4
-17. nod\_DZA\_1  
-18. nod\_A17\_2  
-19. nod\_DZA\_3  
-20. nod\_A17\_4  
-21. nod.weight\_DZA\_1  
-22. nod.weight\_A17\_2  
-23. nod.weight\_DZA\_3  
-24. nod.weight\_A17\_4 25. chloro.plast\_DZA\_13 26.
-chloro.plast\_A17\_24 27. height.plast\_DZA\_13 28.
-height.plast\_A17\_24 29. leaf.plast\_DZA\_13  
-30. leaf.plast\_A17\_24 31. shoot.plast\_DZA\_13  
+Phenotypes included in .fam file: 1. chloro1\_DZA\_1
+2. chloro1\_A17\_2
+3. chloro1\_DZA\_3
+4. chloro1\_A17\_4
+5. height\_DZA\_1 6. height\_A17\_2 7. height\_DZA\_3 8. height\_A17\_4 9. leaf\_DZA\_1
+10. leaf\_A17\_2
+11. leaf\_DZA\_3
+12. leaf\_A17\_4
+13. shoot\_DZA\_1 14. shoot\_A17\_2 15. shoot\_DZA\_3 16. shoot\_A17\_4 17. nod\_DZA\_1
+18. nod\_A17\_2
+19. nod\_DZA\_3
+20. nod\_A17\_4
+21. nod.weight\_DZA\_1
+22. nod.weight\_A17\_2
+23. nod.weight\_DZA\_3
+24. nod.weight\_A17\_4
+25. chloro.plast\_DZA\_13
+26. chloro.plast\_A17\_24 27. height.plast\_DZA\_13 28. height.plast\_A17\_24 29. leaf.plast\_DZA\_13
+30. leaf.plast\_A17\_24 31. shoot.plast\_DZA\_13
 32. shoot.plast\_A17\_24
 
-## Re-filter vcf for all 191 samples
+Re-filter vcf for all 191 samples
+---------------------------------
 
 Moved fam file created above unto server first.
 
@@ -233,7 +290,8 @@ $vcftools --vcf subset191_LD.recode.vcf --chr psymb --recode --out psymb_subset1
 ## 4612 sites
 ```
 
-## Convert vcf to bed for GEMMA
+Convert vcf to bed for GEMMA
+----------------------------
 
 Completed on server:
 
@@ -260,14 +318,12 @@ $PLINK --vcf psymb_subset191_LD.recode.vcf --recode --make-bed --out "psymb_subs
 cp phenos191.fam psymb_subset191_LD_plink.fam
 ```
 
-## Relatedness matrix
+Relatedness matrix
+------------------
 
-“-gk 1” calculates the centered relatedness matrix while “-gk 2”
-calculates the standardized relatedness matrix; Epstein et al 2018 used
-the gk2 option
+"-gk 1" calculates the centered relatedness matrix while "-gk 2" calculates the standardized relatedness matrix; Epstein et al 2018 used the gk2 option
 
-Note: need to have the .fam file for it to run: e.g., cp
-subset89\_LD\_plink.fam chr\_subset89\_LD\_plink.fam
+Note: need to have the .fam file for it to run: e.g., cp subset89\_LD\_plink.fam chr\_subset89\_LD\_plink.fam
 
 Completed on server:
 
@@ -277,12 +333,10 @@ $GEMMA -bfile psyma_subset191_LD_plink -gk 2 -o psyma_subset191_LD_ksmat ## 2955
 $GEMMA -bfile psymb_subset191_LD_plink -gk 2 -o psymb_subset191_LD_ksmat ## 4307 SNPs analyzed
 ```
 
-## LMM option in GEMMA
+LMM option in GEMMA
+-------------------
 
-If you include multiple phenotypes in the same .fam file, you can use
-this loop -n <number> specifies column corresponding to phenotype in
-.fam file. Epstein used -lmm option 4, for all three tests, but only
-reports the liklihood ratio test (-lmm 2)
+If you include multiple phenotypes in the same .fam file, you can use this loop -n <number> specifies column corresponding to phenotype in .fam file. Epstein used -lmm option 4, for all three tests, but only reports the liklihood ratio test (-lmm 2)
 
 Completed on server:
 
@@ -311,7 +365,8 @@ paste pve_ulmm.txt se_ulmm.txt > pve_se_ulmm.txt
 mv *ulmm* ./real
 ```
 
-## GEMMA betascores (real runs)
+GEMMA betascores (real runs)
+----------------------------
 
 -   Only linkage group variants used
 -   emmeans (32 traits) standardized (same .fam file for all analyses)
@@ -404,12 +459,12 @@ save(psymb_realres, file="./psymb_real_betas.Rdata")
 nohup Rscript real_betas.R > real_betas.out & ## takes a few seconds
 ```
 
-## Permutation test
+Permutation test
+----------------
 
 ### Randomize phenotypes
 
-Use same phenotypes file as before, but shuffle values within each
-phenotype col for each phenotype, and produce 1000 shuffled sets.
+Use same phenotypes file as before, but shuffle values within each phenotype col for each phenotype, and produce 1000 shuffled sets.
 
 Completed on server:
 
@@ -553,7 +608,8 @@ for a in [0-9]*.tsv; do
 done
 ```
 
-## findinterval method for checking whether betas fall outside the distribution
+findinterval method for checking whether betas fall outside the distribution
+----------------------------------------------------------------------------
 
 Completed on server:
 
@@ -678,48 +734,156 @@ save(realres.psFIsig, file = "./psymb_betasigs.Rdata")
 
 ## sbatch psymb_sig.slurm
 ## took ~ 1hr, 5 mins
+
+## scp'ed .Rdata files to ./Data_input/betasigs_29Mar2021/
+```
+
+Add gene annotations and predicted effects
+------------------------------------------
+
+### Use bedtools to get annotations (var set inputted into GEMMA)
+
+Note: there is a diff btw GCA (genbank) and GCF (Refseq). All calls were made on GCA.
+
+Completed on server:
+
+``` bash
+# from /projects/sib/labs/kheath/Ensifer_pleiotropy directory:
+# get annotation GFF file
+wget ftp://ftp.ncbi.nlm.nih.gov/genomes/genbank/bacteria/Sinorhizobium_meliloti/latest_assembly_versions/GCA_002197065.1_ASM219706v1/GCA_002197065.1_ASM219706v1_genomic.gff.gz
+gunzip GCA_002197065.1_ASM219706v1_genomic.gff.gz
+
+# needed to rename regions in vcf and gff files to match:
+sed 's/\bCP021798.1\b/psyma/g; s/\bCP021799.1\b/psymb/g' GCA_002197065.1_ASM219706v1_genomic.gff > annot_gff3
+sed 's/\bchr\b/CP021797.1/g' subset191_LD.recode.vcf > GWAS_vcf
+
+# Gene names for each variant (from gwas directory)
+## first, check number of fields in intersect:
+$BEDTOOLS intersect -loj -a GWAS_vcf -b annot_gff3 -wb > intersect.out
+head -1 intersect.out | awk '{ print NF}'
+## 209
+## then, work backwards to get info and field:
+cut -f 1-3,201-205,209 intersect.out > genes.txt
+## extracted region, ps, ID, field, and info
+  
+# scp'ed to ./Data_output/vcf_annotations_29Mar2021
+```
+
+### Annotate genes in SNP file
+
+``` r
+# add in gene products
+func <- read.delim("./Data_input/vcf_annotations_29Mar2021/genes.txt", header=FALSE) ## note, tsv only imported half the file
+## rename column POS to ps to merge
+colnames(func) <- c("CHROM","ps","rs","field","start_pos","end_pos","info")
+
+# filter to CDS and extract info fields
+func.f <- func %>%
+  filter(field == "CDS") %>%
+  droplevels(.) %>%
+  mutate(RefSeq_ID = sub(".*RefSeq: *(.*?) *;.*", "\\1", info),
+         protein_ID = sub(".*protein_id= *(.*?) *;.*", "\\1", info),
+         gene_ID = sub(".*locus_tag= *(.*?) *;.*", "\\1", info),
+         gene_name = sub(".*gene= *(.*?) *;.*", "\\1", info),
+         ncbi_func = sub(".*product= *(.*?) *;.*", "\\1", info))
+
+## replace long string with NA
+func.f$RefSeq_ID <- ifelse(!grepl("RefSeq:", func.f$info, fixed = FALSE),NA, 
+                        func.f$RefSeq_ID)
+func.f$protein_ID <- ifelse(!grepl("protein_id=", func.f$info, fixed = FALSE),NA,
+                         func.f$protein_ID)
+func.f$gene_ID <- ifelse(!grepl("locus_tag=", func.f$info, fixed = FALSE),NA, 
+                      func.f$gene_ID)
+func.f$gene_name <- ifelse(!grepl("gene=", func.f$info, fixed = FALSE),NA, 
+                        func.f$gene_name)
+func.f$ncbi_func <- ifelse(!grepl("product=", func.f$info, fixed = FALSE),NA, 
+                        func.f$ncbi_func)
+func.f$rs <- str_replace(func.f$rs, "CP021797.1", "chr")
+func.f$CHROM <- str_replace(func.f$CHROM, "CP021797.1", "Chromosome")
+
+## get rid of unwanted cols
+funcs <- func.f %>%
+  select(-info)
+
+save(funcs, file = "./Data_output/gene_functions.Rdata")
+```
+
+### Add in predicted SNP effects (snpEff)
+
+First, need to build database in SnpEff.
+
+Completed on server:
+
+``` bash
+wget http://sourceforge.net/projects/snpeff/files/snpEff_latest_core.zip
+# unzip
+cd snpEff
+
+# check to see what genomes are already in the database:
+java -jar snpEff.jar databases | grep -i Sinorhizobium_meliloti
+# found 1021, but not usda1106 Had to build my own...
+
+# build database using GFF (GTF preferred, but not available for usda1106)
+mkdir path/to/snpEff/data/Sinorhizobium_meliloti_usda1106
+cd path/to/snpEff/data/Sinorhizobium_meliloti_usda1106
+wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/197/065/GCF_002197065.1_ASM219706v1/GCF_002197065.1_ASM219706v1_genomic.gff.gz
+mv GCF_002197065.1_ASM219706v1_genomic.gff.gz genes.gff.gz 
+# note: renaming to genes.gff.gz is essential
+
+# Get the genome
+cd /path/to/snpEff/data/Sinorhizobium_meliloti_usda1106
+wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/197/065/GCF_002197065.1_ASM219706v1/GCF_002197065.1_ASM219706v1_genomic.fna.gz
+mv GCF_002197065.1_ASM219706v1_genomic.fna.gz sequences.fa.gz
+# needs to match name of directory in data/, fa and not fna!
+
+# Add the new genome to the config file
+cd path/to/snpEff/
+nano snpEffect.config 
+# Sinorhizobium genome, version usda1106
+Sinorhizobium_meliloti_usda1106.genome : Sinorhizobium_meliloti_usda1106
+
+#create database
+java -jar snpEff.jar build -gtf22 -v Sinorhizobium_meliloti_usda1106
 ```
 
 ### Use SnpEff to get annotations
 
-Note: genomic regions in annotation and genome files from database do
-not match vcf, so have to change the input vcf before proceeding
+Note: genomic regions in annotation and genome files from database do not match vcf, so have to change the input vcf before proceeding
 
 Completed on server:
 
 ``` bash
 # /projects/sib/labs/kheath/Ensifer_pleiotropy:
-sed -i.bak 's/\bchr\b/NZ_CP021797.1/g; s/\bpsyma\b/NZ_CP021798.1/g; s/\bpsymb\b/NZ_CP021799.1/g' subset191_LD.recode.vcf
+sed 's/\bchr\b/CP021797.1/g; s/\bpsyma\b/CP021798.1/g; s/\bpsymb\b/CP021799.1/g' subset191_LD.recode.vcf > GWAS_vcf_snpEff
 
 # up/downstream 1000:
-java -Xmx4g -jar $SNPEFF -v Sinorhizobium_meliloti_usda1106 -s 'subset191_LD.ann1000.html' -ud 1000 subset191_LD.recode.vcf > subset191_LD.ann1000.vcf
+java -Xmx4g -jar $SNPEFF -v Sinorhizobium_meliloti_usda1106 -s 'subset191_LD.ann1000.html' -ud 1000 GWAS_vcf_snpEff > subset191_LD.ann1000.vcf
 
 # immediate area:
-java -Xmx4g -jar $SNPEFF -v Sinorhizobium_meliloti_usda1106 -s 'subset191_LD.ann.html' -ud 0 subset191_LD.recode.vcf > subset191_LD.ann.vcf
-
-## scp'ed summary files over: 
+java -Xmx4g -jar $SNPEFF -v Sinorhizobium_meliloti_usda1106 -s 'subset191_LD.ann.html' -ud 0 GWAS_vcf_snpEff > subset191_LD.ann.vcf
 
 # summarize vcf to table
-$GATK VariantsToTable -V subset191_LD.ann.vcf -F CHROM -F POS -F REF -F ALT -F QUAL -F AF -F ANN -F DP -GF GT -O subset191_LD.ann.table ## note AF and DP not calculated
+$GATK VariantsToTable -V subset191_LD.ann.vcf -F CHROM -F POS -F REF -F ALT -F QUAL -F ANN -GF GT -O subset191_LD.ann.table ## note fields AF and DP not calculated
 
-## scp'ed to VCF summary folder
+# scp'ed summary files over: 
 ```
 
-## Merge results (updated vcf w/ 191 strains)
+Merge results (updated vcf w/ 191 strains)
+------------------------------------------
 
 ``` r
 ## chromosome first
-load("./Data_output/betasigs_29Mar2021/chr_betasigs.Rdata") ## realres.psFIsig
+load("./Data_input/betasigs_29Mar2021/chr_betasigs.Rdata") ## realres.psFIsig
 chr_sigs <- realres.psFIsig
 chr_sigs$region <- "Chromosome"
 
 ## psyma
-load("./Data_output/betasigs_29Mar2021/psyma_betasigs.Rdata") ## realres.psFIsig
+load("./Data_input/betasigs_29Mar2021/psyma_betasigs.Rdata") ## realres.psFIsig
 psyma_sigs <- realres.psFIsig
 psyma_sigs$region <- "pSymA"
 
 ## psymb
-load("./Data_output/betasigs_29Mar2021/psymb_betasigs.Rdata") ## realres.psFIsig
+load("./Data_input/betasigs_29Mar2021/psymb_betasigs.Rdata") ## realres.psFIsig
 psymb_sigs <- realres.psFIsig
 psymb_sigs$region <- "pSymB"
 
@@ -729,7 +893,7 @@ SNPs_comb$ps <- sapply(strsplit(as.character(SNPs_comb$rs), split="-"), "[", 4)
 ## 7965 SNPs
 
 ## add in snpEff info:
-VCF_ann <- read.delim("./Data_output/vcf_annotations_29Mar2021/subset191_LD.ann.TABLE")
+VCF_ann <- read.delim("./Data_input/vcf_annotations_29Mar2021/subset191_LD.ann.TABLE")
 ## extract gene, impact, function from snpEff annotation
 VCF_ann$ANN <- as.character(VCF_ann$ANN)
 VCF_ann <- separate(data = VCF_ann, col = ANN, into = c("allele", "effect","impact","gene_name","feature_type"), sep = "\\|")
@@ -743,9 +907,9 @@ SNPs_vcf_ann <- left_join(SNPs_comb, VCF_ann[,c("rs","effect","impact","gene_nam
 ## 7965 SNPs
 
 ## get MAF, minor allele, et c., from GEMMA
-chr_GEMMA_info <- read.delim("./Data_output/betasigs_29Mar2021/chr_subset191_LD_ulmm_trait_01.assoc.txt")
-psyma_GEMMA_info <- read.delim("./Data_output/betasigs_29Mar2021/psyma_subset191_LD_ulmm_trait_01.assoc.txt")
-psymb_GEMMA_info <- read.delim("./Data_output/betasigs_29Mar2021/psymb_subset191_LD_ulmm_trait_01.assoc.txt")
+chr_GEMMA_info <- read.delim("./Data_input/betasigs_29Mar2021/chr_subset191_LD_ulmm_trait_01.assoc.txt")
+psyma_GEMMA_info <- read.delim("./Data_input/betasigs_29Mar2021/psyma_subset191_LD_ulmm_trait_01.assoc.txt")
+psymb_GEMMA_info <- read.delim("./Data_input/betasigs_29Mar2021/psymb_subset191_LD_ulmm_trait_01.assoc.txt")
 GEMMA_info <- rbind(chr_GEMMA_info, psyma_GEMMA_info, psymb_GEMMA_info)
 
 SNPs <- full_join(SNPs_vcf_ann, GEMMA_info[,c("rs","allele1", "allele0", "af")], by = "rs")
@@ -777,7 +941,8 @@ save(SNPs, file = "./Data_output/SNPs.Rdata")
 write.csv(SNPs, "./Data_output/SNPs_wide.csv", row.names = FALSE)
 ```
 
-## Convert from wide to long (GEMMA only)
+Convert from wide to long (GEMMA only)
+--------------------------------------
 
 ``` r
 # load dataset

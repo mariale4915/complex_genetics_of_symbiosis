@@ -19,11 +19,12 @@ setwd("../../Complex_genetics/GWAS")
 # load packages
 library("tidyverse") ## includes ggplot2, dplyr, readr, stringr
 library("knitr") ## produce the knitted doc
+library("cowplot") ## plot_grid function
 ```
 
 ## LD grouping (a la Epstein et al., 2018)
 
-slurm and shell script located on server
+slurm and shell script located on server:
 
 ```{bash LD_groups, eval = FALSE}
 ## copy of shell script
@@ -104,7 +105,49 @@ $EPSTEIN/ld_grouping_choose_one.py --output "one_variant.tsv" "output.tsv" \
 rm tmp.*
 ```
 
-## create strain list (199 - 8 = 191)
+### Linkage group visualization
+
+```{r linkage}
+## threshold vals to loop over
+LD_thresh <- c(95, 80, 70)
+
+## source the function
+source("../Source_code/linkage_func.R")
+
+LD_res <- sapply(LD_thresh, linkage_func,
+                 USE.NAMES = TRUE, simplify = FALSE)
+
+include_graphics("./Linkage_analyses/LG95.png")
+
+# get dfs
+## 95
+LG_0.95 <- as.data.frame(LD_res[[1]])
+LG_0.95$thresh <- "95"
+LG_0.95_sel <- LG_0.95 %>%
+  filter(seed == 1) %>%
+  group_by(chrom) %>%
+  summarize(count = n())
+## 80
+LG_0.80 <- as.data.frame(LD_res[[2]])
+LG_0.80$thresh <- "80"
+LG_0.80_sel <- LG_0.80 %>%
+  filter(seed == 1) %>%
+  group_by(chrom) %>%
+  summarize(count = n())
+## 70
+LG_0.70 <- as.data.frame(LD_res[[3]])
+LG_0.70$thresh <- "70"
+LG_0.70_sel <- LG_0.70 %>%
+  filter(seed == 1) %>%
+  group_by(chrom) %>%
+  summarize(count = n())
+
+## combine LG
+LG_all <- rbind(LG_0.95, LG_0.80, LG_0.70)
+save(LG_all, file = "./Linkage_analyses/LG_all.Rdata")
+```
+
+## Create phenotype file (.fam) for GEMMA (199 - 8 = 191)
 
 Here are the 8 non-Ensifer strains:
 285, 476, 486, 522, 557, 702A, 717A, 733B
@@ -185,12 +228,13 @@ write.table(pheno191, file="./Data_output/phenos191.fam",
 ```
 
 Phenotypes included in .fam file:
+
 1. chloro1_DZA_1	
-2. chloro1_A17_2
-3. chloro1_DZA_3
-4. chloro1_A17_4
-5. height_DZA_1	
-6. height_A17_2	
+2. chloro1_A17_2  
+3. chloro1_DZA_3  
+4. chloro1_A17_4  
+5. height_DZA_1 
+6. height_A17_2 
 7. height_DZA_3	
 8. height_A17_4	
 9. leaf_DZA_1	
@@ -205,18 +249,18 @@ Phenotypes included in .fam file:
 18. nod_A17_2	
 19. nod_DZA_3	
 20. nod_A17_4	
-21. nod.weight_DZA_1	
+21. nod.weight_DZA_1  
 22. nod.weight_A17_2	
 23. nod.weight_DZA_3	
-24. nod.weight_A17_4
-25. chloro.plast_DZA_13	
-26. chloro.plast_A17_24
-27. height.plast_DZA_13	
-28. height.plast_A17_24
+24. nod.weight_A17_4  
+25. chloro.plast_DZA_13 	
+26. chloro.plast_A17_24 
+27. height.plast_DZA_13 
+28. height.plast_A17_24 
 29. leaf.plast_DZA_13	
-30. leaf.plast_A17_24
-31. shoot.plast_DZA_13	
-32. shoot.plast_A17_24
+30. leaf.plast_A17_24 
+31. shoot.plast_DZA_13  
+32. shoot.plast_A17_24  
 
 ## Re-filter vcf for all 191 samples
 
@@ -701,6 +745,8 @@ save(realres.psFIsig, file = "./psymb_betasigs.Rdata")
 
 ## sbatch psymb_sig.slurm
 ## took ~ 1hr, 5 mins
+
+## scp'ed .Rdata files to ./Data_input/betasigs_29Mar2021/
 ```
 
 ## Add gene annotations and predicted effects
@@ -737,7 +783,7 @@ cut -f 1-3,201-205,209 intersect.out > genes.txt
 
 ```{r ann_ncbi}
 # add in gene products
-func <- read.delim("./Data_output/vcf_annotations_29Mar2021/genes.txt", header=FALSE) ## note, tsv only imported half the file
+func <- read.delim("./Data_input/vcf_annotations_29Mar2021/genes.txt", header=FALSE) ## note, tsv only imported half the file
 ## rename column POS to ps to merge
 colnames(func) <- c("CHROM","ps","rs","field","start_pos","end_pos","info")
 
@@ -836,17 +882,17 @@ $GATK VariantsToTable -V subset191_LD.ann.vcf -F CHROM -F POS -F REF -F ALT -F Q
 
 ```{r merge_results}
 ## chromosome first
-load("./Data_output/betasigs_29Mar2021/chr_betasigs.Rdata") ## realres.psFIsig
+load("./Data_input/betasigs_29Mar2021/chr_betasigs.Rdata") ## realres.psFIsig
 chr_sigs <- realres.psFIsig
 chr_sigs$region <- "Chromosome"
 
 ## psyma
-load("./Data_output/betasigs_29Mar2021/psyma_betasigs.Rdata") ## realres.psFIsig
+load("./Data_input/betasigs_29Mar2021/psyma_betasigs.Rdata") ## realres.psFIsig
 psyma_sigs <- realres.psFIsig
 psyma_sigs$region <- "pSymA"
 
 ## psymb
-load("./Data_output/betasigs_29Mar2021/psymb_betasigs.Rdata") ## realres.psFIsig
+load("./Data_input/betasigs_29Mar2021/psymb_betasigs.Rdata") ## realres.psFIsig
 psymb_sigs <- realres.psFIsig
 psymb_sigs$region <- "pSymB"
 
@@ -856,7 +902,7 @@ SNPs_comb$ps <- sapply(strsplit(as.character(SNPs_comb$rs), split="-"), "[", 4)
 ## 7965 SNPs
 
 ## add in snpEff info:
-VCF_ann <- read.delim("./Data_output/vcf_annotations_29Mar2021/subset191_LD.ann.TABLE")
+VCF_ann <- read.delim("./Data_input/vcf_annotations_29Mar2021/subset191_LD.ann.TABLE")
 ## extract gene, impact, function from snpEff annotation
 VCF_ann$ANN <- as.character(VCF_ann$ANN)
 VCF_ann <- separate(data = VCF_ann, col = ANN, into = c("allele", "effect","impact","gene_name","feature_type"), sep = "\\|")
@@ -870,9 +916,9 @@ SNPs_vcf_ann <- left_join(SNPs_comb, VCF_ann[,c("rs","effect","impact","gene_nam
 ## 7965 SNPs
 
 ## get MAF, minor allele, et c., from GEMMA
-chr_GEMMA_info <- read.delim("./Data_output/betasigs_29Mar2021/chr_subset191_LD_ulmm_trait_01.assoc.txt")
-psyma_GEMMA_info <- read.delim("./Data_output/betasigs_29Mar2021/psyma_subset191_LD_ulmm_trait_01.assoc.txt")
-psymb_GEMMA_info <- read.delim("./Data_output/betasigs_29Mar2021/psymb_subset191_LD_ulmm_trait_01.assoc.txt")
+chr_GEMMA_info <- read.delim("./Data_input/betasigs_29Mar2021/chr_subset191_LD_ulmm_trait_01.assoc.txt")
+psyma_GEMMA_info <- read.delim("./Data_input/betasigs_29Mar2021/psyma_subset191_LD_ulmm_trait_01.assoc.txt")
+psymb_GEMMA_info <- read.delim("./Data_input/betasigs_29Mar2021/psymb_subset191_LD_ulmm_trait_01.assoc.txt")
 GEMMA_info <- rbind(chr_GEMMA_info, psyma_GEMMA_info, psymb_GEMMA_info)
 
 SNPs <- full_join(SNPs_vcf_ann, GEMMA_info[,c("rs","allele1", "allele0", "af")], by = "rs")
