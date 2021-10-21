@@ -43,7 +43,7 @@ This [folder](https://github.com/rtbatstone/complex_genetics_of_symbiosis/tree/m
 This [folder](https://github.com/rtbatstone/complex_genetics_of_symbiosis/tree/main/Genetics_conflict_cooperation) contains the phenotypic and genomic analyses conducted on two of the four GWAS experiments listed in 1), and the code that generated Figures in the main text and Supplemental Figures. 
 
 * Phenotypic_analyses [subfolder](https://github.com/rtbatstone/complex_genetics_of_symbiosis/tree/main/Genetics_conflict_cooperation/Phenotypic_analyses) contains the code to input the raw data and conduct phenotypic analyses 
-    * phenotypic_analyses.md [markdown](https://github.com/rtbatstone/complex_genetics_of_symbiosis/blob/main/Complex_genetics/Phenotypic_analyses/phenotypic_analyses.md) includes input files and code to make: Supp. Fig. S1
+    * phenotypic_analyses.md [markdown](https://github.com/rtbatstone/complex_genetics_of_symbiosis/blob/main/Genetics_conflict_cooperation/Phenotypic_analyses/phenotypic_analyses.md) includes input files and code to make: Supp. Fig. S1
 
 
 * GWAS [subfolder](https://github.com/rtbatstone/complex_genetics_of_symbiosis/tree/main/Complex_genetics/GWAS) contains the code to run the GWAS and conduct genomic analyses 
