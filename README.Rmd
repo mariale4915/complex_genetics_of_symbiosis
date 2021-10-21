@@ -23,8 +23,29 @@ This repository contains the raw data and analyses for:
 
 ### 1) Complex Genetics
 
-This [folder](https://github.com/rtbatstone/complex_genetics_of_symbiosis/tree/master/Complex_genetics) contains the raw data from the four GWAS experiments, the linear model results presented in the main text of the paper, and the code that generated Figures in the main text and Supplemental Figures. 
+This [folder](https://github.com/rtbatstone/complex_genetics_of_symbiosis/tree/main/Complex_genetics) contains the raw data from the four GWAS experiments, the linear model results presented in the main text of the paper, and the code that generated Figures in the main text and Supplemental Figures. 
+
+* Phenotypic_analyses [subfolder](https://github.com/rtbatstone/complex_genetics_of_symbiosis/tree/main/Complex_genetics/Phenotypic_analyses) contains the code to format the raw data and conduct phenotypic analyses 
+    * phenotypic_analyses.md [markdown](https://github.com/rtbatstone/complex_genetics_of_symbiosis/blob/main/Complex_genetics/Phenotypic_analyses/phenotypic_analyses.md) includes input files and code to make: Supp. Figs. S2-5, S10; Tables 1-2
+    * RNA_seq_exp.md [markdown](https://github.com/rtbatstone/complex_genetics_of_symbiosis/blob/main/Complex_genetics/Phenotypic_analyses/RNA_seq_exp.md) includes input files and code to make: Supp. Fig. S11
+
+
+* GWAS [subfolder](https://github.com/rtbatstone/complex_genetics_of_symbiosis/tree/main/Complex_genetics/GWAS) contains the code to run the GWAS and conduct genomic analyses 
+    *   Run_GEMMA.md [markdown](https://github.com/rtbatstone/complex_genetics_of_symbiosis/blob/main/Complex_genetics/GWAS/Run_GEMMA.md) includes code to run GEMMA (on computer cluster)
+    *   Genetic_analyses.md [markdown](https://github.com/rtbatstone/complex_genetics_of_symbiosis/blob/main/Complex_genetics/GWAS/Genetic_analyses.md) includes input files and code to make: Figs. 1-3; Supp. Figs. S1, S6-9, S12; Datasets S1-S7
+
+* Source_code [subfolder](https://github.com/rtbatstone/complex_genetics_of_symbiosis/tree/main/Complex_genetics/Source_code) contains the source code called throughout
 
 ### 2) Genetics of Conflict and Cooperation
 
-This [folder](https://github.com/rtbatstone/complex_genetics_of_symbiosis/tree/master/Genetics_conflict_cooperation) contains the phenotypic and genomic analyses conducted on two of the four GWAS experiments listed in 1), and the code that generated Figures in the main text and Supplemental Figures. 
+This [folder](https://github.com/rtbatstone/complex_genetics_of_symbiosis/tree/main/Genetics_conflict_cooperation) contains the phenotypic and genomic analyses conducted on two of the four GWAS experiments listed in 1), and the code that generated Figures in the main text and Supplemental Figures. 
+
+* Phenotypic_analyses [subfolder](https://github.com/rtbatstone/complex_genetics_of_symbiosis/tree/main/Genetics_conflict_cooperation/Phenotypic_analyses) contains the code to input the raw data and conduct phenotypic analyses 
+    * phenotypic_analyses.md [markdown](https://github.com/rtbatstone/complex_genetics_of_symbiosis/blob/main/Complex_genetics/Phenotypic_analyses/phenotypic_analyses.md) includes input files and code to make: Supp. Fig. S1
+
+
+* GWAS [subfolder](https://github.com/rtbatstone/complex_genetics_of_symbiosis/tree/main/Complex_genetics/GWAS) contains the code to run the GWAS and conduct genomic analyses 
+    *   Run_GEMMA.md [markdown](https://github.com/rtbatstone/complex_genetics_of_symbiosis/blob/main/Genetics_conflict_cooperation/GWAS/Run_GEMMA.md) includes code to run GEMMA (on computer cluster)
+    *   Genomic_analyses.md [markdown](https://github.com/rtbatstone/complex_genetics_of_symbiosis/blob/main/Genetics_conflict_cooperation/GWAS/Genomic_analyses.md) includes input files and code to make: Figs. 1-3; Supp. Figs. S1-3; Tables S1-2; Datasets S1-S3
+
+* Source_code [subfolder](https://github.com/rtbatstone/complex_genetics_of_symbiosis/tree/main/Genetics_conflict_cooperation/Source_code) contains the source code called throughout
