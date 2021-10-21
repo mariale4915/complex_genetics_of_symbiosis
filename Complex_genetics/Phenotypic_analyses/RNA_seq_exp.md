@@ -1,35 +1,15 @@
----
-title: "RNA seq experiment phenotypes to test for G by G"
-author: "Rebecca Batstone"
-date: "`r format(Sys.Date())`"
-output: github_document
-editor_options: 
-  chunk_output_type: console
----
+RNA seq experiment phenotypes to test for G by G
+================
+Rebecca Batstone
+2021-10-21
 
-## Setup
+Setup
+-----
 
-```{r setup, include=FALSE}
-# global options
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+RNA seq experiment phenotypes to test for G by G (Supp. Fig. S11)
+-----------------------------------------------------------------
 
-# set working directory
-setwd("../../Complex_genetics/Phenotypic_analyses")
-
-# load packages
-library("tidyverse") ## includes ggplot2, dplyr, readr, stringr
-library("knitr") ## produce the knitted doc
-library("lme4") ## mixed effects models
-library("car") ## Anova function
-library("cowplot") ## produce paneled plots
-
-# set contrasts
-options(contrasts = rep ("contr.sum", 2)) 
-```
-
-## RNA seq experiment phenotypes to test for G by G (Supp. Fig. S11)
-
-```{r gxg_data}
+``` r
 GxG_data <- read_csv("./Raw_data/GxG_data.csv")
 
 # variable specifications
@@ -40,9 +20,26 @@ GxG_data$plant_line <- as.factor(GxG_data$plant_line)
 lmm_shoot <- lmer(sqrt(shoot) ~ strain_ID*plant_line + (1|rack) + (1|researcher),
                       data = filter(GxG_data, treat_type == "exp"))
 plot(lmm_shoot)
+```
 
+![](RNA_seq_exp_files/figure-markdown_github/gxg_data-1.png)
+
+``` r
 (Anova(lmm_shoot, type = 3)) # interaction term sig.
+```
 
+    ## Analysis of Deviance Table (Type III Wald chisquare tests)
+    ## 
+    ## Response: sqrt(shoot)
+    ##                         Chisq Df Pr(>Chisq)    
+    ## (Intercept)          793.7595  1  < 2.2e-16 ***
+    ## strain_ID             94.8908 19  4.459e-12 ***
+    ## plant_line             0.5534  1     0.4569    
+    ## strain_ID:plant_line  83.2736 19  5.039e-10 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+``` r
 # Summarize the data
 GxG_data_sum_shoot <- GxG_data %>%
   filter(treat_type == "exp") %>%
@@ -80,12 +77,15 @@ write.csv(GxG_data_sum_shoot, "./Data_output/GxG_expression_means.csv", row.name
           panel.grid.minor = element_blank()
           )
   )
+```
 
+![](RNA_seq_exp_files/figure-markdown_github/gxg_data-2.png)
+
+``` r
 save_plot("./Figures_tables/GxG.png", p1,
           ncol = 1, # we're saving a grid plot of 2 columns
           nrow = 1, # and 3 rows
           # each individual subplot should have an aspect ratio of 1.3
           base_aspect_ratio = 1.3
           )
-
 ```
