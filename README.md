@@ -26,6 +26,8 @@ This [folder](https://github.com/rtbatstone/complex_genetics_of_symbiosis/tree/m
     -   Genetic\_analyses.md [markdown](https://github.com/rtbatstone/complex_genetics_of_symbiosis/blob/main/Complex_genetics/GWAS/Genetic_analyses.md) includes input files and code to make: Figs. 1-3; Supp. Figs. S1, S6-9, S12; Datasets S1-S7
 -   Source\_code [subfolder](https://github.com/rtbatstone/complex_genetics_of_symbiosis/tree/main/Complex_genetics/Source_code) contains the source code called throughout
 
+-   Supp\_files [subfolder](https://github.com/rtbatstone/complex_genetics_of_symbiosis/tree/main/Complex_genetics/Supp_files) contains copies of the supplementary Datasets (S1-S7), also on bioRxiv
+
 ### 2) Genetics of Conflict and Cooperation (Batstone, Burghardt, Heath 2021)
 
 This [folder](https://github.com/rtbatstone/complex_genetics_of_symbiosis/tree/main/Genetics_conflict_cooperation) contains the phenotypic and genomic analyses conducted on two of the four GWAS experiments listed in 1), and the code that generated Figures in the main text and Supplemental Figures.
@@ -34,5 +36,7 @@ This [folder](https://github.com/rtbatstone/complex_genetics_of_symbiosis/tree/m
     -   phenotypic\_analyses.md [markdown](https://github.com/rtbatstone/complex_genetics_of_symbiosis/blob/main/Complex_genetics/Phenotypic_analyses/phenotypic_analyses.md) includes input files and code to make: Supp. Fig. S1
 -   GWAS [subfolder](https://github.com/rtbatstone/complex_genetics_of_symbiosis/tree/main/Complex_genetics/GWAS) contains the code to run the GWAS and conduct genomic analyses
     -   Run\_GEMMA.md [markdown](https://github.com/rtbatstone/complex_genetics_of_symbiosis/blob/main/Genetics_conflict_cooperation/GWAS/Run_GEMMA.md) includes code to run GEMMA (on computer cluster)
-    -   Genomic\_analyses.md [markdown](https://github.com/rtbatstone/complex_genetics_of_symbiosis/blob/main/Genetics_conflict_cooperation/GWAS/Genomic_analyses.md) includes input files and code to make: Figs. 1-3; Supp. Figs. S1-3; Tables S1-2; Datasets S1-S3
+    -   Genomic\_analyses.md [markdown](https://github.com/rtbatstone/complex_genetics_of_symbiosis/blob/main/Genetics_conflict_cooperation/GWAS/Genomic_analyses.md) includes input files and code to make: Figs. 1-3; Supp. Figs. S2-3; Tables S1-2; Datasets S1-S3
 -   Source\_code [subfolder](https://github.com/rtbatstone/complex_genetics_of_symbiosis/tree/main/Genetics_conflict_cooperation/Source_code) contains the source code called throughout
+
+-   Supp\_files [subfolder](https://github.com/rtbatstone/complex_genetics_of_symbiosis/tree/main/Genetics_conflict_cooperation/Supp_files) contains copies of the supplementary Datasets (S1-S3), also on bioRxiv

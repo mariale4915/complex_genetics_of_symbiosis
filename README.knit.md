@@ -1,15 +1,13 @@
 ---
 title: "Analyses for the project \"Complex genetics of symbiosis\""
 author: "Rebecca Batstone"
-date: "`r format(Sys.Date())`"
+date: "2021-10-21"
 output: github_document
 editor_options: 
   chunk_output_type: console
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+
 
 This repository archives the data and analyses for two papers:
 
