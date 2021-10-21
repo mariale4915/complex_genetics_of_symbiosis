@@ -1,7 +1,7 @@
 Phenotypic analyses
 ================
 Rebecca Batstone
-2021-10-20
+2021-10-21
 
 Setup
 -----
@@ -11,7 +11,7 @@ Load the data, format
 
 ``` r
 load(file = "../../Complex_genetics/Phenotypic_analyses/Data_output/emmeans.w_Ensifer.Rdata") ## loads emmeans.w_Ensifer
-fit <- read.delim("./Data_output/multistrain_data.txt") ## from Liana's experiment
+fit <- read.delim("./Data_input/multistrain_data.txt") ## from Liana's experiment
 
 # format fitness data
 fit_sel <- fit %>%
@@ -57,8 +57,8 @@ save(sub89_means, file = "./Data_output/sub89_means.Rdata")
 write.csv(sub89_means, file = "./Data_output/means_89strains.csv", row.names = FALSE)
 ```
 
-Panel figure (supp)
--------------------
+Panel figure (Supp. Fig. S1)
+----------------------------
 
 ``` r
 ## load relevant df
@@ -234,5 +234,5 @@ ggplot(sub89_means.l %>%
 ![](phenotypic_analyses_files/figure-markdown_github/cheaters-1.png)
 
 ``` r
-ggsave("./Figures/cheaters.pdf", width = 9, height = 6, units = "in")
+ggsave("./Figures/cheaters.png", width = 9, height = 6, units = "in")
 ```
