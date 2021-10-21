@@ -76,9 +76,46 @@ save(sub89_means, file = "./Data_output/sub89_means.Rdata")
 write.csv(sub89_means, file = "./Data_output/means_89strains.csv", row.names = FALSE)
 ```
 
-## Panel figure (Supp. Fig. S1)
+## Genetic correlations (part of Figs. 1 & 2)
 
-```{r p_fig_supp}
+```{r gen_corrs}
+# load relevant df
+load(file = "./Data_output/sub89_means.Rdata") ## loads sub89_means
+
+# specify vars to loop over
+trait1.list <- rep(c("chloro","shoot","nod.weight","fit", ## nod as x 
+                     "chloro","shoot","fit", ## nod.weight as x
+                     "chloro","shoot"), 2) ## fit as x
+trait2.list <- rep(c(rep("nod",4), 
+                     rep("nod.weight",3), 
+                     rep("fit", 2)),2) ## traits as x
+line.list <- c(rep("DZA",9), rep("A17",9))
+comb.list <- paste0(trait1.list,"_vs_",trait2.list,"_",line.list)
+cols.list <- c(rep("#4E820C",9), rep('#AD208D',9))
+
+# source the function
+source('../Source_code/gen_corr_func.R')
+
+# run the function
+gc_out <- mapply(combs = comb.list, traits1 = trait1.list, traits2 = trait2.list, 
+                 lines = line.list, cols = cols.list, 
+                 FUN = gen_corr_func,  
+                 USE.NAMES = TRUE, 
+                 MoreArgs = list(df = sub89_means))
+
+gc_ra <- gc_out[c("nod.weight_vs_nod_DZA","fit_vs_nod_DZA","fit_vs_nod.weight_DZA",
+                  "nod.weight_vs_nod_A17","fit_vs_nod_A17","fit_vs_nod.weight_A17",
+                  "shoot_vs_nod_DZA","shoot_vs_nod.weight_DZA","shoot_vs_fit_DZA",
+                  "shoot_vs_nod_A17","shoot_vs_nod.weight_A17","shoot_vs_fit_A17",
+                  "chloro_vs_nod_DZA","chloro_vs_nod.weight_DZA","chloro_vs_fit_DZA",
+                  "chloro_vs_nod_A17","chloro_vs_nod.weight_A17","chloro_vs_fit_A17")]
+
+save(gc_ra, file = "./Data_output/pheno_corrs.Rdata")
+```
+
+### Panel figure (Supp. Fig. S1)
+
+```{r corrs_supp}
 ## load relevant df
 load(file = "./Data_output/sub89_means.Rdata") ## loads sub89_means
 
@@ -105,7 +142,7 @@ cols.list <- c('#9F7871', rep("#4E820C",4), ## first
                )
 
 ## source the function
-source("../Source_code/gen_corr_func.R")
+source("../Source_code/gen_corr_func2.R")
 
 # run the function
 gc_out <- mapply(combs = comb.list, traits_y = traits_y.list, traits_x = traits_x.list, 

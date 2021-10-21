@@ -865,7 +865,7 @@ load(file="./Data_output/SNPs_all.Rdata") ## loads SNPs_all
 
 ## add in the specific variants within the linkage group
 one_variant <- 
-  read.delim("../../Complex_genetics/GWAS/Data_output/one_variant.tsv", 
+  read.delim("../../Complex_genetics/GWAS/Data_input/one_variant.tsv", 
                           header=FALSE)
 colnames(one_variant) <- c("region","start_ps","end_ps","rs","group_no","vars_in_group")
 ### add to SNPs
@@ -1139,7 +1139,7 @@ save(all_genes, file = "./Data_output/all_gene_stats.Rdata")
 
 ### numbers/stats to iterate:
 cat.list <- rep(c("positive", "antagonistic", "alignment", "conflict","sig","GWAS"),4)
-size.list <- rep(c(10, 85, 97, 21,1051,1726),4) 
+size.list <- rep(c(10, 85, 97, 21, 1051, 1726), 4) 
 stat.list <- c(rep("Pi",6),rep("Tajima.D",6),rep("Fu.Li.F",6),rep("Fu.Li.D",6))
 comb.list <- paste0(stat.list,"_", cat.list)
 
@@ -1152,8 +1152,8 @@ ttests_out <- mapply(combs = comb.list,
                      stats = stat.list, 
                      cats = cat.list,
                      MoreArgs = list(df = all_genes),
-                    FUN = ttest_func, 
-                    USE.NAMES = TRUE)
+                     FUN = ttest_func, 
+                     USE.NAMES = TRUE)
 ```
 
     ## [1] "Pi_positive"
@@ -1195,7 +1195,6 @@ cat.list <- rep(c("positive", "antagonistic", "alignment", "conflict"),4)
 size.list <- rep(c(10, 85, 97, 21),4) 
 stat.list <- c(rep("Pi",4),rep("Tajima.D",4),rep("Fu.Li.F",4),rep("Fu.Li.D",4))
 comb.list <- paste0(stat.list,"_", cat.list)
-
 ## run (just for GWAS genes)
 ttests_out <- mapply(combs = comb.list, sizes = size.list,
                      stats = stat.list, cats = cat.list,
