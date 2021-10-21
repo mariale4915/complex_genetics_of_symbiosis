@@ -1,7 +1,7 @@
 Genomic analyses
 ================
 Rebecca Batstone
-2021-10-20
+2021-10-21
 
 Setup
 -----
@@ -81,15 +81,13 @@ SNPs_sig_long %>%
     ## 1 A17        383
     ## 2 DZA        548
 
-Summarize at the SNP-level for all traits
------------------------------------------
+Summarize at the SNP-level for all traits (Supp. Datasets S1 & S3)
+------------------------------------------------------------------
 
 ``` r
 load(file = "./Data_output/SNPs_sig_long.Rdata") # loads SNPs_sig_long
   
 # create variant summary files for each trait individually
-
-## function to summarize data at the variant-level:
 
 trait.list <- c("all","chloro1","height1","leaf1","shoot",
                 "chloro.plast","height.plast","leaf.plast","shoot.plast")
@@ -115,8 +113,8 @@ var_sum_out <- sapply(trait.list, var_sum_func, df = SNPs_sig_long,
 save(var_sum_out, file = "./Data_output/Var-lvl_summaries/var_sums.Rdata")
 ```
 
-Summarize at the gene-lvl and categorize
-----------------------------------------
+Summarize at the gene-lvl and categorize (Supp. Datasets S4 & S7)
+-----------------------------------------------------------------
 
 ``` r
 load(file = "./Data_output/SNPs_sig_long.Rdata") # loads SNPs_sig_long
@@ -161,7 +159,7 @@ SNPs_ann_gene <- SNPs_ann_gene %>%
 
 save(SNPs_ann_gene, file = "./Data_output/Gene-lvl_summaries/SNPs_ann_gene_all.Rdata")
 write.csv(SNPs_ann_gene, "./Data_output/Gene-lvl_summaries/SNPs_ann_gene_all.csv", 
-          row.names = FALSE)
+          row.names = FALSE) ## Supp. Dataset S4
 
 # function: iterate through each trait individually
 
@@ -201,8 +199,7 @@ gene_sum_out[["shoot.plast"]] %>%
     ## 2 Both        93 shoot.plast          93
     ## 3 DZA only   304 shoot.plast         304
 
-Venn diagrams
--------------
+### Venn diagrams (Fig. 1 and Supp. Fig. S1)
 
 ``` r
 load(file = "./Data_output/Gene-lvl_summaries/Venn_diagram_nums.Rdata") # loads gene_sum_out
@@ -221,47 +218,12 @@ Venn_diagrams <- rbind(Venn_diagram_nums, c("All","All",colSums(Venn_diagram_num
 cols.to.num <- 3:6
 Venn_diagrams[cols.to.num] <- sapply(Venn_diagrams[cols.to.num],as.numeric)
 
-write.csv(Venn_diagrams, file = "./Figures_tables/Venn_numbers.csv", row.names = FALSE)
+write.csv(Venn_diagrams, file = "./Figures_tables/Venn_numbers.csv", row.names = FALSE) ## Fig. 1 & Supp. Fig. 1
 
-kable(Venn_diagrams)
-```
-
-| cat                 | host\_exps       |  chloro|  height|  leaf|  shoot|
-|:--------------------|:-----------------|-------:|-------:|-----:|------:|
-| GxE                 | A17 only\_2      |     124|      48|    50|    104|
-| GxE                 | A17 only\_4      |      79|      58|   179|     76|
-| GxE                 | DZA only\_1      |     175|     254|   171|    186|
-| GxE                 | DZA only\_3      |     109|     284|   239|    144|
-| GxG                 | A17 only\_2, 4   |       9|       2|     7|     18|
-| GxG                 | DZA only\_1, 3   |      18|      98|    85|     33|
-| other               | Both\_1, 2       |      26|      34|    16|     35|
-| other               | Both\_1, 4       |      11|      19|    44|     21|
-| other               | Both\_2, 3       |      14|      25|    26|     57|
-| other               | Both\_3, 4       |       6|      19|    65|     12|
-| Partially Universal | Both\_1, 2, 3    |       5|      21|    14|     25|
-| Partially Universal | Both\_1, 2, 4    |       7|       8|     2|     12|
-| Partially Universal | Both\_1, 3, 4    |       1|      14|    28|      3|
-| Partially Universal | Both\_2, 3, 4    |       1|       5|    14|     15|
-| Universal           | Both\_1, 2, 3, 4 |       3|       9|    11|      5|
-| All                 | All              |     588|     898|   951|    746|
-
-``` r
-(Venn_diagrams.sum <- Venn_diagrams %>%
+Venn_diagrams.sum <- Venn_diagrams %>%
   group_by(cat) %>%
-  summarize_if(is.numeric, sum, na.rm=TRUE))
-```
+  summarize_if(is.numeric, sum, na.rm=TRUE)
 
-    ## # A tibble: 6 x 5
-    ##   cat                 chloro height  leaf shoot
-    ##   <chr>                <dbl>  <dbl> <dbl> <dbl>
-    ## 1 All                    588    898   951   746
-    ## 2 GxE                    487    644   639   510
-    ## 3 GxG                     27    100    92    51
-    ## 4 other                   57     97   151   125
-    ## 5 Partially Universal     14     48    58    55
-    ## 6 Universal                3      9    11     5
-
-``` r
 kable(Venn_diagrams.sum)
 ```
 
@@ -290,7 +252,7 @@ Venn_diagrams <- rbind(Venn_diagram_nums, c("All",colSums(Venn_diagram_nums[,2:5
 cols.to.num <- 2:5
 Venn_diagrams[cols.to.num] <- sapply(Venn_diagrams[cols.to.num],as.numeric)
 
-write.csv(Venn_diagrams, file = "./Figures_tables/Venn_numbers_plast.csv", row.names = FALSE)
+write.csv(Venn_diagrams, file = "./Figures_tables/Venn_numbers_plast.csv", row.names = FALSE) ## Fig. 1 & Supp. Fig. 1
 
 kable(Venn_diagrams)
 ```
@@ -302,8 +264,20 @@ kable(Venn_diagrams)
 | DZA only |           348|           450|         400|          304|
 | All      |           518|           671|         786|          576|
 
-Overlap in genes for shoot biomass (and other traits) and plasticity
---------------------------------------------------------------------
+``` r
+include_graphics("./Figures_tables/VennDiagram different colors_filled_shoot.png")
+```
+
+<img src="./Figures_tables/VennDiagram different colors_filled_shoot.png" width="5100" />
+
+``` r
+include_graphics("./Figures_tables/VennDiagram different colors_filled_others.png")
+```
+
+<img src="./Figures_tables/VennDiagram different colors_filled_others.png" width="4591" />
+
+Overlap in genes for shoot biomass (and other traits) and plasticity (Supp. Dataset S6)
+---------------------------------------------------------------------------------------
 
 ``` r
 # get overlap between plast and shoot
@@ -350,8 +324,8 @@ kable(overlap)
 | trait\_only  | 265    | 358    | 348  | 346   |
 | tot\_plast   | 518    | 671    | 786  | 576   |
 
-Make stacked barplots (number of genes for each trait and line)
----------------------------------------------------------------
+Make stacked barplots (Supp. Fig. S6)
+-------------------------------------
 
 ``` r
 load(file = "./Data_output/SNPs_sig_long.Rdata") # loads SNPs_sig_long
@@ -565,7 +539,7 @@ SNPs_sel <- SNPs %>%
 save(SNPs_sel, file = "./Data_output/SNPs_sel.Rdata")
 ```
 
-### Correlations of effect sizes across experiments (same trait)
+### Correlations of effect sizes across experiments (Fig. 3 & Supp. Fig. S8)
 
 ``` r
 load(file = "./Data_output/SNPs_sel.Rdata") # loads SNPs_sel
@@ -617,10 +591,17 @@ save_plot("./Figures_tables/var_effect_corrs_shoot.pdf", fig_base,
           base_aspect_ratio = 1.3
           )
 
-include_graphics("./Figures_tables/var_effect_corrs_shoot.pdf")
+save_plot("./Figures_tables/var_effect_corrs_shoot.png", fig_base,
+          ncol = 1, # we're saving a grid plot of 2 columns
+          nrow = 2, # and 3 rows
+          # each individual subplot should have an aspect ratio of 1.3
+          base_aspect_ratio = 1.3
+          )
+
+include_graphics("./Figures_tables/var_effect_corrs_shoot.png") ## Fig. 3
 ```
 
-![](./Figures_tables/var_effect_corrs_shoot.pdf)
+<img src="./Figures_tables/var_effect_corrs_shoot.png" width="1446" />
 
 ``` r
 ## corrplots (rest)
@@ -669,10 +650,17 @@ save_plot("./Figures_tables/var_effect_corrs_all.pdf", fig,
           base_aspect_ratio = 1.3
           )
 
-include_graphics("./Figures_tables/var_effect_corrs_all.pdf")
+save_plot("./Figures_tables/var_effect_corrs_all.png", fig,
+          ncol = 3, # we're saving a grid plot of 2 columns
+          nrow = 2, # and 3 rows
+          # each individual subplot should have an aspect ratio of 1.3
+          base_aspect_ratio = 1.3
+          )
+
+include_graphics("./Figures_tables/var_effect_corrs_all.png") ## Supp. Fig. S8
 ```
 
-![](./Figures_tables/var_effect_corrs_all.pdf)
+<img src="./Figures_tables/var_effect_corrs_all.png" width="4340" />
 
 GxE global analyses
 -------------------
@@ -690,23 +678,25 @@ This code combines the association tests for each trait across the genome (i.e.,
   
 ### make trait number list
 trait.list <- str_pad(1:24, 2, pad = "0")
+
 comb_func <- sapply(trait.list, function(x){
 
-file_list <- list.files(path="./Data_output/betasigs_29Mar2021/", 
-                        pattern = paste0(x, ".assoc"), full.names = T)
+  ## input association files
+  file_list <- list.files(path="./Data_input/betasigs_29Mar2021/", 
+                          pattern = paste0(x, ".assoc"), full.names = T)
 
-extract_fun <- function(files){
-  traits <- read.table(files, header=T, sep="\t") # read in the file
-    return(traits)
-}  
+  extract_fun <- function(files){
+    traits <- read.table(files, header=T, sep="\t") # read in the file
+      return(traits)
+  }  
 
-traits <- lapply(file_list, extract_fun)
-
-comb <- bind_rows(traits)
-
-write.csv(comb, file = paste0("./Data_output/Global_gxe/trait_", x , ".csv"), row.names = FALSE)
-
-print(paste0("completed trait", x))
+  traits <- lapply(file_list, extract_fun)
+  
+  comb <- bind_rows(traits)
+  
+  write.csv(comb, file = paste0("./Global_gxe/trait_", x , ".csv"), row.names = FALSE)
+  
+  print(paste0("completed trait", x))
 })
 ```
 
@@ -829,15 +819,17 @@ save(slopes_out_all, file = "./slopes_out_all.Rdata")
 #
 
 ### end server run
+
+## scp'ed .Rdata to ./Global_gxe/
 ```
 
-### Global test of GxE (plotting)
+### Global test of GxE (Supp. Fig. S9)
 
 ``` r
-traits <- read.table("./Data_output/Global_gxe/README.txt", header = FALSE)
+traits <- read.table("./Global_gxe/README.txt", header = FALSE)
 
 # load slopes_out_all
-load(file = "./Data_output/Global_gxe/slopes_out_all.Rdata")
+load(file = "./Global_gxe/slopes_out_all.Rdata")
 
 ## merge data
 seq_x1 <- seq(1,12000,1000)
@@ -863,10 +855,10 @@ slopes_out <- mapply(x1 = seq_x1,
 
 plot_func <- function(traits1, traits2, cols, list){
 
-  data_1 <- read_csv(paste0("./Data_output/Global_gxe/trait_", 
+  data_1 <- read_csv(paste0("./Global_gxe/trait_", 
                             substr(traits$V2[traits1], 6, 7), ".csv"),
                             col_names = TRUE)
-  data_2 <- read_csv(paste0("./Data_output/Global_gxe/trait_", 
+  data_2 <- read_csv(paste0("./Global_gxe/trait_", 
                             substr(traits$V2[traits2], 6, 7), ".csv"),
                             col_names = TRUE)
   
@@ -889,7 +881,7 @@ plot_func <- function(traits1, traits2, cols, list){
     theme(plot.title = element_text(hjust = 0.5))
   
   ## save the resulting plot
-  ggsave(file = paste0("./Data_output/Global_gxe/beta_dist_plots/beta_dist_", cols, ".png"))
+  ggsave(file = paste0("./Global_gxe/beta_dist_plots/beta_dist_", cols, ".png"))
   
   # real slope
   lm <- lm(beta.exp2 ~ beta.exp1, data = data)
@@ -907,7 +899,7 @@ plot_func <- function(traits1, traits2, cols, list){
     xlab(paste0(cols))
 
   ## save the resulting plot
-  ggsave(file = paste0("./Data_output/Global_gxe/real_perms/", cols, ".png"))
+  ggsave(file = paste0("./Global_gxe/real_perms/", cols, ".png"))
 
   p_value <- findInterval(real_slope, sort(df[[cols]]))/1000
 
@@ -930,16 +922,20 @@ plots_all <- plot_grid(plotlist = plots_out,
                        align = "hv",
                        labels = NULL)
 
-save_plot("./Data_output/Global_gxe/all_dist.png", plots_all,
+save_plot("./Global_gxe/all_dist.png", plots_all,
           ncol = 4, # we're saving a grid plot of 2 columns
           nrow = 2, # and 3 rows
           # each individual subplot should have an aspect ratio of 1.3
           base_aspect_ratio = 1.3
           )
+
+include_graphics("./Global_gxe/all_dist.png")
 ```
 
-Circos plots
-------------
+<img src="./Global_gxe/all_dist.png" width="5787" />
+
+Circos plots (Fig. 2 and Supp. Fig. S7)
+---------------------------------------
 
 <https://jokergoo.github.io/circlize_book/book/>
 
@@ -965,52 +961,76 @@ circos_out <- sapply(trait.list, circos_func,
 
     ## [1] "shoot"
 
-Merging uniprot accessions and RefSeq\_IDs, and DAVID outputs
--------------------------------------------------------------
+``` r
+include_graphics("./Figures_tables/circos_plots/circos_shoot.png")
+```
+
+<img src="./Figures_tables/circos_plots/circos_shoot.png" width="1350" />
+
+``` r
+include_graphics("./Figures_tables/circos_plots/circos_chloro.png")
+```
+
+<img src="./Figures_tables/circos_plots/circos_chloro.png" width="1350" />
+
+``` r
+include_graphics("./Figures_tables/circos_plots/circos_height.png")
+```
+
+<img src="./Figures_tables/circos_plots/circos_height.png" width="1350" />
+
+``` r
+include_graphics("./Figures_tables/circos_plots/circos_leaf.png")
+```
+
+<img src="./Figures_tables/circos_plots/circos_leaf.png" width="1350" />
+
+Merging uniprot accessions and RefSeq\_IDs, and DAVID outputs (Supp. Datasets S2 & S5)
+--------------------------------------------------------------------------------------
 
 ``` r
 ## uniprot
 genes_shoot <- read_csv("./Data_output/Gene-lvl_summaries/genes_shoot.csv")
 genes_uniprot <- 
- read_excel("./Data_output/DAVID_files/all_sig_genes_uniprot.xlsx")
+ read_excel("./DAVID_files/all_sig_genes_uniprot.xlsx")
 
 genes_shoot_uniprot <- left_join(genes_shoot,
                                  genes_uniprot, by = "RefSeq_ID")
 
-write.csv(genes_shoot_uniprot, file = "./Data_output/DAVID_files/all_sig_genes_uniprot_comb.csv", 
-          row.names = FALSE)
+write.csv(genes_shoot_uniprot, file = "./DAVID_files/all_sig_genes_uniprot_comb.csv", 
+          row.names = FALSE) ## Supp. Dataset S2
 
 ## merge all DAVID outputs
 genes_GxE_DZA1 <- 
- read_excel("./Data_output/DAVID_files/GxE_DZA-1_func_ann.xlsx")
+ read_excel("./DAVID_files/GxE_DZA-1_func_ann.xlsx")
 genes_GxE_DZA1$type <- "GxE_DZA1"
 ###
 genes_GxE_DZA3 <- 
- read_excel("./Data_output/DAVID_files/GxE_DZA-3_func_ann.xlsx")
+ read_excel("./DAVID_files/GxE_DZA-3_func_ann.xlsx")
 genes_GxE_DZA3$type <- "GxE_DZA3"
 ###
 genes_GxE_A172 <- 
- read_excel("./Data_output/DAVID_files/GxE_A17-2_func_ann.xlsx")
+ read_excel("./DAVID_files/GxE_A17-2_func_ann.xlsx")
 genes_GxE_A172$type <- "GxE_A172"
 ###
 genes_GxE_A174 <- 
- read_excel("./Data_output/DAVID_files/GxE_A17-4_func_ann.xlsx")
+ read_excel("./DAVID_files/GxE_A17-4_func_ann.xlsx")
 genes_GxE_A174$type <- "GxE_A174"
 ###
 genes_GxG_DZA <- 
- read_excel("./Data_output/DAVID_files/GxG_DZA_func_ann.xlsx")
+ read_excel("./DAVID_files/GxG_DZA_func_ann.xlsx")
 genes_GxG_DZA$type <- "GxG_DZA"
 ###
 genes_GxG_A17 <- 
- read_excel("./Data_output/DAVID_files/GxG_A17_func_ann.xlsx")
+ read_excel("./DAVID_files/GxG_A17_func_ann.xlsx")
 genes_GxG_A17$type <- "GxG_A17"
 ###
 genes_uni <- 
- read_excel("./Data_output/DAVID_files/universal_func_ann.xlsx")
+ read_excel("./DAVID_files/universal_func_ann.xlsx")
 genes_uni$type <- "universal"
 ###
 genes_plast <- 
- read_excel("./Data_output/DAVID_files/plast_shoot_func_ann.xlsx")
+ read_excel("./DAVID_files/plast_shoot_func_ann.xlsx")
 genes_plast$type <- "plasticity"
 
 ## combine
@@ -1018,25 +1038,25 @@ genes_DAVID <- rbind(genes_GxE_DZA1, genes_GxE_DZA3, genes_GxE_A172, genes_GxE_A
                      genes_GxG_DZA, genes_GxG_A17,
                      genes_uni, genes_plast)
 
-write.csv(genes_DAVID, file = "./Data_output/DAVID_files/DAVID_outputs_combined.csv", row.names = FALSE)
+write.csv(genes_DAVID, file = "./DAVID_files/DAVID_outputs_combined.csv", row.names = FALSE) ## Supp. Dataset S5
 ```
 
-Compare analyses based on WG with separate genomic regions
-----------------------------------------------------------
+Compare analyses based on WG with separate genomic regions (Supp. Fig. S12)
+---------------------------------------------------------------------------
 
 ``` r
 ## chromosome first
-load("./Data_output/methods_comp/betasigs_15May2020/chr_betasigs.Rdata") ## realres.psFIsig
+load("./Methods_comp/betasigs_15May2020/chr_betasigs.Rdata") ## realres.psFIsig
 chr_sigs <- realres.psFIsig
 chr_sigs$region <- "Chromosome"
 
 ## psyma
-load("./Data_output/methods_comp/betasigs_15May2020/psyma_betasigs.Rdata") ## realres.psFIsig
+load("./Methods_comp/betasigs_15May2020/psyma_betasigs.Rdata") ## realres.psFIsig
 psyma_sigs <- realres.psFIsig
 psyma_sigs$region <- "pSymA"
 
 ## psymb
-load("./Data_output/methods_comp/betasigs_15May2020/psymb_betasigs.Rdata") ## realres.psFIsig
+load("./Methods_comp/betasigs_15May2020/psymb_betasigs.Rdata") ## realres.psFIsig
 psymb_sigs <- realres.psFIsig
 psymb_sigs$region <- "pSymB"
 
@@ -1048,7 +1068,7 @@ SNPs_comb.s <- SNPs_comb %>%
   select(rs, region, starts_with("shoot"), starts_with("nod"), -starts_with("nod.weight"))
 
 ## load betasigs from WG
-load("./Data_output/methods_comp/betasigs_12June2020/WG_betasigs.Rdata") ## realres.psFIsig
+load("./Methods_comp/betasigs_12June2020/WG_betasigs.Rdata") ## realres.psFIsig
 WG_sigs <- realres.psFIsig
 
 WG_sigs$rs <- str_replace(WG_sigs$rs, "NZ_CP021797.1", "chr")
@@ -1059,7 +1079,7 @@ sigs_all <- full_join(SNPs_comb.s, WG_sigs, by ="rs", all = TRUE, suffix = c("_M
 ## 7961 SNPs
 
 ## load betasigs from WG
-load("./Data_output/methods_comp/betasigs_17June2020/WG2_betasigs.Rdata") ## realres.psFIsig
+load("./Methods_comp/betasigs_17June2020/WG2_betasigs.Rdata") ## realres.psFIsig
 WG2_sigs <- realres.psFIsig
 
 ## rename genomic region in rs
@@ -1083,7 +1103,7 @@ sigs$ps <- as.numeric(sigs$ps)
 ## 7961 SNPs
 
 ### add in gene products
-load(file = "./Data_output/methods_comp/vcf_ann_11May2020/gene_functions.Rdata") # loads funcs
+load(file = "./Methods_comp/vcf_ann_11May2020/gene_functions.Rdata") # loads funcs
 
 ## match info
 sigs$ncbi_func <- funcs$ncbi_func[match(sigs$rs, funcs$rs)]
@@ -1121,7 +1141,8 @@ colnames(SNPs_long1)[colnames(SNPs_long1)=="betas"] <- "assoc"
 
 # split into trait and env
 SNPs_long1.s <- separate(data = SNPs_long1, 
-                            col = assoc, into = c("trait","line","exp","method"), sep = "\\_", remove = FALSE)
+                         col = assoc, into = c("trait","line","exp","method"), 
+                         sep = "\\_", remove = FALSE)
 
 # format cols, add line
 SNPs_long1.s$ps <- as.numeric(SNPs_long1.s$ps)
@@ -1232,9 +1253,13 @@ fig_y_axis <- ggdraw() + draw_label("Genes (no.)", size = 24, angle=90)
 fig <- plot_grid(fig_y_axis, fig_x_axis, ncol=2, rel_widths=c(0.05, 1)) 
 # rel_heights or widths values control text margins
 
-save_plot("./Data_output/methods_comp/stacked_bars_methods.png", fig,
+save_plot("./Methods_comp/stacked_bars_methods.png", fig,
           ncol = 3, # we're saving a grid plot of 2 columns
           nrow = 2, # and 2 rows
           # each individual subplot should have an aspect ratio of 1.3
           base_aspect_ratio = 1.3)
+
+include_graphics("./Methods_comp/stacked_bars_methods.png")
 ```
+
+<img src="./Methods_comp/stacked_bars_methods.png" width="4340" />
