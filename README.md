@@ -14,7 +14,7 @@ Contents
 
 This repository contains the raw data and analyses for:
 
-### 1) Complex Genetics
+### 1) Complex Genetics (Batstone & Lindgren et al. 2021)
 
 This [folder](https://github.com/rtbatstone/complex_genetics_of_symbiosis/tree/main/Complex_genetics) contains the raw data from the four GWAS experiments, the linear model results presented in the main text of the paper, and the code that generated Figures in the main text and Supplemental Figures.
 
@@ -26,7 +26,7 @@ This [folder](https://github.com/rtbatstone/complex_genetics_of_symbiosis/tree/m
     -   Genetic\_analyses.md [markdown](https://github.com/rtbatstone/complex_genetics_of_symbiosis/blob/main/Complex_genetics/GWAS/Genetic_analyses.md) includes input files and code to make: Figs. 1-3; Supp. Figs. S1, S6-9, S12; Datasets S1-S7
 -   Source\_code [subfolder](https://github.com/rtbatstone/complex_genetics_of_symbiosis/tree/main/Complex_genetics/Source_code) contains the source code called throughout
 
-### 2) Genetics of Conflict and Cooperation
+### 2) Genetics of Conflict and Cooperation (Batstone, Burghardt, Heath 2021)
 
 This [folder](https://github.com/rtbatstone/complex_genetics_of_symbiosis/tree/main/Genetics_conflict_cooperation) contains the phenotypic and genomic analyses conducted on two of the four GWAS experiments listed in 1), and the code that generated Figures in the main text and Supplemental Figures.
 

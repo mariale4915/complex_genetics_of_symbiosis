@@ -856,8 +856,8 @@ write.csv(SNPs_all, file="./Data_output/SNPs_all.csv", row.names = FALSE)
 save(SNPs_all, file="./Data_output/SNPs_all.Rdata")
 ```
 
-SNP and Gene-level summaries for pleiotropic variants
------------------------------------------------------
+SNP and Gene-level summaries for pleiotropic variants (Supp. Table S2; Supp. Datasets S2 & S3)
+----------------------------------------------------------------------------------------------
 
 ``` r
 # load all SNPs first
@@ -879,7 +879,7 @@ pleio_vars.ps <- SNPs_all %>%
   select(-sig, -pleio, -host, -lines, -assocs) %>%
   arrange(pleio_type)
 
-write.csv(pleio_vars.ps, file="./Data_output/pleio_vars.ps.csv", row.names = FALSE)
+write.csv(pleio_vars.ps, file="./Data_output/pleio_vars.ps.csv", row.names = FALSE) ## Supp. Dataset S2
 
 ## summarize to the gene-level
 pleio_vars.gene <- SNPs_all %>%
@@ -936,7 +936,7 @@ pleio_vars.gene <- pleio_vars.gene %>%
 
 save(pleio_vars.gene, file = "./Data_output/pleio_vars.gene.Rdata")
 write.csv(pleio_vars.gene, file="./Data_output/pleio_vars.gene.csv", 
-          row.names = FALSE)
+          row.names = FALSE) ## Supp. Table S2 & Dataset S3 (partially)
 ```
 
 Nucleotide diversity and other Pop Gen stats
@@ -1050,7 +1050,7 @@ save(popgenome_out, file = "pg_stats_all.Rdata")
 ## note that I saved the focal genes of interest as well (real_gene_stats.Rdata)
 ```
 
-### PopGenome randomizations (Supp. Table S1)
+### PopGenome randomizations (Supp. Table S1; Supp. Dataset S1)
 
 Compare test stats of focal genes to randomly selected genes in the WG.
 
@@ -1134,7 +1134,7 @@ all_genes$cat <- ifelse(is.na(all_genes$sigs), "all",
     ## 4 sig      853
 
 ``` r
-write.csv(all_genes, file = "./Data_output/all_gene_stats.csv", row.names = FALSE)
+write.csv(all_genes, file = "./Data_output/all_gene_stats.csv", row.names = FALSE) ## Supp. Dataset S1
 save(all_genes, file = "./Data_output/all_gene_stats.Rdata")
 
 ### numbers/stats to iterate:

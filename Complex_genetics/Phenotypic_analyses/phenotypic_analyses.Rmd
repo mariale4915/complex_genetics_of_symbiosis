@@ -320,6 +320,7 @@ names(emmeans.w) <- c("strain_ID",
                       "nod.weight_DZA_3", "nod.weight_A17_4")
 
 save(emmeans.w, file = "./Data_output/emmeans_wide.Rdata")
+write.csv(emmeans.w, file = "./Data_output/emmeans_wide.csv", row.names = FALSE)
 
 ## wide to long
 emmeans <- reshape(emmeans.w, direction='long', 
