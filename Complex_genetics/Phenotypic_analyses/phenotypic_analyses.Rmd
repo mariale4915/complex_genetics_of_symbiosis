@@ -117,7 +117,7 @@ line_exp_cols <- c("#A4D466","#DE6BC4","#4E820C","#AD208D")
 names(line_exp_cols) <- levels(ds_all$line_exp)
 colScale <- scale_color_manual(values = line_exp_cols)
 
-ggplot(ds_all %>% filter(strain_ID %in% strains_inc & exp %in% c(3,4)), 
+(p <- ggplot(ds_all %>% filter(strain_ID %in% strains_inc & exp %in% c(3,4)), 
                 aes(x=line_exp, y = nod)) +
    facet_wrap(~strain_ID, strip.position = c("top"), scales = "free") +
    geom_hline(aes(yintercept = 0), linetype = 2) +
@@ -129,7 +129,7 @@ ggplot(ds_all %>% filter(strain_ID %in% strains_inc & exp %in% c(3,4)),
    theme(axis.text.x = element_blank(),
          strip.text = element_text(face = "bold"),
          legend.position="bottom",
-         legend.box = "horizontal")
+         legend.box = "horizontal"))
 
 ## incompatible strains: 285, 476 (A17-only), 486, 557, 522, 702A, 717A, 733B
 
