@@ -28,6 +28,7 @@ library("car") ## Anova function
 library("emmeans") ## post hoc tests
 library("PopGenome") ## calculate nucleotide diversity
 library("readxl") ## read_excel function
+library("gridGraphics") ## base r plots
 ```
 
 ## Categorize variants
@@ -98,10 +99,7 @@ Main text Figures 1 \& 2
 load(file = "../Phenotypic_analyses/Data_output/pheno_corrs.Rdata") ## loads gc_ra
 load(file = "./Data_output/allelic_corrs.Rdata") ## loads corr_out
 
-##### Rhiz pleio #####
-
-##### nod.weight vs nod
-
+## get leaf figures
 DZA <- "./Figures/Leaves_DZAt.png" %>%
   image_read() %>%
   image_resize("560x370") 
@@ -109,6 +107,10 @@ DZA <- "./Figures/Leaves_DZAt.png" %>%
 A17 <- "./Figures/Leaves_A17t.png" %>%
   image_read() %>%
   image_resize("560x370") 
+
+##### Rhiz pleio #####
+
+##### nod.weight vs nod
  
 ## gen corrs
 gc <- plot_grid(gc_ra[["nod.weight_vs_nod_DZA"]],
@@ -269,7 +271,7 @@ save_plot("./Figures/rhiz_fit.png", p_comb.rhiz,
 
 include_graphics("./Figures/rhiz_fit.png")
 
-##### Sym pleio #####
+##### Sym pleio - shoot #####
 
 ##### shoot vs nods
 
@@ -415,6 +417,24 @@ p_comb.shoot <- plot_grid(p4,p5,p6,
                     labels = c("A","B","C")) +
                     theme(panel.border = element_rect(colour = "black", fill=NA, size=1))
 
+save_plot("./Figures/sym_shoot.pdf", p_comb.shoot,
+          ncol = 1.5, # we're saving a grid plot of 2 columns
+          nrow = 4, # and 3 rows
+          # each individual subplot should have an aspect ratio of 1.3
+          base_aspect_ratio = 1.3
+          )
+
+save_plot("./Figures/sym_shoot.png", p_comb.shoot,
+          ncol = 1.5, # we're saving a grid plot of 2 columns
+          nrow = 4, # and 3 rows
+          # each individual subplot should have an aspect ratio of 1.3
+          base_aspect_ratio = 1.3
+          )
+
+include_graphics("./Figures/sym_shoot.png")
+
+##### Sym pleio - chloro #####
+
 ##### chloro vs nod
 
 ## gen corrs
@@ -543,32 +563,48 @@ p_comb.chloro <- plot_grid(p7,p8,p9,
                     ncol=1,
                     nrow=3,
                     align="v",
-                    labels = c("D","E","F")) +
+                    labels = c("A","B","C")) +
                     theme(panel.border = element_rect(colour = "black", fill=NA, size=1))
 
-## put shoot and chloro together
-p_comb <- plot_grid(p_comb.shoot,p_comb.chloro,
-                    ncol = 2,
-                    nrow=1,
-                    align="h",
-                    labels = NULL)
-
-save_plot("./Figures/sym.pdf", p_comb,
-          ncol = 3, # we're saving a grid plot of 2 columns
+save_plot("./Figures/sym_chloro.pdf", p_comb.chloro,
+          ncol = 1.5, # we're saving a grid plot of 2 columns
           nrow = 4, # and 3 rows
           # each individual subplot should have an aspect ratio of 1.3
           base_aspect_ratio = 1.3
           )
 
-save_plot("./Figures/sym.png", p_comb,
-          ncol = 3, # we're saving a grid plot of 2 columns
+save_plot("./Figures/sym_chloro.png", p_comb.chloro,
+          ncol = 1.5, # we're saving a grid plot of 2 columns
           nrow = 4, # and 3 rows
           # each individual subplot should have an aspect ratio of 1.3
           base_aspect_ratio = 1.3
           )
 
+include_graphics("./Figures/sym_chloro.png")
 
-include_graphics("./Figures/sym.png")
+# ## put shoot and chloro together
+# p_comb <- plot_grid(p_comb.shoot,p_comb.chloro,
+#                     ncol = 2,
+#                     nrow=1,
+#                     align="h",
+#                     labels = NULL)
+# 
+# save_plot("./Figures/sym.pdf", p_comb,
+#           ncol = 3, # we're saving a grid plot of 2 columns
+#           nrow = 4, # and 3 rows
+#           # each individual subplot should have an aspect ratio of 1.3
+#           base_aspect_ratio = 1.3
+#           )
+# 
+# save_plot("./Figures/sym.png", p_comb,
+#           ncol = 3, # we're saving a grid plot of 2 columns
+#           nrow = 4, # and 3 rows
+#           # each individual subplot should have an aspect ratio of 1.3
+#           base_aspect_ratio = 1.3
+#           )
+# 
+# 
+# include_graphics("./Figures/sym.png")
 ```
 
 ## Count and compare pleiotropic variants (Supp. Fig. S2)
