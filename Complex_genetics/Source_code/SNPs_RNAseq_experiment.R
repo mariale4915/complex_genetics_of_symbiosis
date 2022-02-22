@@ -1,5 +1,7 @@
 ## vcf table file for Rizwan
 
+library(tidyverse)
+
 ## get strain names
 GxG_data <- read_csv("../../Complex_genetics/Phenotypic_analyses/Raw_data/GxG_data.csv")
 GxG_data$strain_ID <- as.factor(GxG_data$strain_ID)
@@ -55,3 +57,11 @@ SNP_file <- left_join(SNPs_ann_ps_all, VCF, by = "rs")
 
 ## save
 write.csv(SNP_file, file = "./Data_output/SNPs_RNAseq.csv", row.names = FALSE)
+
+## filter to only shoot DZA (example)
+
+SNP_file$shoot_DZA <- ifelse(SNP_file$host == "DZA only" &
+                               grepl("shoot+", SNP_file$assocs, fixed = TRUE), "YES",
+                             ifelse(SNP_file$host == "DZA only" &
+                                      grepl("shoot-", SNP_file$assocs, fixed = TRUE),
+                                "YES", "NO"))

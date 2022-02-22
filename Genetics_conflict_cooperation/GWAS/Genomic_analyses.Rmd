@@ -138,23 +138,23 @@ y_axis <- ggdraw() + draw_label("Nodule weight (mg)", size = 16, angle=90)
 ## put them together
 gc1 <- plot_grid(y_axis, gc_leaves, ncol=2, rel_widths=c(0.1, 1)) 
 
-## effect size corrs
+## Allelic effect size corrs
 es <- plot_grid(corr_out[["nod.weight_vs_nod_DZA"]],
                        corr_out[["nod.weight_vs_nod_A17"]] +
-                         xlab("Effect size for Nodules"),
+                         xlab("Allelic effect size for Nodules"),
           ncol = 1,
           nrow = 2,
           align = "v",
           labels = NULL)
 
 ## add on the shared y axis title
-y_axis <- ggdraw() + draw_label("Effect size for Nodule weight", size = 16, angle=90)
+y_axis <- ggdraw() + draw_label("Allelic effect size for Nodule weight", size = 16, angle=90)
 
 ## put them together
 es1 <- plot_grid(y_axis, es, ncol=2, rel_widths=c(0.1, 1)) 
 
 ## create plot titles
-t1 <- ggdraw() + draw_label("Organismal", size = 20, hjust = 0.3, fontface = "bold")
+t1 <- ggdraw() + draw_label("Phenotypic", size = 20, hjust = 0.3, fontface = "bold")
 t2 <- ggdraw() + draw_label("Genomic", size = 20, hjust = 0.3, fontface = "bold")
 
 ## put both gc and es together
@@ -178,22 +178,22 @@ gc <- plot_grid(gc_ra[["fit_vs_nod_DZA"]],
           labels = NULL)
 
 ## add on the shared y axis title
-y_axis <- ggdraw() + draw_label("Competitive fitness", size = 16, angle=90)
+y_axis <- ggdraw() + draw_label("Rhizobium relative fitness", size = 16, angle=90)
 
 ## put them together
 gc2 <- plot_grid(y_axis, gc, ncol=2, rel_widths=c(0.1, 1)) 
 
-## effect size corrs
+## Allelic effect size corrs
 es <- plot_grid(corr_out[["fit_vs_nod_DZA"]],
                        corr_out[["fit_vs_nod_A17"]] +
-                         xlab("Effect size for Nodules"),
+                         xlab("Allelic effect size for Nodules"),
           ncol = 1,
           nrow = 2,
           align = "v",
           labels = NULL)
 
 ## add on the shared y axis title
-y_axis <- ggdraw() + draw_label("Effect size for Competitive fitness", 
+y_axis <- ggdraw() + draw_label("Allelic effect size for Rhizobium relative fitness", 
                                 size = 16, angle=90)
 
 ## put them together
@@ -218,22 +218,22 @@ gc <- plot_grid(gc_ra[["fit_vs_nod.weight_DZA"]],
           labels = NULL)
 
 ## add on the shared y axis title
-y_axis <- ggdraw() + draw_label("Competitive fitness", size = 16, angle=90)
+y_axis <- ggdraw() + draw_label("Rhizobium relative fitness", size = 16, angle=90)
 
 ## put them together
 gc3 <- plot_grid(y_axis, gc, ncol=2, rel_widths=c(0.1, 1)) 
 
-## effect size corrs
+## Allelic effect size corrs
 es <- plot_grid(corr_out[["fit_vs_nod.weight_DZA"]],
                        corr_out[["fit_vs_nod.weight_A17"]] +
-                         xlab("Effect size for Nodule weight"),
+                         xlab("Allelic effect size for \n Nodule weight"),
           ncol = 1,
           nrow = 2,
           align = "v",
           labels = NULL)
 
 ## add on the shared y axis title
-y_axis <- ggdraw() + draw_label("Effect size for Competitive fitness", 
+y_axis <- ggdraw() + draw_label("Allelic effect size for Rhizobium relative fitness", 
                                 size = 16, angle=90)
 
 ## put them together
@@ -302,23 +302,23 @@ y_axis <- ggdraw() + draw_label("Shoot biomass (g)", size = 16, angle=90)
 ## put them together
 gc4 <- plot_grid(y_axis, gc_leaves, ncol=2, rel_widths=c(0.1, 1)) 
 
-## effect size corrs
+## Allelic effect size corrs
 es <- plot_grid(corr_out[["shoot_vs_nod_DZA"]],
                        corr_out[["shoot_vs_nod_A17"]] +
-                         xlab("Effect size for Nodules"),
+                         xlab("Allelic effect size for Nodules"),
           ncol = 1,
           nrow = 2,
           align = "v",
           labels = NULL)
 
 ## add on the shared y axis title
-y_axis <- ggdraw() + draw_label("Effect size for Shoot biomass", size = 16, angle=90)
+y_axis <- ggdraw() + draw_label("Allelic effect size for Shoot biomass", size = 16, angle=90)
 
 ## put them together
 es4 <- plot_grid(y_axis, es, ncol=2, rel_widths=c(0.1, 1)) 
 
 ## create plot titles
-t1 <- ggdraw() + draw_label("Organismal", size = 20, hjust = 0.3, fontface = "bold")
+t1 <- ggdraw() + draw_label("Phenotypic", size = 20, hjust = 0.3, fontface = "bold")
 t2 <- ggdraw() + draw_label("Genomic", size = 20, hjust = 0.3, fontface = "bold")
 
 ## put both gc and es together
@@ -347,17 +347,17 @@ y_axis <- ggdraw() + draw_label("Shoot biomass (g)", size = 16, angle=90)
 ## put them together
 gc5 <- plot_grid(y_axis, gc, ncol=2, rel_widths=c(0.1, 1)) 
 
-## effect size corrs
+## Allelic effect size corrs
 es <- plot_grid(corr_out[["shoot_vs_nod.weight_DZA"]],
                        corr_out[["shoot_vs_nod.weight_A17"]] +
-                         xlab("Effect size for Nodule weight"),
+                         xlab("Allelic effect size for \n Nodule weight"),
           ncol = 1,
           nrow = 2,
           align = "v",
           labels = NULL)
 
 ## add on the shared y axis title
-y_axis <- ggdraw() + draw_label("Effect size for Shoot biomass", size = 16, angle=90)
+y_axis <- ggdraw() + draw_label("Allelic effect size for Shoot biomass", size = 16, angle=90)
 
 ## put them together
 es5 <- plot_grid(y_axis, es, ncol=2, rel_widths=c(0.1, 1)) 
@@ -374,7 +374,7 @@ p5 <- plot_grid(gc5, es5,
 ## gen corrs
 gc <- plot_grid(gc_ra[["shoot_vs_fit_DZA"]],
                        gc_ra[["shoot_vs_fit_A17"]] +
-                         xlab("Competitive fitness"),
+                         xlab("Rhizobium relative fitness"),
           ncol = 1,
           nrow = 2,
           align = "v",
@@ -386,17 +386,17 @@ y_axis <- ggdraw() + draw_label("Shoot biomass (g)", size = 16, angle=90)
 ## put them together
 gc6 <- plot_grid(y_axis, gc, ncol=2, rel_widths=c(0.1, 1)) 
 
-## effect size corrs
+## Allelic effect size corrs
 es <- plot_grid(corr_out[["shoot_vs_fit_DZA"]],
                        corr_out[["shoot_vs_fit_A17"]] +
-                         xlab("Effect size for Comp. fitness"),
+                         xlab("Allelic effect size for \n Rhizobium relative fitness"),
           ncol = 1,
           nrow = 2,
           align = "v",
           labels = NULL)
 
 ## add on the shared y axis title
-y_axis <- ggdraw() + draw_label("Effect size for Shoot biomass", size = 16, angle=90)
+y_axis <- ggdraw() + draw_label("Allelic effect size for Shoot biomass", size = 16, angle=90)
 
 ## put them together
 es6 <- plot_grid(y_axis, es, ncol=2, rel_widths=c(0.1, 1)) 
@@ -447,28 +447,28 @@ gc <- plot_grid(gc_ra[["chloro_vs_nod_DZA"]],
           labels = NULL)
 
 ## add on the shared y axis title
-y_axis <- ggdraw() + draw_label("Chlorophyll A", size = 16, angle=90)
+y_axis <- ggdraw() + draw_label("Leaf chlorophyll A", size = 16, angle=90)
 
 ## put them together
 gc7 <- plot_grid(y_axis, gc, ncol=2, rel_widths=c(0.1, 1)) 
 
-## effect size corrs
+## Allelic effect size corrs
 es <- plot_grid(corr_out[["chloro_vs_nod_DZA"]],
                        corr_out[["chloro_vs_nod_A17"]] +
-                         xlab("Effect size for Nodules"),
+                         xlab("Allelic effect size for Nodules"),
           ncol = 1,
           nrow = 2,
           align = "v",
           labels = NULL)
 
 ## add on the shared y axis title
-y_axis <- ggdraw() + draw_label("Effect size for Chlorophyll A", size = 16, angle=90)
+y_axis <- ggdraw() + draw_label("Allelic effect size for Leaf chlorophyll A", size = 16, angle=90)
 
 ## put them together
 es7 <- plot_grid(y_axis, es, ncol=2, rel_widths=c(0.1, 1)) 
 
 ## create plot titles
-t1 <- ggdraw() + draw_label("Organismal", size = 20, hjust = 0.3, fontface = "bold")
+t1 <- ggdraw() + draw_label("Phenotypic", size = 20, hjust = 0.3, fontface = "bold")
 t2 <- ggdraw() + draw_label("Genomic", size = 20, hjust = 0.3, fontface = "bold")
 
 ## put both gc and es together
@@ -492,22 +492,22 @@ gc <- plot_grid(gc_ra[["chloro_vs_nod.weight_DZA"]],
           labels = NULL)
 
 ## add on the shared y axis title
-y_axis <- ggdraw() + draw_label("Chlorophyll A", size = 16, angle=90)
+y_axis <- ggdraw() + draw_label("Leaf chlorophyll A", size = 16, angle=90)
 
 ## put them together
 gc8 <- plot_grid(y_axis, gc, ncol=2, rel_widths=c(0.1, 1)) 
 
-## effect size corrs
+## Allelic effect size corrs
 es <- plot_grid(corr_out[["chloro_vs_nod.weight_DZA"]],
                        corr_out[["chloro_vs_nod.weight_A17"]] +
-                         xlab("Effect size for Nodule weight"),
+                         xlab("Allelic effect size for \n Nodule weight"),
           ncol = 1,
           nrow = 2,
           align = "v",
           labels = NULL)
 
 ## add on the shared y axis title
-y_axis <- ggdraw() + draw_label("Effect size for Chlorophyll A", size = 16, angle=90)
+y_axis <- ggdraw() + draw_label("Allelic effect size for Leaf chlorophyll A", size = 16, angle=90)
 
 ## put them together
 es8 <- plot_grid(y_axis, es, ncol=2, rel_widths=c(0.1, 1)) 
@@ -524,29 +524,29 @@ p8 <- plot_grid(gc8, es8,
 ## gen corrs
 gc <- plot_grid(gc_ra[["chloro_vs_fit_DZA"]],
                        gc_ra[["chloro_vs_fit_A17"]] +
-                         xlab("Competitive fitness"),
+                         xlab("Rhizobium relative fitness"),
           ncol = 1,
           nrow = 2,
           align = "v",
           labels = NULL)
 
 ## add on the shared y axis title
-y_axis <- ggdraw() + draw_label("Chlorophyll A", size = 16, angle=90)
+y_axis <- ggdraw() + draw_label("Leaf Chlorophyll A", size = 16, angle=90)
 
 ## put them together
 gc9 <- plot_grid(y_axis, gc, ncol=2, rel_widths=c(0.1, 1)) 
 
-## effect size corrs
+## Allelic effect size corrs
 es <- plot_grid(corr_out[["chloro_vs_fit_DZA"]],
                        corr_out[["chloro_vs_fit_A17"]] +
-                         xlab("Effect size for Comp. fitness"),
+                         xlab("Allelic effect size for \n Rhizobium relative fitness"),
           ncol = 1,
           nrow = 2,
           align = "v",
           labels = NULL)
 
 ## add on the shared y axis title
-y_axis <- ggdraw() + draw_label("Effect size for Chlorophyll A", size = 16, angle=90)
+y_axis <- ggdraw() + draw_label("Allelic effect size for Leaf chlorophyll A", size = 16, angle=90)
 
 ## put them together
 es9 <- plot_grid(y_axis, es, ncol=2, rel_widths=c(0.1, 1)) 
