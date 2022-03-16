@@ -1,0 +1,199 @@
+region,RefSeq_ID,ncbi_func,protein_ID,gene_ID,start_pos,end_pos,no_vars,no_effects,max_effect,min_ps,max_ps,trait_combs,hosts,rhiz,sym,pleio_type,Max effect size
+pSymA,NP_436481.1,penicillin-binding protein 1A,ASP60956.1,CDO30_22235,802166,804352,1,2,0.26277465,802610,802610,fit-_vs_nod.weight-_DZA,DZA,concordant,NA,rhiz_only,0.263
+pSymB,NP_436905.1,aspartate aminotransferase family protein,ASP61943.1,CDO30_27330,457493,458878,2,4,0.3295026,458239,458566,fit-_vs_nod-_A17,A17,concordant,NA,rhiz_only,0.330
+pSymB,NP_437823.1,hypothetical protein,ASP62799.1,CDO30_32160,1450014,1450451,1,2,0.38852305,1450206,1450206,fit-_vs_nod-_A17,A17,concordant,NA,rhiz_only,0.389
+pSymB,NP_436738.1,pyrroloquinoline quinone biosynthesis protein B,ASP61779.1,CDO30_26450,281366,282277,1,3,0.227051633,282006,282006,fit+_vs_nod.weight+_DZA,DZA,concordant,NA,rhiz_only,0.227
+pSymB,NP_437079.1,copper chaperone,ASP62112.1,CDO30_28320,652218,652439,1,2,0.238869,652242,652242,fit-_vs_nod-_DZA,DZA,concordant,NA,rhiz_only,0.239
+pSymB,NP_437156.1,DNA ligase D,ASP62180.1,CDO30_28730,731358,733268,1,2,0.40753765,733002,733002,fit-_vs_nod.weight-_DZA,DZA,concordant,NA,rhiz_only,0.408
+pSymB,NP_437856.1,cytochrome ubiquinol oxidase subunit I,ASP62833.1,CDO30_32335,1475712,1477721,1,2,0.42917045,1476536,1476536,fit+_vs_nod+_DZA,DZA,concordant,NA,rhiz_only,0.429
+pSymA,NA,hypothetical protein,ASP61170.1,CDO30_23540,1043765,1044124,1,2,0.29970765,1043909,1043909,fit-_vs_nod.weight+_A17,A17,discordant,NA,rhiz_only,0.300
+pSymA,NP_435272.1,AGE family epimerase/isomerase,ASP60870.1,CDO30_21735,693348,694544,1,3,0.226945233,693530,693530,fit-_vs_nod+_A17,A17,discordant,NA,rhiz_only,0.227
+pSymA,NP_435292.1,BA14K family protein,ASP60850.1,CDO30_21635,676116,676811,1,2,0.39161805,676369,676369,fit+_vs_nod-_A17,A17,discordant,NA,rhiz_only,0.392
+pSymA,NP_435377.1,fumarylacetoacetate hydrolase,ASP60762.1,CDO30_21170,585554,586750,1,2,0.3025272,585794,585794,nod.weight+_vs_nod-_A17,A17,discordant,NA,rhiz_only,0.303
+pSymA,NP_435378.1,TRAP transporter permease DctQ,ASP60761.1,CDO30_21165,585020,585553,1,2,0.33715615,585125,585125,nod.weight+_vs_nod-_A17,A17,discordant,NA,rhiz_only,0.337
+pSymA,NP_435547.2,hypothetical protein,ASP60601.1,CDO30_20185,415105,415392,1,3,0.4090751,415144,415144,fit+_vs_nod.weight-_A17,A17,discordant,NA,rhiz_only,0.409
+pSymA,NP_435911.1,cytochrome c oxidase subunit 1,ASP60265.1,CDO30_18085,45130,46749,1,3,0.2714111,45960,45960,fit+_vs_nod-_A17,A17,discordant,NA,rhiz_only,0.271
+pSymA,NP_435919.1,nitrate reductase,ASP60257.1,CDO30_18045,38664,39167,1,3,0.2390476,38807,38807,fit+_vs_nod.weight-_A17,A17,discordant,NA,rhiz_only,0.239
+pSymA,NP_436056.1,oxidoreductase,ASP61352.1,CDO30_24605,1258734,1260977,1,2,0.2905332,1259150,1259150,nod.weight+_vs_nod-_A17,A17,discordant,NA,rhiz_only,0.291
+pSymA,NP_436085.1,cation:proton antiporter,ASP61324.1,CDO30_24460,1228519,1229982,1,2,0.2303945,1229919,1229919,fit-_vs_nod+_A17,A17,discordant,NA,rhiz_only,0.230
+pSymA,NP_436089.2,GGDEF domain-containing protein,ASP61320.1,CDO30_24440,1223389,1226604,1,2,0.25794995,1225499,1225499,nod.weight+_vs_nod-_A17,A17,discordant,NA,rhiz_only,0.258
+pSymA,NP_436397.2,hemolysin-type calcium-binding protein,ASP61037.1,CDO30_22720,889404,890954,2,6,0.335272767,889527,889625,"fit-_vs_nod.weight+_A17| nod.weight+_vs_nod-_A17, fit-_vs_nod-_A17, fit-_vs_nod.weight+_A17",A17,discordant,NA,rhiz_only,0.335
+pSymA,NP_436518.1,molybdopterin dehydrogenase,ASP60920.1,CDO30_22035,755491,756441,2,4,0.2761672,756007,756105,fit-_vs_nod.weight+_A17,A17,discordant,NA,rhiz_only,0.276
+pSymA,NP_436519.2,oxidoreductase,ASP61494.1,CDO30_22030,753288,755486,1,2,0.3472622,755310,755310,fit-_vs_nod.weight+_A17,A17,discordant,NA,rhiz_only,0.347
+pSymA,YP_001314404.1,hypothetical protein,ASP60576.1,CDO30_20035,384699,384908,1,2,0.27278605,384741,384741,nod.weight+_vs_nod-_A17,A17,discordant,NA,rhiz_only,0.273
+pSymA,YP_001314405.1,glycerol transporter,NA,CDO30_19760,340054,340136,1,2,0.32461645,340109,340109,nod.weight+_vs_nod-_A17,A17,discordant,NA,rhiz_only,0.325
+pSymA,YP_001314499.1,GntR family transcriptional regulator,ASP61343.1,CDO30_24560,1249658,1250428,1,2,0.25229585,1250303,1250303,nod.weight+_vs_nod-_A17,A17,discordant,NA,rhiz_only,0.252
+pSymA,NP_435386.1,alcohol dehydrogenase,ASP60753.1,CDO30_21125,574678,575877,1,2,0.2088347,574840,574840,nod.weight-_vs_nod+_DZA,DZA,discordant,NA,rhiz_only,0.209
+pSymA,NP_435662.1,nodulation protein NoeA,ASP60498.1,CDO30_19510,299263,300693,1,2,0.20443005,299918,299918,nod.weight-_vs_nod+_DZA,DZA,discordant,NA,rhiz_only,0.204
+pSymA,NP_436112.1,adenylate cyclase,ASP61295.1,CDO30_24310,1193214,1196693,1,3,0.385754067,1196000,1196000,nod.weight+_vs_nod-_DZA,DZA,discordant,NA,rhiz_only,0.386
+pSymA,NP_436119.2,LysR family transcriptional regulator,ASP61291.1,CDO30_24270,1184755,1185630,1,2,0.3580225,1185356,1185356,nod.weight-_vs_nod+_DZA,DZA,discordant,NA,rhiz_only,0.358
+pSymA,NP_436135.2,nuclear transport factor 2 family protein,ASP61279.1,CDO30_24200,1172915,1173235,1,2,0.3139732,1173205,1173205,nod.weight+_vs_nod-_DZA,DZA,discordant,NA,rhiz_only,0.314
+pSymA,NP_436516.2,class I SAM-dependent methyltransferase,ASP60922.1,CDO30_22045,757445,758125,1,3,0.5104305,757840,757840,fit+_vs_nod-_DZA,DZA,discordant,NA,rhiz_only,0.510
+pSymA,WP_014990337.1,hypothetical protein,ASP60771.1,CDO30_21215,596047,596346,1,2,0.16934245,596157,596157,nod.weight+_vs_nod-_DZA,DZA,discordant,NA,rhiz_only,0.169
+pSymB,NP_436594.1,alpha/beta hydrolase,ASP63021.1,CDO30_25700,130557,131384,1,2,0.37791245,131048,131048,nod.weight+_vs_nod-_A17,A17,discordant,NA,rhiz_only,0.378
+pSymB,NP_436599.1,SAM-dependent methyltransferase,ASP61642.1,CDO30_25725,137089,137868,1,2,0.292036,137490,137490,fit-_vs_nod.weight+_A17,A17,discordant,NA,rhiz_only,0.292
+pSymB,NP_436628.1,protein-L-isoaspartate O-methyltransferase,ASP61671.1,CDO30_25885,164094,166070,1,2,0.3397367,165216,165216,nod.weight+_vs_nod-_A17,A17,discordant,NA,rhiz_only,0.340
+pSymB,NP_436773.1,glycosyl transferase,ASP61817.1,CDO30_26640,315130,316281,1,2,0.1640469,315342,315342,fit+_vs_nod.weight-_A17,A17,discordant,NA,rhiz_only,0.164
+pSymB,NP_436856.1,gfo/Idh/MocA family oxidoreductase,ASP61896.1,CDO30_27055,400824,401921,2,4,0.1783482,400955,401399,nod.weight+_vs_nod-_A17,A17,discordant,NA,rhiz_only,0.178
+pSymB,NP_437315.1,nucleotide-binding protein,ASP62325.1,CDO30_29550,911300,912049,1,2,0.24656645,911419,911419,fit-_vs_nod+_A17,A17,discordant,NA,rhiz_only,0.247
+pSymB,NP_437322.1,adenine deaminase,ASP62332.1,CDO30_29585,917926,919707,1,2,0.23446845,918368,918368,fit-_vs_nod+_A17,A17,discordant,NA,rhiz_only,0.234
+pSymB,NP_437324.1,phosphoribosyltransferase,ASP62334.1,CDO30_29595,921035,921745,1,2,0.2208349,921205,921205,fit-_vs_nod+_A17,A17,discordant,NA,rhiz_only,0.221
+pSymB,NP_437327.1,allantoicase,ASP62337.1,CDO30_29610,924092,925114,1,2,0.259991,925029,925029,fit-_vs_nod+_A17,A17,discordant,NA,rhiz_only,0.260
+pSymB,NP_437330.1,xanthine dehydrogenase small subunit,ASP62340.1,CDO30_29625,927084,928565,1,2,0.30274185,927350,927350,fit-_vs_nod+_A17,A17,discordant,NA,rhiz_only,0.303
+pSymB,NP_437331.1,xanthine dehydrogenase molybdopterin binding subunit,ASP62341.1,CDO30_29630,928579,930912,1,2,0.27020635,929745,929745,fit-_vs_nod+_A17,A17,discordant,NA,rhiz_only,0.270
+pSymB,NP_437386.1,LysR family transcriptional regulator,ASP62394.1,CDO30_29905,993059,994012,2,4,0.30197455,993173,993326,fit-_vs_nod+_A17,A17,discordant,NA,rhiz_only,0.302
+pSymB,NP_437405.1,sigma-54-dependent Fis family transcriptional regulator,ASP62411.1,CDO30_30000,1016740,1018083,1,2,0.27078495,1016848,1016848,fit-_vs_nod+_A17,A17,discordant,NA,rhiz_only,0.271
+pSymB,NP_437417.1,phosphoethanolamine transferase,ASP62422.1,CDO30_30060,1030236,1032002,1,2,0.3190113,1030877,1030877,fit-_vs_nod+_A17,A17,discordant,NA,rhiz_only,0.319
+pSymB,NP_437418.1,hypothetical protein,ASP62423.1,CDO30_30065,1032114,1032494,1,2,0.27953885,1032440,1032440,fit-_vs_nod+_A17,A17,discordant,NA,rhiz_only,0.280
+pSymB,YP_001312350.1,transporter,ASP62058.1,CDO30_27965,593336,594364,1,2,0.18438315,593981,593981,fit-_vs_nod+_A17,A17,discordant,NA,rhiz_only,0.184
+pSymB,YP_001313347.1,NCS2 family permease,ASP62335.1,CDO30_29600,922026,923318,1,2,0.20890405,922235,922235,fit-_vs_nod+_A17,A17,discordant,NA,rhiz_only,0.209
+pSymB,NP_436547.1,LysR family transcriptional regulator,ASP61595.1,CDO30_25450,74805,75710,1,3,0.3992952,75355,75355,fit-_vs_nod+_DZA,DZA,discordant,NA,rhiz_only,0.399
+pSymB,NP_436564.1,Lrp/AsnC family transcriptional regulator,ASP61612.1,CDO30_25540,97077,97547,1,2,0.32600285,97084,97084,fit-_vs_nod+_DZA,DZA,discordant,NA,rhiz_only,0.326
+pSymB,NP_436573.1,RNA polymerase sigma factor SigJ,ASP61621.1,CDO30_25600,108960,109817,1,3,0.263452,108992,108992,nod.weight+_vs_nod-_DZA,DZA,discordant,NA,rhiz_only,0.263
+pSymB,NP_436656.1,amylo-alpha-1%2C6-glucosidase,ASP61697.1,CDO30_26025,195789,197993,2,6,0.411761167,196128,196416,fit+_vs_nod-_DZA,DZA,discordant,NA,rhiz_only,0.412
+pSymB,NP_436680.1,dihydrodipicolinate synthase family protein,ASP61722.1,CDO30_26155,221465,222346,1,3,0.453597033,221840,221840,fit+_vs_nod-_DZA,DZA,discordant,NA,rhiz_only,0.454
+pSymB,NP_436709.1,hypothetical protein,ASP61751.1,CDO30_26305,255132,255773,1,2,0.32348725,255612,255612,fit+_vs_nod-_DZA,DZA,discordant,NA,rhiz_only,0.323
+pSymB,NP_436710.1,S-(hydroxymethyl)glutathione dehydrogenase,ASP61752.1,CDO30_26310,255943,257070,1,2,0.3309204,256440,256440,fit+_vs_nod-_DZA,DZA,discordant,NA,rhiz_only,0.331
+pSymB,NP_436766.1,ABC transporter ATP-binding protein,ASP61809.1,CDO30_26600,308058,309149,1,2,0.4479183,308993,308993,fit+_vs_nod-_DZA,DZA,discordant,NA,rhiz_only,0.448
+pSymB,NP_436789.1,dihydrodipicolinate synthase family protein,ASP61832.1,CDO30_26720,331606,332568,1,2,0.20885765,332253,332253,fit+_vs_nod-_DZA,DZA,discordant,NA,rhiz_only,0.209
+pSymB,NP_436791.1,malate dehydrogenase,ASP61834.1,CDO30_26730,333072,334109,1,2,0.2672716,333531,333531,fit+_vs_nod-_DZA,DZA,discordant,NA,rhiz_only,0.267
+pSymB,NP_436797.1,amino acid dehydrogenase,ASP61840.1,CDO30_26760,338976,340217,1,2,0.34348765,340173,340173,fit+_vs_nod-_DZA,DZA,discordant,NA,rhiz_only,0.343
+pSymB,NP_436798.1,hydroxyproline-2-epimerase,ASP61841.1,CDO30_26765,340232,341233,1,2,0.37759185,340987,340987,fit+_vs_nod-_DZA,DZA,discordant,NA,rhiz_only,0.378
+pSymB,NP_437053.1,sugar phosphate isomerase/epimerase,ASP62083.1,CDO30_28135,625088,625897,1,3,0.357932667,625791,625791,fit+_vs_nod-_DZA,DZA,discordant,NA,rhiz_only,0.358
+pSymB,NP_437093.2,ABC transporter ATP-binding protein,ASP62125.1,CDO30_28395,667388,669193,1,3,0.255549233,668017,668017,fit+_vs_nod-_DZA,DZA,discordant,NA,rhiz_only,0.256
+pSymB,NP_437094.1,hypothetical protein,ASP62126.1,CDO30_28400,669531,670271,1,2,0.39678415,669983,669983,fit+_vs_nod-_DZA,DZA,discordant,NA,rhiz_only,0.397
+pSymB,NP_438092.1,2-(1%2C2-epoxy-1%2C2-dihydrophenyl)acetyl-CoA isomerase,ASP61570.1,CDO30_25320,45865,46656,1,2,0.25015595,46145,46145,nod.weight-_vs_nod+_DZA,DZA,discordant,NA,rhiz_only,0.250
+pSymB,YP_001312688.1,S-formylglutathione hydrolase,ASP61753.1,CDO30_26315,257079,257909,1,2,0.2383897,257600,257600,fit+_vs_nod-_DZA,DZA,discordant,NA,rhiz_only,0.238
+pSymB,YP_002122330.1,DUF899 domain-containing protein,ASP62043.1,CDO30_27885,575153,576013,1,2,0.51932415,575657,575657,fit+_vs_nod-_DZA,DZA,discordant,NA,rhiz_only,0.519
+pSymB,NP_436767.1,hypothetical protein,ASP61810.1,CDO30_26605,309269,309613,2,5,0.489217467,309277,309328,fit+_vs_nod-_DZA| fit+_vs_nod.weight-_A17,Both,discordant,NA,rhiz_only,0.489
+Chromosome,NP_386155.1,sorbosone dehydrogenase,ASP59485.1,CDO30_15000,3120458,3121786,1,3,0.422954567,3120725,3120725,"nod.weight+_vs_nod-_DZA, fit+_vs_nod-_DZA, fit+_vs_nod.weight+_DZA",DZA,mixed,NA,rhiz_only,0.423
+pSymB,NP_436679.1,DUF2243 domain-containing protein,ASP61721.1,CDO30_26150,220951,221445,2,6,0.286415067,221070,221181,fit+_vs_nod.weight+_DZA| nod.weight+_vs_nod-_DZA,DZA,mixed,NA,rhiz_only,0.286
+pSymB,NP_436713.1,PQQ-dependent dehydrogenase%2C methanol/ethanol family,ASP61755.1,CDO30_26325,258511,260316,1,4,0.42257705,259299,259299,"nod.weight+_vs_nod-_DZA, fit+_vs_nod-_DZA, fit+_vs_nod.weight+_DZA",DZA,mixed,NA,rhiz_only,0.423
+pSymA,NP_435247.1,formate dehydrogenase-N subunit alpha,ASP60899.1,CDO30_21905,721465,724569,1,2,0.2574873,722739,722739,shoot-_vs_fit-_A17,A17,NA,concordant,sym_only,0.257
+pSymA,NP_435250.1,formate dehydrogenase accessory protein FdhE,ASP60896.1,CDO30_21890,718853,719773,4,8,0.2785219,719005,719758,shoot-_vs_fit-_A17,A17,NA,concordant,sym_only,0.279
+pSymA,NP_435251.1,L-selenocysteinyl-tRNA(Sec) synthase,ASP60895.1,CDO30_21885,717448,718848,3,6,0.2905182,718078,718252,shoot-_vs_fit-_A17,A17,NA,concordant,sym_only,0.291
+pSymA,NP_435253.1,selenocysteine-specific translation elongation factor,ASP60893.1,CDO30_21875,714670,716670,1,2,0.35570925,715555,715555,shoot-_vs_fit-_A17,A17,NA,concordant,sym_only,0.356
+pSymA,NP_435307.1,cytochrome C,ASP60834.1,CDO30_21550,658830,659357,1,2,0.2144268,659049,659049,shoot-_vs_nod.weight-_A17,A17,NA,concordant,sym_only,0.214
+pSymA,NP_435593.1,hypothetical protein,ASP60560.1,CDO30_19910,370418,370897,2,4,0.3271841,370568,370589,shoot-_vs_nod.weight-_A17,A17,NA,concordant,sym_only,0.327
+pSymA,NP_435594.1,transcriptional regulator,ASP60559.1,CDO30_19905,369725,370360,1,2,0.29784685,370024,370024,shoot-_vs_nod.weight-_A17,A17,NA,concordant,sym_only,0.298
+pSymA,NP_435599.1,HlyD family secretion protein,ASP60555.1,CDO30_19880,364036,365265,1,3,0.165715167,364610,364610,shoot-_vs_nod.weight-_A17,A17,NA,concordant,sym_only,0.166
+pSymA,NP_435610.2,hypothetical protein,ASP60545.1,CDO30_19800,347682,348188,1,2,0.19143105,347838,347838,shoot-_vs_nod.weight-_A17,A17,NA,concordant,sym_only,0.191
+pSymA,NP_435697.1,nitrogenase molybdenum-iron protein subunit beta,ASP60464.1,CDO30_19280,259595,261136,1,3,0.270467933,259775,259775,shoot-_vs_nod.weight-_A17,A17,NA,concordant,sym_only,0.270
+pSymA,NP_435710.1,nodulation protein H,ASP60452.1,CDO30_19200,248336,249079,1,2,0.1856283,248488,248488,shoot-_vs_nod.weight-_A17,A17,NA,concordant,sym_only,0.186
+pSymA,NP_436262.1,tartrate dehydrogenase,ASP61163.1,CDO30_23495,1035061,1036104,1,2,0.195322,1035106,1035106,shoot+_vs_nod.weight+_A17,A17,NA,concordant,sym_only,0.195
+pSymA,NP_436462.1,integrase,ASP60971.1,CDO30_22330,814973,816130,2,4,0.3325485,815474,815480,shoot+_vs_nod.weight+_A17,A17,NA,concordant,sym_only,0.333
+pSymA,NP_435259.1,hypothetical protein,ASP60883.1,CDO30_21810,706186,706614,1,2,0.24360355,706434,706434,shoot+_vs_fit+_DZA,DZA,NA,concordant,sym_only,0.244
+pSymA,NP_435294.1,D-aminopeptidase,ASP60848.1,CDO30_21625,673915,674952,1,2,0.2557047,674598,674598,shoot+_vs_fit+_DZA,DZA,NA,concordant,sym_only,0.256
+pSymA,NP_435306.1,hypothetical protein,ASP60835.1,CDO30_21555,659584,659922,1,2,0.3282695,659880,659880,shoot+_vs_fit+_DZA,DZA,NA,concordant,sym_only,0.328
+pSymA,NP_435317.2,AI-2E family transporter,ASP60823.1,CDO30_21495,649750,651762,1,2,0.24572605,651499,651499,shoot+_vs_nod.weight+_DZA,DZA,NA,concordant,sym_only,0.246
+pSymA,NP_435318.2,bifunctional diguanylate cyclase/phosphodiesterase,ASP60822.1,CDO30_21490,647457,649658,1,2,0.2593779,648830,648830,shoot+_vs_fit+_DZA,DZA,NA,concordant,sym_only,0.259
+pSymA,NP_435324.1,hypothetical protein,ASP60817.1,CDO30_21460,642363,643076,1,2,0.2758734,642519,642519,shoot+_vs_fit+_DZA,DZA,NA,concordant,sym_only,0.276
+pSymA,NP_435326.1,malonyl-CoA synthase,ASP60815.1,CDO30_21450,640137,641663,1,3,0.2038284,640242,640242,"shoot-_vs_fit-_DZA, chloro-_vs_fit-_DZA",DZA,NA,concordant,sym_only,0.204
+pSymA,NP_435334.1,hypothetical protein,ASP60807.1,CDO30_21410,632469,632999,1,2,0.1680012,632574,632574,shoot+_vs_nod+_DZA,DZA,NA,concordant,sym_only,0.168
+pSymA,NP_435343.1,MFS transporter,ASP60798.1,CDO30_21355,621531,623075,1,2,0.1850702,621605,621605,shoot-_vs_nod.weight-_DZA,DZA,NA,concordant,sym_only,0.185
+pSymA,NP_435368.1,glutamate dehydrogenase,ASP60772.1,CDO30_21220,596274,597620,1,2,0.23698345,597407,597407,shoot-_vs_nod.weight-_DZA,DZA,NA,concordant,sym_only,0.237
+pSymA,NP_435372.1,dihydroxy-acid dehydratase,ASP60767.1,CDO30_21195,591156,592934,1,2,0.2591109,592463,592463,shoot+_vs_nod+_DZA,DZA,NA,concordant,sym_only,0.259
+pSymA,NP_435559.2,alpha/beta hydrolase,ASP60593.1,CDO30_20130,401875,403206,1,2,0.28057625,402303,402303,chloro-_vs_fit-_DZA,DZA,NA,concordant,sym_only,0.281
+pSymA,NP_435560.2,adenylate cyclase,ASP60592.1,CDO30_20125,399485,401731,1,2,0.2992242,400255,400255,shoot+_vs_nod.weight+_DZA,DZA,NA,concordant,sym_only,0.299
+pSymA,NP_435567.1,cytochrome c oxidase%2C cbb3-type subunit II,ASP60586.1,CDO30_20085,391900,392652,1,3,0.1849693,392263,392263,shoot-_vs_nod.weight-_DZA,DZA,NA,concordant,sym_only,0.185
+pSymA,NP_435571.1,copper-translocating P-type ATPase,ASP60581.1,CDO30_20060,387540,389807,1,2,0.23650745,388887,388887,shoot+_vs_nod.weight+_DZA,DZA,NA,concordant,sym_only,0.237
+pSymA,NP_435604.2,amino acid ABC transporter substrate-binding protein,ASP60550.1,CDO30_19845,358648,359589,1,3,0.196134333,359100,359100,shoot-_vs_nod.weight-_DZA,DZA,NA,concordant,sym_only,0.196
+pSymA,NP_435615.1,carbamate kinase,ASP60540.1,CDO30_19770,341024,341998,1,2,0.21060145,341621,341621,shoot+_vs_nod.weight+_DZA,DZA,NA,concordant,sym_only,0.211
+pSymA,NP_435621.1,sugar ABC transporter substrate-binding protein,ASP60534.1,CDO30_19735,334593,335858,2,4,0.38847495,334796,335088,shoot-_vs_nod.weight-_DZA| shoot+_vs_nod.weight+_DZA,DZA,NA,concordant,sym_only,0.388
+pSymA,NP_435623.1,carbohydrate ABC transporter permease,ASP60532.1,CDO30_19725,332763,333593,2,4,0.22420275,333207,333498,shoot-_vs_nod.weight-_DZA,DZA,NA,concordant,sym_only,0.224
+pSymA,NP_435628.1,NAD(P)-dependent oxidoreductase,ASP61474.1,CDO30_19700,328226,328945,1,2,0.3084494,328761,328761,shoot+_vs_nod.weight+_DZA,DZA,NA,concordant,sym_only,0.308
+pSymA,NP_435641.1,molecular chaperone GroEL,ASP60517.1,CDO30_19630,319297,320934,1,2,0.1891672,320628,320628,shoot+_vs_nod+_DZA,DZA,NA,concordant,sym_only,0.189
+pSymA,NP_435654.1,transcriptional regulator,ASP60507.1,CDO30_19555,306552,307187,1,2,0.17054835,306861,306861,shoot+_vs_nod+_DZA,DZA,NA,concordant,sym_only,0.171
+pSymA,NP_435748.1,Ti-type conjugative transfer system protein TraG,ASP60415.1,CDO30_18960,202271,204190,1,2,0.20611965,203959,203959,shoot-_vs_nod.weight-_DZA,DZA,NA,concordant,sym_only,0.206
+pSymA,NP_435752.1,mechanosensitive ion channel family protein,ASP60411.1,CDO30_18940,194350,196509,1,2,0.4524365,194382,194382,chloro-_vs_fit-_DZA,DZA,NA,concordant,sym_only,0.452
+pSymA,NP_435753.1,sensor histidine kinase,ASP60410.1,CDO30_18935,192156,194057,2,4,0.3843892,193505,193731,chloro-_vs_fit-_DZA| chloro+_vs_nod.weight+_DZA,DZA,NA,concordant,sym_only,0.384
+pSymA,NP_435978.2,sugar ABC transporter permease,ASP61431.1,CDO30_25030,1345828,1346733,1,2,0.46425555,1346695,1346695,chloro-_vs_fit-_DZA,DZA,NA,concordant,sym_only,0.464
+pSymA,NP_435981.1,ABC transporter ATP-binding protein,ASP61427.1,CDO30_25010,1342485,1343561,1,3,0.291015133,1343223,1343223,chloro-_vs_fit-_DZA,DZA,NA,concordant,sym_only,0.291
+pSymA,NP_435985.1,sugar phosphate isomerase/epimerase,ASP61423.1,CDO30_24990,1338576,1339463,1,2,0.4039412,1338734,1338734,chloro-_vs_fit-_DZA,DZA,NA,concordant,sym_only,0.404
+pSymA,NP_436006.1,LysR family transcriptional regulator,ASP61401.1,CDO30_24870,1315714,1316628,1,2,0.40252485,1316627,1316627,chloro-_vs_fit-_DZA,DZA,NA,concordant,sym_only,0.403
+pSymA,NP_436072.1,NADH-quinone oxidoreductase subunit I 2,ASP61336.1,CDO30_24525,1242709,1243275,2,5,0.3136698,1243153,1243267,shoot-_vs_nod.weight-_DZA| shoot+_vs_nod.weight+_DZA,DZA,NA,concordant,sym_only,0.314
+pSymA,NP_436073.1,histidine kinase,ASP61335.1,CDO30_24520,1242225,1242665,1,2,0.20290785,1242282,1242282,shoot-_vs_nod.weight-_DZA,DZA,NA,concordant,sym_only,0.203
+pSymA,NP_436166.2,amidohydrolase family protein,ASP61523.1,CDO30_24020,1138240,1139673,1,3,0.3192637,1139457,1139457,chloro-_vs_fit-_DZA,DZA,NA,concordant,sym_only,0.319
+pSymA,NP_436209.1,TonB-dependent siderophore receptor,ASP61209.1,CDO30_23800,1089410,1091554,1,2,0.27637555,1090194,1090194,shoot+_vs_nod.weight+_DZA,DZA,NA,concordant,sym_only,0.276
+pSymA,NP_436219.1,aminotransferase,ASP61201.1,CDO30_23745,1077723,1079039,1,2,0.3836193,1078518,1078518,chloro-_vs_fit-_DZA,DZA,NA,concordant,sym_only,0.384
+pSymA,NP_436244.1,MBL fold metallo-hydrolase,ASP61179.1,CDO30_23600,1054756,1055730,1,2,0.19717805,1055277,1055277,shoot-_vs_nod.weight-_DZA,DZA,NA,concordant,sym_only,0.197
+pSymA,NP_436245.1,MFS transporter,ASP61178.1,CDO30_23595,1053142,1054734,1,2,0.20144315,1053319,1053319,shoot-_vs_nod.weight-_DZA,DZA,NA,concordant,sym_only,0.201
+pSymA,NP_436271.1,ABC transporter permease,ASP61155.1,CDO30_23450,1024267,1025130,1,3,0.334203933,1024282,1024282,"shoot-_vs_fit-_DZA, chloro-_vs_fit-_DZA",DZA,NA,concordant,sym_only,0.334
+pSymA,NP_436482.1,penicillin-binding protein 2,ASP60955.1,CDO30_22230,800657,801988,1,3,0.349822633,801548,801548,"shoot-_vs_nod.weight-_DZA, chloro-_vs_nod.weight-_DZA",DZA,NA,concordant,sym_only,0.350
+pSymA,YP_001312338.1,sugar ABC transporter permease,ASP60533.1,CDO30_19730,333605,334510,1,2,0.2057826,333997,333997,shoot+_vs_nod.weight+_DZA,DZA,NA,concordant,sym_only,0.206
+pSymA,YP_001313599.1,cell envelope protein,NA,CDO30_20100,394617,396058,3,7,0.26593215,395351,395932,shoot-_vs_nod.weight-_DZA| shoot+_vs_nod.weight+_DZA| shoot+_vs_nod+_DZA,DZA,NA,concordant,sym_only,0.266
+pSymA,YP_001314274.1,N-acetyltransferase,ASP61511.1,CDO30_23475,1030193,1031029,2,6,0.3453208,1030882,1031002,"chloro-_vs_fit-_DZA| shoot-_vs_fit-_DZA, chloro-_vs_fit-_DZA",DZA,NA,concordant,sym_only,0.345
+pSymA,YP_001314472.1,mandelate racemase,ASP60871.1,CDO30_21740,694608,695855,1,2,0.24528705,694954,694954,shoot+_vs_fit+_DZA,DZA,NA,concordant,sym_only,0.245
+pSymA,NP_435603.2,calcium/proton exchanger,ASP60551.1,CDO30_19850,359794,360939,3,11,0.209766575,359911,360507,"shoot-_vs_nod.weight-_DZA| shoot-_vs_nod.weight-_DZA, shoot-_vs_nod.weight-_A17",Both,NA,concordant,sym_only,0.210
+pSymB,NP_436553.1,alpha/beta hydrolase,ASP61601.1,CDO30_25480,81912,82979,1,2,0.296043,82400,82400,shoot+_vs_nod.weight+_A17,A17,NA,concordant,sym_only,0.296
+pSymB,NP_436569.1,tripartite tricarboxylate transporter TctB family protein,ASP61617.1,CDO30_25575,104868,105329,1,3,0.1989263,105170,105170,shoot+_vs_nod.weight+_A17,A17,NA,concordant,sym_only,0.199
+pSymB,NP_436640.1,LLM class F420-dependent oxidoreductase,ASP61682.1,CDO30_25945,176298,177284,1,3,0.236536933,177226,177226,shoot+_vs_nod.weight+_A17,A17,NA,concordant,sym_only,0.237
+pSymB,NP_436646.1,FadR family transcriptional regulator,ASP61688.1,CDO30_25975,184361,185092,1,3,0.303857867,184382,184382,shoot+_vs_nod.weight+_A17,A17,NA,concordant,sym_only,0.304
+pSymB,NP_436678.1,amidohydrolase,ASP61720.1,CDO30_26145,219713,220639,1,2,0.2705953,220439,220439,shoot+_vs_fit+_A17,A17,NA,concordant,sym_only,0.271
+pSymB,NP_436774.1,CDP-paratose 2-epimerase,ASP61818.1,CDO30_26645,316278,317399,1,2,0.1653823,316800,316800,shoot-_vs_nod.weight-_A17,A17,NA,concordant,sym_only,0.165
+pSymB,NP_436981.1,UDP-glucose 4-epimerase GalE,ASP62012.1,CDO30_27715,538996,539982,1,3,0.275655067,539748,539748,shoot+_vs_nod.weight+_A17,A17,NA,concordant,sym_only,0.276
+pSymB,NP_437117.1,cell surface protein,ASP62145.1,CDO30_28510,693272,694570,1,2,0.25414245,693443,693443,chloro-_vs_nod.weight-_A17,A17,NA,concordant,sym_only,0.254
+pSymB,NP_437160.1,hypothetical protein,ASP62190.1,CDO30_28780,740172,741053,1,2,0.1903898,740462,740462,chloro+_vs_nod.weight+_A17,A17,NA,concordant,sym_only,0.190
+pSymB,NP_437221.1,IclR family transcriptional regulator,ASP62245.1,CDO30_29095,811567,812349,1,4,0.16257345,812107,812107,"shoot+_vs_nod.weight+_A17, chloro+_vs_nod.weight+_A17",A17,NA,concordant,sym_only,0.163
+pSymB,NP_437366.1,beta-N-acetylhexosaminidase,ASP62374.1,CDO30_29805,969542,971461,1,2,0.3637375,969875,969875,chloro-_vs_fit-_A17,A17,NA,concordant,sym_only,0.364
+pSymB,NP_437398.1,fructose-bisphosphate aldolase class II,ASP62405.1,CDO30_29965,1009550,1010593,1,2,0.3306029,1009567,1009567,chloro-_vs_fit-_A17,A17,NA,concordant,sym_only,0.331
+pSymB,NP_437637.1,ABC transporter ATP-binding protein,ASP62628.1,CDO30_31170,1268359,1269534,1,2,0.19511005,1269523,1269523,chloro+_vs_nod+_A17,A17,NA,concordant,sym_only,0.195
+pSymB,NP_437662.1,hypothetical protein,ASP62652.1,CDO30_31315,1300176,1300844,1,3,0.2127739,1300452,1300452,chloro+_vs_nod+_A17,A17,NA,concordant,sym_only,0.213
+pSymB,YP_001313261.1,two-component system response regulator,ASP62257.1,CDO30_29160,824162,824752,1,2,0.173109,824486,824486,shoot-_vs_fit-_A17,A17,NA,concordant,sym_only,0.173
+pSymB,NP_436559.1,ABC transporter permease,ASP61606.1,CDO30_25510,89882,90874,1,3,0.2835152,90581,90581,shoot+_vs_nod.weight+_DZA,DZA,NA,concordant,sym_only,0.284
+pSymB,NP_436799.1,hypothetical protein,ASP61842.1,CDO30_26770,341230,342921,1,2,0.20869605,342210,342210,chloro-_vs_fit-_DZA,DZA,NA,concordant,sym_only,0.209
+pSymB,NP_436969.1,GGDEF-domain containing protein,ASP62001.1,CDO30_27655,526403,528097,1,2,0.3841623,526865,526865,shoot+_vs_nod.weight+_DZA,DZA,NA,concordant,sym_only,0.384
+pSymB,NP_437002.1,FadR family transcriptional regulator,ASP62033.1,CDO30_27830,561551,562333,2,6,0.215164867,561976,562117,shoot+_vs_nod.weight+_DZA,DZA,NA,concordant,sym_only,0.215
+pSymB,NP_437003.1,N-acetylglutaminylglutamine amidotransferase,ASP62034.1,CDO30_27835,562457,564232,1,2,0.19315005,563665,563665,shoot+_vs_nod.weight+_DZA,DZA,NA,concordant,sym_only,0.193
+pSymB,NP_437007.1,sugar ABC transporter ATP-binding protein,ASP62038.1,CDO30_27855,568468,569997,1,3,0.2136923,569748,569748,shoot+_vs_nod.weight+_DZA,DZA,NA,concordant,sym_only,0.214
+pSymB,NP_437015.1,3-ketoacyl-ACP reductase,ASP62046.1,CDO30_27900,578119,578853,1,3,0.289877667,578655,578655,chloro+_vs_nod.weight+_DZA,DZA,NA,concordant,sym_only,0.290
+pSymB,NP_437016.1,LysR family transcriptional regulator,ASP62047.1,CDO30_27905,578976,579872,1,3,0.228123967,579587,579587,shoot-_vs_fit-_DZA,DZA,NA,concordant,sym_only,0.228
+pSymB,NP_437030.1,arabinose ABC transporter substrate-binding protein,ASP62061.1,CDO30_27985,597987,598970,1,2,0.1966238,598245,598245,shoot-_vs_nod.weight-_DZA,DZA,NA,concordant,sym_only,0.197
+pSymB,NP_437035.1,chemotaxis protein CheB,ASP62067.1,CDO30_28015,603955,605172,1,2,0.26163075,604719,604719,chloro-_vs_fit-_DZA,DZA,NA,concordant,sym_only,0.262
+pSymB,NP_437145.1,hypothetical protein,ASP62168.1,CDO30_28655,719276,719692,1,2,0.28967,719653,719653,shoot-_vs_fit-_DZA,DZA,NA,concordant,sym_only,0.290
+pSymB,NP_437243.1,acetyl/propionyl/methylcrotonyl-CoA carboxylase subunit alpha,ASP62266.1,CDO30_29205,830326,832314,1,2,0.24933215,830391,830391,shoot-_vs_nod.weight-_DZA,DZA,NA,concordant,sym_only,0.249
+pSymB,NP_437510.1,sulfoacetaldehyde acetyltransferase,ASP62509.1,CDO30_30520,1121884,1123659,1,3,0.3546946,1123074,1123074,chloro+_vs_fit+_DZA,DZA,NA,concordant,sym_only,0.355
+pSymB,NP_437900.1,asparagine synthetase B,ASP62873.1,CDO30_32555,1519673,1521610,1,2,0.40680125,1520973,1520973,chloro-_vs_fit-_DZA,DZA,NA,concordant,sym_only,0.407
+pSymA,NP_435314.1,fatty acid desaturase,ASP60827.1,CDO30_21515,653368,654435,1,2,0.1763041,653674,653674,shoot+_vs_nod-_A17,A17,NA,discordant,sym_only,0.176
+pSymA,NP_435598.1,hypothetical protein,ASP60556.1,CDO30_19885,365269,365757,1,2,0.1865475,365285,365285,shoot+_vs_nod-_A17,A17,NA,discordant,sym_only,0.187
+pSymA,NP_436261.1,aldehyde dehydrogenase,ASP61164.1,CDO30_23500,1036114,1037577,1,2,0.28147905,1036819,1036819,chloro+_vs_nod-_A17,A17,NA,discordant,sym_only,0.281
+pSymA,NP_436495.1,ATP-dependent helicase,ASP60944.1,CDO30_22160,784724,786793,1,2,0.2785502,786001,786001,chloro+_vs_nod-_DZA,DZA,NA,discordant,sym_only,0.279
+pSymB,NP_436546.1,pyrroline-5-carboxylate reductase,ASP61594.1,CDO30_25445,74022,74798,1,2,0.16094395,74649,74649,shoot-_vs_fit+_A17,A17,NA,discordant,sym_only,0.161
+pSymB,NP_436984.1,beta-mannosidase,ASP62015.1,CDO30_27730,542460,543437,1,2,0.24463015,542729,542729,chloro+_vs_fit-_A17,A17,NA,discordant,sym_only,0.245
+pSymB,NP_438036.2,sulfite oxidase-like oxidoreductase,ASP63118.1,CDO30_33235,1663645,1664307,1,3,0.3208532,1663817,1663817,chloro+_vs_fit-_A17,A17,NA,discordant,sym_only,0.321
+pSymB,NP_437005.1,transcriptional regulator,ASP62036.1,CDO30_27845,566026,567096,1,2,0.23228335,566083,566083,shoot+_vs_fit-_DZA,DZA,NA,discordant,sym_only,0.232
+pSymB,NP_437011.1,carbohydrate kinase,ASP62041.1,CDO30_27875,572882,574354,1,2,0.2582841,573490,573490,chloro-_vs_fit+_DZA,DZA,NA,discordant,sym_only,0.258
+pSymB,NP_437792.1,esterase,ASP62771.1,CDO30_31995,1421446,1423182,1,2,0.30191995,1422933,1422933,shoot+_vs_nod-_DZA,DZA,NA,discordant,sym_only,0.302
+pSymA,NP_435605.1,putrescine-ornithine antiporter,ASP60549.1,CDO30_19840,357260,358618,2,4,0.23648935,357970,358255,shoot+_vs_fit-_DZA| shoot+_vs_nod+_DZA,DZA,NA,mixed,sym_only,0.236
+pSymA,NP_435751.1,Ti-type conjugative transfer relaxase TraA,ASP60412.1,CDO30_18945,196966,201585,2,5,0.2843486,200153,200702,shoot+_vs_fit-_DZA| shoot+_vs_nod+_DZA,DZA,NA,mixed,sym_only,0.284
+pSymB,NP_436648.1,peptide ABC transporter substrate-binding protein,ASP61689.1,CDO30_25985,186240,187748,2,6,0.3094204,186608,187664,shoot+_vs_nod-_A17| shoot+_vs_nod.weight+_A17,A17,NA,mixed,sym_only,0.309
+pSymB,YP_001313723.1,membrane assembly protein AsmA,ASP62127.1,CDO30_28405,670322,673345,2,4,0.33489385,672158,672194,chloro+_vs_nod-_A17| shoot-_vs_fit-_DZA,Both,NA,mixed,sym_only,0.335
+pSymB,NP_436880.1,hypothetical protein,ASP61921.1,CDO30_27205,429400,431319,2,5,0.308298233,430818,431224,chloro+_vs_fit-_A17| fit-_vs_nod-_A17,A17,concordant,discordant,Both,0.308
+pSymB,NP_436558.1,ABC transporter permease,ASP61605.1,CDO30_25505,88929,89885,1,4,0.373291575,89801,89801,"nod.weight+_vs_nod-_A17; shoot+_vs_nod-_A17, shoot+_vs_nod.weight+_A17",A17,discordant,mixed,Both,0.373
+pSymB,NP_436561.1,sugar ABC transporter substrate-binding protein,ASP61609.1,CDO30_25525,92629,93651,1,3,0.372928333,93058,93058,"nod.weight+_vs_nod-_A17; shoot+_vs_nod-_A17, shoot+_vs_nod.weight+_A17",A17,discordant,mixed,Both,0.373
+pSymB,NP_436633.1,lysylphosphatidylglycerol synthetase family protein,ASP61675.1,CDO30_25910,168111,169052,2,6,0.36116815,168869,168875,"nod.weight+_vs_nod-_A17| nod.weight+_vs_nod-_A17; shoot+_vs_nod-_A17, shoot+_vs_nod.weight+_A17",A17,discordant,mixed,Both,0.361
+pSymB,NP_436643.1,FAD-dependent oxidoreductase,ASP61685.1,CDO30_25960,180811,182613,1,4,0.399073,181173,181173,"nod.weight+_vs_nod-_A17; shoot+_vs_nod-_A17, shoot+_vs_nod.weight+_A17",A17,discordant,mixed,Both,0.399
+pSymB,NP_437001.1,ABC transporter ATP-binding protein,ASP62032.1,CDO30_27825,560747,561544,1,3,0.345090267,561025,561025,"nod.weight+_vs_nod-_A17; shoot+_vs_nod-_A17, shoot+_vs_nod.weight+_A17",A17,discordant,mixed,Both,0.345
+pSymA,NP_436524.1,amidase,ASP60914.1,CDO30_21995,745969,747384,2,5,0.28812785,746623,747157,chloro-_vs_fit-_DZA| fit-_vs_nod.weight-_DZA,DZA,concordant,concordant,Both,0.288
+pSymA,NP_435596.1,hypothetical protein,ASP60557.1,CDO30_19895,367443,369200,3,6,0.25546285,368277,369039,nod.weight+_vs_nod-_DZA| shoot-_vs_nod.weight-_DZA,DZA,discordant,concordant,Both,0.255
+pSymA,NP_435597.2,AI-2E family transporter,ASP61477.1,CDO30_19890,366255,367409,4,9,0.208166033,366629,367128,chloro-_vs_nod.weight-_DZA| nod.weight+_vs_nod-_DZA,DZA,discordant,concordant,Both,0.208
+pSymB,NP_437804.1,Zn-dependent hydrolase,ASP62780.1,CDO30_32050,1431330,1432574,2,5,0.380905033,1431876,1432542,fit-_vs_nod-_A17| shoot+_vs_fit-_DZA,Both,concordant,discordant,Both,0.381
+pSymA,NP_435627.1,IclR family transcriptional regulator,ASP60529.1,CDO30_19705,329003,330712,2,6,0.207620625,329466,330614,"nod.weight+_vs_nod-_A17; shoot+_vs_nod-_A17, shoot+_vs_nod.weight+_A17| shoot+_vs_nod+_DZA",Both,discordant,concordant,Both,0.208
+pSymA,NP_435563.1,hypothetical protein,ASP60589.1,CDO30_20105,396116,397666,2,4,0.3062839,396151,396524,chloro+_vs_nod.weight+_DZA| nod.weight+_vs_nod-_A17,Both,discordant,concordant,Both,0.306
+pSymA,YP_001313905.1,amino acid decarboxylase,ASP60548.1,CDO30_19835,354869,357232,3,7,0.3847699,356425,356968,nod.weight+_vs_nod-_DZA| shoot-_vs_nod.weight-_A17,Both,discordant,concordant,Both,0.385
+pSymB,NP_436566.1,5-oxoprolinase,ASP61615.1,CDO30_25560,98838,102455,2,4,0.4442593,99057,99918,chloro+_vs_nod.weight+_A17| fit-_vs_nod+_DZA,Both,discordant,concordant,Both,0.444
+pSymB,NP_437100.1,ferredoxin reductase,ASP62131.1,CDO30_28425,676228,677454,2,4,0.2750603,676737,677196,chloro+_vs_nod+_A17| fit-_vs_nod+_DZA,Both,discordant,concordant,Both,0.275
+pSymB,NP_437305.1,peptide ABC transporter substrate-binding protein,ASP62318.1,CDO30_29505,899212,901113,2,4,0.32949285,899613,900672,chloro-_vs_fit-_A17| fit+_vs_nod-_DZA,Both,discordant,concordant,Both,0.329
+pSymB,NP_436655.1,dihydroxy-acid dehydratase,ASP61696.1,CDO30_26020,193933,195654,2,8,0.3388206,194230,194434,"fit+_vs_nod-_DZA, nod.weight+_vs_nod-_A17; shoot+_vs_nod-_A17, shoot+_vs_nod.weight+_A17| shoot-_vs_fit-_DZA, chloro-_vs_fit-_DZA",Both,discordant,concordant,Both,0.339
+pSymB,NP_437004.1,N-acetylglutaminylglutamine synthetase,ASP62035.1,CDO30_27840,564234,566018,4,10,0.4703413,564494,565694,fit+_vs_nod-_DZA| nod.weight+_vs_nod-_A17| shoot+_vs_nod.weight+_DZA,Both,discordant,concordant,Both,0.470
+pSymB,NP_436652.1,EamA/RhaT family transporter,ASP61693.1,CDO30_26005,191322,192209,1,4,0.3009425,191918,191918,fit+_vs_nod-_DZA; shoot+_vs_nod-_A17,Both,discordant,discordant,Both,0.301
+pSymB,NP_436701.1,hypothetical protein,ASP61743.1,CDO30_26265,247070,247420,1,4,0.349354675,247278,247278,fit+_vs_nod-_DZA; shoot+_vs_nod-_A17,Both,discordant,discordant,Both,0.349
+pSymB,NP_436950.1,NAD-dependent succinate-semialdehyde dehydrogenase,ASP61984.1,CDO30_27560,506168,507664,1,4,0.558744375,506469,506469,fit+_vs_nod-_DZA; shoot+_vs_nod-_A17,Both,discordant,discordant,Both,0.559
+pSymB,NP_436967.1,L-idonate 5-dehydrogenase,ASP61999.1,CDO30_27645,523851,524909,1,4,0.369789375,524672,524672,fit+_vs_nod-_DZA; shoot+_vs_nod-_A17,Both,discordant,discordant,Both,0.370
+pSymB,NP_436974.1,hypothetical protein,ASP63043.1,CDO30_27680,532806,533144,1,4,0.45216815,532994,532994,fit+_vs_nod-_DZA; shoot+_vs_nod-_A17,Both,discordant,discordant,Both,0.452
+pSymB,NP_436975.1,gluconolactonase,ASP62006.1,CDO30_27685,533180,534091,2,9,0.42316562,533399,533930,"fit+_vs_nod-_DZA; chloro+_vs_nod-_A17| fit+_vs_nod-_DZA; shoot+_vs_nod-_A17, chloro+_vs_nod-_A17",Both,discordant,discordant,Both,0.423
+pSymB,WP_003525897.1,N-alpha-acetyl diaminobutyric acid deacetylase DoeB,ASP61994.1,CDO30_27615,517108,518118,1,4,0.6355283,517516,517516,fit+_vs_nod-_DZA; shoot+_vs_nod-_A17,Both,discordant,discordant,Both,0.636
+pSymB,NP_436651.1,ABC transporter ATP-binding protein,ASP61692.1,CDO30_26000,189685,191325,2,7,0.3068141,189760,190803,fit+_vs_nod-_DZA; shoot+_vs_nod-_A17| shoot+_vs_nod-_A17,Both,discordant,discordant,Both,0.307
+pSymB,NP_437017.1,hypothetical protein,ASP63047.1,CDO30_27915,580753,582456,2,6,0.566445475,580891,582057,fit+_vs_nod-_DZA| fit+_vs_nod-_DZA; shoot+_vs_nod-_A17,Both,discordant,discordant,Both,0.566
+pSymB,NP_436650.1,ABC transporter permease,ASP61691.1,CDO30_25995,188741,189688,2,9,0.35844152,189244,189619,"fit+_vs_nod-_DZA, nod.weight+_vs_nod-_A17; shoot+_vs_nod-_A17, shoot+_vs_nod.weight+_A17| nod.weight+_vs_nod-_A17; shoot+_vs_nod-_A17, shoot+_vs_nod.weight+_A17",Both,discordant,mixed,Both,0.358
+pSymB,NP_437206.1,Ti-type conjugative transfer relaxase TraA,ASP62230.1,CDO30_29020,793521,798140,4,9,0.5840394,794520,796815,chloro-_vs_fit-_DZA| fit+_vs_nod-_A17| fit+_vs_nod+_A17,Both,mixed,concordant,Both,0.584

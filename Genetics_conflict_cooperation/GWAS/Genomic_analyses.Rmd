@@ -1258,3 +1258,49 @@ ggsave("./Figures/popgen_stats_rhiz.png")
 include_graphics("./Figures/popgen_stats_rhiz.png") ## Supp. Fig. S3
 ```
 
+## Simplified Table S1
+
+```{r tabS1_updated}
+load(file = "./Data_output/neutrality_stats.Rdata") ## loads real_data
+load(file = "./Data_output/all_gene_stats.Rdata") ## loads all_genes
+
+## summarize all genes first
+vars <- c("Pi","Tajima.D","Fu.Li.F","Fu.Li.D") 
+all_genes.sum <- all_genes %>% 
+  summarise_at(vars, mean, na.rm = TRUE) %>%
+  gather(stat, mean, Pi:Fu.Li.D)
+all_genes.sum$mean.r <- round(all_genes.sum$mean, 3)
+all_genes.sum$mean_sig <- paste0(all_genes.sum$mean.r, " (NA)")
+all_genes.sum.f <- all_genes.sum %>%
+  mutate(cat = paste0("All")) %>%
+  select(cat, stat, mean_sig)
+  
+
+## focal genes:
+### format mean and p-vals, keep certain cols
+real_data.k <- real_data %>%
+  mutate(mean.r = round(mean, 3)) 
+real_data.k$p_all <- ifelse(real_data.k$pvals.all > 0.1, "NS", real_data.k$pvals.all)
+real_data.k$p_sig <- ifelse(real_data.k$pvals.sig > 0.1, "NS", real_data.k$pvals.sig)
+real_data.k$mean_sig <- ifelse(real_data.k$cat == "GWAS" | 
+                                 real_data.k$cat == "sig", 
+                               paste0(real_data.k$mean.r, 
+                                      " (", 
+                                      real_data.k$pvals.all,")"), 
+                               paste0(real_data.k$mean.r, 
+                                      " (", 
+                                      real_data.k$pvals.sig,")"))
+real_data.f <- real_data.k %>%
+  select(cat, stat, mean_sig)
+
+## combine all and focal gene stats
+comb <- rbind(all_genes.sum.f, real_data.f)
+
+## spread means for each stat
+comb.w <- comb %>%
+  spread(stat, mean_sig, fill = NA, convert = FALSE)
+
+## save
+write.csv(comb.w, file = "./Data_output/neutrality_stats_simplified.csv",
+     row.names = FALSE) ## Updated Supp. Table S1
+```

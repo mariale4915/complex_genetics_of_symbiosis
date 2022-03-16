@@ -12,9 +12,9 @@ tally_func <- function(groups, df){
   # New facet label names for trait comb variable
   trait.labs <- c("Chlorophyll vs. \n Nodules", "Shoot biomass vs. \n Nodules", 
                   "Chlorophyll vs. \n Nodule weight", "Shoot biomass vs. \n Nodule weight",
-                  "Chlorophyll vs. \n Comp. fitness", "Shoot biomass vs. \n Comp. fitness",
-                  "Nodule weight vs. \n Nodules","Comp. fitness vs. \n Nodules",
-                  "Comp. fitness vs. \n Nodule weight")
+                  "Chlorophyll vs. \n Rhizo. relative fitness", "Shoot biomass vs. \n Rhizo. relative fitness",
+                  "Nodule weight vs. \n Nodules","Rhizo. relative fitness vs. \n Nodules",
+                  "Rhizo. relative fitness vs. \n Nodule weight")
   names(trait.labs) <- c("chloro_vs_nod", "shoot_vs_nod", 
                          "chloro_vs_nod.weight", "shoot_vs_nod.weight",  "chloro_vs_fit",
                          "shoot_vs_fit", "nod.weight_vs_nod", "fit_vs_nod","fit_vs_nod.weight")
