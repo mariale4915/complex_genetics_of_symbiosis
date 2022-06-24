@@ -20,6 +20,7 @@ setwd("../../Complex_genetics/GWAS")
 library("tidyverse") ## includes ggplot2, dplyr, readr, stringr
 library("knitr") ## produce the knitted doc
 library("cowplot") ## plot_grid function
+library("harmonicmeanp") ## calculate harmonic means
 ```
 
 ## LD grouping (a la Epstein et al., 2018)
@@ -660,7 +661,7 @@ for(i in 1:32){
 # Does real data exceed 5% cuttoff?
 realsigFull <- (realintFull > 0.975 | realintFull < 0.025)
 colSums(realsigFull)
-data.frame(trait =colnames(realres.rs[betacols.realres]) , snps = colSums(realintFull > 0.975 | realintFull < 0.025))
+data.frame(trait = colnames(realres.rs[betacols.realres]) , snps = colSums(realintFull > 0.975 | realintFull < 0.025))
 
 dfFIsig <- data.frame(realsigFull)
 colnames(dfFIsig) <- paste(colnames(realres.rs[betacols.realres]),".FIsig",sep="")
@@ -1019,3 +1020,410 @@ write.csv(SNPs_sig_long, file = "./Data_output/SNPs_ann_effect.csv", row.names =
 save(SNPs_sig_long, file = "./Data_output/SNPs_sig_long.Rdata")
 ```
 
+## Response to referees (Invited editor, mBio)
+
+Obtained qq-plot script from:
+https://genome.sph.umich.edu/wiki/Code_Sample:_Generating_QQ_Plots_in_R
+
+Obtained harmonic mean p scripts from:
+https://cran.r-project.org/web/packages/harmonicmeanp/vignettes/harmonicmeanp.html
+
+### Univariate LMMs
+
+1) direct FDR or Bonferroni applied to the 7,965 individual p-values from GEMMA. 
+2) a strategy to increase the power of Bonferroni correction by combining GEMMA p-values at the gene or chromosome level using the harmonic mean p-value
+4) Multivariate GWAS as implemented through GEMMA could also help - biomass under the four combinations of plant line and experiment would be the four outcome variables.
+
+```{r response}
+## create functions to iterate across traits (DZA_1, A17_2, DZA_3, A17_4, shoot_MV)
+nums.list <- c(str_pad(1:24, 2, pad = "0"),
+               "chloro1","height1","leaf1","shoot","nod","nod.weight")
+traits.list <- c(rep("chloro",4),rep("height",4),
+                 rep("leaf",4),rep("shoot",4), 
+                 rep("nod",4),rep("nod_weight",4),
+                 "chloro1","height1","leaf1","shoot","nod","nod.weight")
+exps.list <- c(rep(c("DZA_1", "A17_2", "DZA_3", "A17_4"),6), rep("MV",6))
+traits_exps.list <- paste0(traits.list, "-", exps.list)
+
+### for each trait (e.g., shoot, cholor), combine associations across genomic regions
+source('../Source_code/comb_func.R')
+comb_out <- mapply(FUN = comb_func,
+                   traits_exps = traits_exps.list, 
+                   traits = traits.list, 
+                   nums = nums.list, 
+                   USE.NAMES = TRUE)
+
+## qq_plots for each trait
+source('../Source_code/qq_func.R')
+qq_out <- sapply(FUN = qq_func,
+                 traits_exps.list, 
+                 USE.NAMES = TRUE, 
+                 simplify = FALSE)
+
+## calculate harmonic means
+source('../Source_code/manhattan_func.R')
+manhattan_out <- sapply(FUN = manhattan_func,
+                        traits_exps.list,
+                        USE.NAMES = TRUE,
+                        simplify = FALSE)
+
+## correlate betas and p-vals (LRT)
+source('../Source_code/corr_func.R')
+corr_out <- sapply(FUN = corr_func,
+                        traits_exps.list,
+                        USE.NAMES = TRUE,
+                        simplify = FALSE)
+
+### save corrplots just for shoot:
+comb <- plot_grid(corr_out[["shoot-DZA_1"]], corr_out[["shoot-DZA_3"]],
+                  corr_out[["shoot-A17_2"]], corr_out[["shoot-A17_4"]],
+                  ncol = 2,
+                  nrow = 2,
+                  align = "hv")
+
+save_plot("./Data_input/betasigs_29Mar2021/plots/shoot_beta_pval_corrs.png",
+          comb,
+          ncol = 2, # we're saving a grid plot of 2 columns
+          nrow = 2, # and 3 rows
+          # each individual subplot should have an aspect ratio of 1.3
+          base_aspect_ratio = 2
+          )
+                       
+## save plots (univariate)
+traits.list <- c("chloro","height","leaf","shoot","nod","nod_weight")
+
+sapply(traits.list, function(traits){
+  
+  ## print traits
+  print(paste0(traits))
+  
+  comb <- plot_grid(qq_out[[paste0(traits, "-DZA_1")]],
+                    manhattan_out[[paste0(traits,"-DZA_1")]],
+                    qq_out[[paste0(traits, "-DZA_3")]], 
+                    manhattan_out[[paste0(traits, "-DZA_3")]],
+                    qq_out[[paste0(traits, "-A17_2")]], 
+                    manhattan_out[[paste0(traits, "-A17_2")]],
+                    qq_out[[paste0(traits, "-A17_4")]], 
+                    manhattan_out[[paste0(traits, "-A17_4")]],
+                    ncol = 2,
+                    nrow = 4,
+                    align = "hv",
+                    rel_widths = c(0.5,1)
+                    )
+
+  save_plot(paste0("./Data_input/betasigs_29Mar2021/plots/", traits, ".pdf"),
+          comb,
+          ncol = 2, # we're saving a grid plot of 2 columns
+          nrow = 4, # and 3 rows
+          # each individual subplot should have an aspect ratio of 1.3
+          base_aspect_ratio = 2
+          )
+  
+})
+
+### Multivariate LMMs
+## create functions to iterate across traits
+traits.list <- c("chloro","height","leaf","shoot","nod","nod_weight")
+
+## save plots (multivariate)
+sapply(traits.list, function(traits){
+  
+  ## print traits
+  print(paste0(traits))
+  
+  comb <- plot_grid(qq_out[[paste0(traits,"-MV")]], manhattan_out[[paste0(traits,"-MV")]],
+                        ncol = 2,
+                        nrow = 1,
+                        align = "h",
+                        rel_widths = c(0.5,1))
+
+  save_plot(paste0("./Data_input/betasigs_29Mar2021/plots/", traits, "_MV.pdf"),
+          comb,
+          ncol = 2, # we're saving a grid plot of 2 columns
+          nrow = 1, # and 3 rows
+          # each individual subplot should have an aspect ratio of 1.3
+          base_aspect_ratio = 2
+          )
+})
+
+## combined UV and MV for shoot
+comb <- plot_grid(qq_out[["shoot-DZA_1"]], manhattan_out[["shoot-DZA_1"]],
+                    qq_out[["shoot-DZA_3"]], manhattan_out[["shoot-DZA_3"]],
+                    qq_out[["shoot-A17_2"]], manhattan_out[["shoot-A17_2"]],
+                    qq_out[["shoot-A17_4"]], manhattan_out[["shoot-A17_4"]],
+                    qq_out[["shoot-MV"]], manhattan_out[["shoot-MV"]],
+                    ncol = 2,
+                    nrow = 5,
+                    align = "hv",
+                    rel_widths = c(0.5,1)
+                    )
+
+comb2 <- plot_grid(qq_out[["shoot-MV"]], manhattan_out[["shoot-MV"]],
+                        ncol = 2,
+                        nrow = 1,
+                        align = "h",
+                        rel_widths = c(0.5,1))
+
+comb <- plot_grid(comb1, comb2,
+                  ncol = 1,
+                  nrow = 2,
+                  rel_heights = c(1,0.5),
+                  align = "v")
+
+save_plot("./Data_input/betasigs_29Mar2021/plots/shoot_UV-MV.pdf",
+          comb,
+          ncol = 2, # we're saving a grid plot of 2 columns
+          nrow = 5, # and 3 rows
+          # each individual subplot should have an aspect ratio of 1.3
+          base_aspect_ratio = 1.3
+          )
+```
+
+### Compare Multivariate sig calls and permutation method (per genomic region)
+
+```{r comp_sig}
+## load beta values
+load("./Data_input/betasigs_29Mar2021/chr_betasigs.Rdata") ## realres.psFIsig
+chr <- realres.psFIsig
+
+## link up gene and var-level information
+var <- read_csv("./Data_output/Var-lvl_summaries/SNPs_ann_ps_height1.csv")
+gene <- read_csv("./Data_output/Gene-lvl_summaries/genes_height1.csv")
+
+## match info
+chr <- left_join(chr, var[,c("rs","RefSeq_ID")], by = "rs")
+chr <- left_join(chr, gene[,c("RefSeq_ID","cat")], by = "RefSeq_ID")
+
+
+## for each of three genomic regions:
+traits.list <- c(rep("chloro1",3),rep("height1",3),rep("leaf1",3),rep("shoot",3))
+regions.list <- c(rep(c("chr","psyma","psymb"),4))
+traits_regions.list <- paste0(traits.list,"_",regions.list)
+
+## run functions
+source('../Source_code/comp.sigs_func.R')
+comp.sigs_out <- mapply(FUN = comp.sigs_func,
+                        traits_regions = traits_regions.list,
+                        traits = traits.list,
+                        regions = regions.list,
+                        USE.NAMES = TRUE)
+
+source('../Source_code/corr.plot_func.R')
+corr.plot_out <- mapply(FUN = corr.plot_func,
+                        traits_regions = traits_regions.list,
+                        traits = traits.list,
+                        USE.NAMES = TRUE)
+
+source('../Source_code/manhattan.plot_func.R')
+manhattan.plot_out <- mapply(FUN = manhattan.plot_func,
+                             traits_regions = traits_regions.list,
+                             traits = traits.list,
+                             USE.NAMES = TRUE)
+                      
+## create functions to iterate across traits
+traits.list <- c("chloro1","height1","leaf1","shoot")
+
+## save plots (multi vs univariate)
+sapply(traits.list, function(traits){
+  
+  ## print traits
+  print(paste0(traits))
+  
+  comb <- plot_grid(corr.plot_out[[paste0(traits, "_chr")]], manhattan.plot_out[[paste0(traits, "_chr")]],
+                    corr.plot_out[[paste0(traits, "_psyma")]], manhattan.plot_out[[paste0(traits, "_psyma")]],
+                    corr.plot_out[[paste0(traits, "_psymb")]], manhattan.plot_out[[paste0(traits, "_psymb")]],
+                        ncol = 2,
+                        nrow = 3,
+                        align = "hv",
+                        rel_widths = c(0.5,1))
+  
+  save_plot(paste0("./Data_input/betasigs_29Mar2021/plots/", traits, "_MV_vs_UV.pdf"),
+            comb,
+            ncol = 2, # we're saving a grid plot of 2 columns
+            nrow = 3, # and 3 rows
+            # each individual subplot should have an aspect ratio of 1.3
+            base_aspect_ratio = 2
+            )
+})
+```
+
+## import PVE from null model (how much variance is explained by phylogeny alone)
+
+```{r chip_herit}
+real <- read.delim("./Data_input/betasigs_29Mar2021/pve_se_ulmm.txt", 
+                   header=FALSE)
+random <- read.delim("./Data_input/betasigs_29Mar2021/pve_se_ulmm_random.txt",
+                     header=FALSE)
+
+## add in traits: trait 1 for chr, psyma, psymb, then trait 2 ...
+real$traits <- c(rep("chloro1_DZA_1",3),rep("chloro1_A17_2",3),
+                 rep("chloro1_DZA_3",3), rep("chloro1_A17_4",3),
+                 rep("height1_DZA_1",3), rep("height1_A17_2",3),
+                 rep("height1_DZA_3",3), rep ("height1_A17_4",3),
+                 rep("leaf1_DZA_1",3), rep("leaf1_A17_2",3), 
+                 rep("leaf1_DZA_3",3), rep("leaf1_A17_4",3),
+                 rep("shoot_DZA_1",3), rep("shoot_A17_2",3), 
+                 rep("shoot_DZA_3",3), rep("shoot_A17_4",3),
+                 rep("nod_DZA_1",3), rep("nod_A17_2",3),
+                 rep("nod_DZA_3",3), rep("nod_A17_4",3),
+                 rep("nod.weight_DZA_1",3), rep("nod.weight_A17_2",3),
+                 rep("nod.weight_DZA_3",3), rep("nod.weight_A17_4",3),
+                 rep("chloro.plast_DZA_13",3), rep("chloro.plast_A17_24",3),
+                 rep("height.plast_DZA_13",3), rep("height.plast_A17_24",3),
+                 rep("leaf.plast_DZA_13",3), rep("leaf.plast_A17_24",3),
+                 rep("shoot.plast_DZA_13",3), rep("shoot.plast_A17_24",3))
+
+real$region <- rep(c("chr", "psyma","psymb"),32)
+
+## extract everything after = sign
+real$pve <- as.numeric(sub(".* =", "", real$V1))
+real$se <- as.numeric(sub(".* =", "", real$V2))
+
+ggplot(real, aes(x=region, y = pve)) +
+  geom_point() +
+  geom_hline(aes(yintercept = 0), linetype = 2) +
+  geom_errorbar(aes(ymin = pve - se, ymax = pve + se), width = 0.2) +
+  facet_wrap(~traits, ncol = 4, scales = "free")
+
+## for random
+
+## add in traits: trait 1 for chr, psyma, psymb, then trait 2 ...
+random$traits <- rep(c(rep("chloro1_DZA_1",3),rep("chloro1_A17_2",3),
+                 rep("chloro1_DZA_3",3), rep("chloro1_A17_4",3),
+                 rep("height1_DZA_1",3), rep("height1_A17_2",3),
+                 rep("height1_DZA_3",3), rep ("height1_A17_4",3),
+                 rep("leaf1_DZA_1",3), rep("leaf1_A17_2",3), 
+                 rep("leaf1_DZA_3",3), rep("leaf1_A17_4",3),
+                 rep("shoot_DZA_1",3), rep("shoot_A17_2",3), 
+                 rep("shoot_DZA_3",3), rep("shoot_A17_4",3),
+                 rep("nod_DZA_1",3), rep("nod_A17_2",3),
+                 rep("nod_DZA_3",3), rep("nod_A17_4",3),
+                 rep("nod.weight_DZA_1",3), rep("nod.weight_A17_2",3),
+                 rep("nod.weight_DZA_3",3), rep("nod.weight_A17_4",3),
+                 rep("chloro.plast_DZA_13",3), rep("chloro.plast_A17_24",3),
+                 rep("height.plast_DZA_13",3), rep("height.plast_A17_24",3),
+                 rep("leaf.plast_DZA_13",3), rep("leaf.plast_A17_24",3),
+                 rep("shoot.plast_DZA_13",3), rep("shoot.plast_A17_24",3)),1000)
+
+random$region <- rep(rep(c("chr", "psyma","psymb"),32),1000)
+
+iteration <- sapply(1:1000, function(x){
+  nums <- c(rep(x, 96))
+  return(nums)
+})
+
+iteration.l <- as.data.frame(iteration) %>%
+  gather(iter, num, V1:V1000)
+
+random$iter <- iteration.l$num
+
+## extract everything after = sign
+random$pve <- as.numeric(sub(".* =", "", random$V1))
+random$se <- as.numeric(sub(".* =", "", random$V2))
+
+## combine real and random
+real$iter <- NA
+real$type <- "real"
+random$type <- "random"
+pve <- rbind(real, random)
+
+## filter to just shoot biomass
+pve_shoot <- pve %>%
+  filter(traits %in% c("shoot_DZA_1", "shoot_DZA_3", "shoot_A17_2","shoot_A17_4")) %>%
+  droplevels(.)
+
+## draw histograms with real PVEs added
+png(filename = "./Data_input/betasigs_29Mar2021/plots/PVE_shoot.png",
+    width = 500, height = 500)
+  ggplot(pve_shoot, aes(x = region, y = pve)) +
+    geom_linerange(data = pve_shoot %>% filter(type == "random"),
+                    aes(ymin = quantile(pve, 0), ymax = quantile(pve, 0.95)),
+                    alpha = 0.5, size = 3) +
+    geom_point(data = pve_shoot %>% filter(type == "random" & pve > quantile(pve, 0.99)),
+                    alpha = 0.5) +
+    geom_point(data = pve_shoot %>% filter(type == "real"), size = 4, color = "red") +
+    facet_wrap(~traits, ncol = 2, scales = "free") +
+    theme_bw()
+dev.off()
+
+```
+
+## Re-do analyses for K-matrix based on all three regions combined
+
+Tried, but PVEs still really low for LD SNPs:
+Shoot_DZA_1: pve estimate =0.00257278; se(pve) =0.0466846
+Shoot_A17_2: pve estimate =0.00508176; se(pve) =0.0449808
+Shoot_DZA_3: pve estimate =0.0234543;  se(pve) =0.0496732
+Shoot_A17_4: pve estimate =9.9999e-06; se(pve) =0.0471789
+
+Even worse for all filtered SNPs (including those in high LD)
+
+Also tried centered matrix rather than standardized matrix and didn't do much better either
+
+```{bash k-mat_redo}
+## for LD SNPs
+## all in one step (vcf to bed)
+$PLINK --vcf subset191_LD.recode.vcf --recode --make-bed --out "subset191_LD_plink" --allow-extra-chr --allow-no-sex --maf 0.05 --geno --pheno "phenos191.fam"
+# 8302 variants pass filters
+cp phenos191.fam subset191_LD_plink.fam
+
+## kinship matrix
+$GEMMA -bfile subset191_LD_plink -gk 2 -o subset191_LD_ksmat ## 7965 SNPs analyzed
+
+## LMM in GEMMA
+$GEMMA -bfile subset191_LD_plink -k ./output/subset191_LD_ksmat.sXX.txt -lmm 4 -n 13 -o subset191_LD_ulmm_shoot_DZA_1
+$GEMMA -bfile subset191_LD_plink -k ./output/subset191_LD_ksmat.sXX.txt -lmm 4 -n 14 -o subset191_LD_ulmm_shoot_A17_2
+$GEMMA -bfile subset191_LD_plink -k ./output/subset191_LD_ksmat.sXX.txt -lmm 4 -n 15 -o subset191_LD_ulmm_shoot_DZA_3
+$GEMMA -bfile subset191_LD_plink -k ./output/subset191_LD_ksmat.sXX.txt -lmm 4 -n 16 -o subset191_LD_ulmm_shoot_A17_4
+
+## for all filtered SNPs
+## all in one step (vcf to bed)
+$PLINK --vcf subset191.recode.vcf --recode --make-bed --out "subset191_plink" --allow-extra-chr --allow-no-sex --maf 0.05 --geno --pheno "phenos191.fam"
+# 104627 variants pass filters
+cp phenos191.fam subset191_plink.fam
+
+## kinship matrix
+$GEMMA -bfile subset191_plink -gk 2 -o subset191_ksmat ## 100416 SNPs analyzed
+
+## LMM in GEMMA
+$GEMMA -bfile subset191_plink -k ./output/subset191_ksmat.sXX.txt -lmm 4 -n 13 -o subset191_ulmm_shoot_DZA_1
+$GEMMA -bfile subset191_plink -k ./output/subset191_ksmat.sXX.txt -lmm 4 -n 14 -o subset191_ulmm_shoot_A17_2
+$GEMMA -bfile subset191_plink -k ./output/subset191_ksmat.sXX.txt -lmm 4 -n 15 -o subset191_ulmm_shoot_DZA_3
+$GEMMA -bfile subset191_plink -k ./output/subset191_ksmat.sXX.txt -lmm 4 -n 16 -o subset191_ulmm_shoot_A17_4
+```
+
+## Re-do analyses for LD groups based on 0.8 cut-off
+
+Note: PVEs still very small
+
+```{bash LD_redo}
+# filter sites based on LD groups:
+cut -f 4 ./ld_groups/0.80/one_variant.tsv > keep_sites80.txt 
+
+$vcftools --vcf subset191.recode.vcf --snps keep_sites80.txt --chr chr --recode --out chr_subset191_LD80 ## 276 variants
+$vcftools --vcf subset191.recode.vcf --snps keep_sites80.txt --chr psyma --recode --out psyma_subset191_LD80 ## 2276 variants
+$vcftools --vcf subset191.recode.vcf --snps keep_sites80.txt --chr psymb --recode --out psymb_subset191_LD80 ## 3202 variants
+
+## for LD SNPs
+## all in one step (vcf to bed)
+$PLINK --vcf chr_subset191_LD80.recode.vcf --recode --make-bed --out "chr_subset191_LD80_plink" --allow-extra-chr --allow-no-sex --maf 0.05 --geno --pheno "phenos191.fam"
+# 262 variants pass filters
+cp phenos191.fam chr_subset191_LD80_plink.fam
+
+## all in one step (vcf to bed)
+$PLINK --vcf psyma_subset191_LD80.recode.vcf --recode --make-bed --out "psyma_subset191_LD80_plink" --allow-extra-chr --allow-no-sex --maf 0.05 --geno --pheno "phenos191.fam"
+# 2150 variants pass filters
+cp phenos191.fam psyma_subset191_LD80_plink.fam
+## all in one step (vcf to bed)
+$PLINK --vcf psymb_subset191_LD80.recode.vcf --recode --make-bed --out "psymb_subset191_LD80_plink" --allow-extra-chr --allow-no-sex --maf 0.05 --geno --pheno "phenos191.fam"
+# 3122 variants pass filters
+cp phenos191.fam psymb_subset191_LD80_plink.fam
+
+## kinship matrix
+$GEMMA -bfile chr_subset191_LD80_plink -gk 2 -o chr_subset191_LD80_ksmat ## 252 SNPs analyzed
+$GEMMA -bfile psyma_subset191_LD80_plink -gk 2 -o psyma_subset191_LD80_ksmat ## 2074 SNPs analyzed
+$GEMMA -bfile psymb_subset191_LD80_plink -gk 2 -o psymb_subset191_LD80_ksmat ## 2974 SNPs analyzed
+
+## LMM in GEMMA (edited run_gemma.sh to the appropriote files)
+
+```

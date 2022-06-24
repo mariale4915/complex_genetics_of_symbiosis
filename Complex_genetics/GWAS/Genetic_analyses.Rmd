@@ -570,27 +570,6 @@ comb_func <- sapply(trait.list, function(x){
   
   print(paste0("completed trait", x))
 })
-
-# ## alternative 
-# # merge across regions for each trait
-# bind_func <- function(x){
-#   trait_chr <- read.delim(paste0("./chr_subset191_LD_ulmm_trait_",
-#   x, ".assoc.txt"))
-#   trait_psyma <- read.delim(paste0("./psyma_subset191_LD_ulmm_trait_",
-#   x, ".assoc.txt"))
-#   trait_psymb <- read.delim(paste0("./psymb_subset191_LD_ulmm_trait_",
-#   x, ".assoc.txt"))
-# 
-# trait <- rbind(trait_chr, trait_psyma, trait_psymb)
-# 
-# write.csv(trait, file = paste0("./trait_",
-#   x, ".csv"), row.names = FALSE)
-#   
-# }
-# 
-# index <- sprintf("%02d",1:24)
-# 
-# sapply(index, bind_func)
 ```
 
 ### Global test of GxE
